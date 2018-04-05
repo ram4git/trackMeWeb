@@ -6,7 +6,7 @@ import TeamLogo from './TeamLogo'
 import Team from './Team'
 import Loading from './Loading'
 
-export default class Teams extends Component {
+export default class Settings extends Component {
   state = {
     teamNames: [],
     loading: true,

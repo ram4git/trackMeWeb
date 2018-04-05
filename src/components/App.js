@@ -12,24 +12,24 @@ const Home = (props) => (
   </DynamicImport>
 )
 
-const Players = (props) => (
-  <DynamicImport load={() => import('./Players')}>
+const Requests = (props) => (
+  <DynamicImport load={() => import('./Requests')}>
     {(Component) => Component === null
       ? <Loading />
       : <Component {...props} />}
   </DynamicImport>
 )
 
-const Teams = (props) => (
-  <DynamicImport load={() => import('./Teams')}>
+const Settings = (props) => (
+  <DynamicImport load={() => import('./Settings')}>
     {(Component) => Component === null
       ? <Loading />
       : <Component {...props} />}
   </DynamicImport>
 )
 
-const TeamPage = (props) => (
-  <DynamicImport load={() => import('./TeamPage')}>
+const Request = (props) => (
+  <DynamicImport load={() => import('./Request')}>
     {(Component) => Component === null
       ? <Loading />
       : <Component {...props} />}
@@ -47,16 +47,15 @@ const Articles = (props) => (
 class App extends Component {
   render() {
     return (
-      <Router basename={'/projects/router-league'}>
+      <Router basename={'/'}>
         <div>
           <Navbar />
 
           <Switch>
             <Route path='/' exact component={Home} />
-            <Route path='/players' component={Players} />
-            <Route path='/teams' component={Teams} />
-            <Route path='/:teamId' exact component={TeamPage} />
-            <Route path='/:teamId/articles' component={Articles} />
+            <Route path='/requests' component={Requests} />
+            <Route path='/settings' component={Settings} />
+            <Route path='/request/:id' exact component={Request} />
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>
         </div>

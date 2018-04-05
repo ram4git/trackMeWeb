@@ -6,8 +6,9 @@ export default function Navbar () {
     <div className='container navbar'>
       <Link to='/'>Home</Link>
       <nav className='nav-links'>
-        <Link to='/players'>Players</Link>
-        <Link to='/teams'>Teams</Link>
+        <Link to='/requests'>Requests</Link>
+        <Link to='/settings'>Settings</Link>
+        <Link to='/search'>Search</Link>
       </nav>
     </div>
   )

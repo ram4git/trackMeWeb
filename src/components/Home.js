@@ -19,10 +19,10 @@ export default class Home extends Component {
     return (
       <div className='container'>
         <h1 className='large-header'>
-          Hash History Basketball League
+          Dashboard
         </h1>
         <h3 className='header text-center'>
-          Select a team
+          Active Requests Requiring Immediate Attention
         </h3>
         <div className='home-grid'>
           {teamNames.map((id) => (

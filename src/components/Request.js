@@ -6,7 +6,7 @@ import Team from './Team'
 import slug from 'slug'
 import Loading from './Loading'
 
-export default class TeamPage extends Component {
+export default class Request extends Component {
   state = {
     loading: true,
     teamNames: {},

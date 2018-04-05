@@ -10,7 +10,7 @@ import {
   CSSTransition,
 } from 'react-transition-group'
 
-export default class Players extends Component {
+export default class Requests extends Component {
   state = {
     players: [],
     loading: true,
@@ -36,12 +36,12 @@ export default class Players extends Component {
       <div className='container two-column'>
         <Sidebar
           loading={loading}
-          title='Players'
+          title='Requests'
           list={players.map((player) => player.name)}
           {...this.props}
         />
 
-        {loading === false && location.pathname === '/players'
+        {loading === false && location.pathname === '/requests'
           ? <div className='sidebar-instruction'>Select a Player</div>
           : null}
 
