@@ -36,6 +36,14 @@ const Request = (props) => (
   </DynamicImport>
 )
 
+const JobCard = (props) => (
+  <DynamicImport load={() => import('./JobCard')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 const Articles = (props) => (
   <DynamicImport load={() => import('./Articles')}>
     {(Component) => Component === null
@@ -56,6 +64,9 @@ class App extends Component {
             <Route path='/requests' component={Requests} />
             <Route path='/settings' component={Settings} />
             <Route path='/request/:id' exact component={Request} />
+            <Route path='/jobcards' component={Requests} />
+            <Route path='/jobcard/:id' component={JobCard} />
+
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>
         </div>
