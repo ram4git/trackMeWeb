@@ -26,7 +26,7 @@ export default class Home extends Component {
         <Button size="massive">Click Here</Button>
       </div>
       <Card>
-      <Image src={require('../background.jpg')} size='mini'/>
+      <Image src={require('../background.jpg')} size='large'/>
    <Card.Content>
      <Card.Header>
        Matthew
