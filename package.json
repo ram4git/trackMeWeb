@@ -1,8 +1,8 @@
 {
-  "name": "reactrouter-course-project",
+  "name": "trackMeWeb",
   "version": "0.1.0",
   "private": true,
-  "homepage" : "https://tylermcginnis.com/projects/router-league/",
+  "homepage" : "",
   "dependencies": {
     "prop-types": "^15.6.0",
     "query-string": "^5.0.1",
