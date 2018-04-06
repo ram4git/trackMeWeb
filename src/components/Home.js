@@ -6,6 +6,8 @@ import { Button } from 'semantic-ui-react'
 import { Card, Icon, Image } from 'semantic-ui-react'
 import {browserHistory} from 'react-router';
 import { Redirect } from 'react-router';
+import FlatButton from 'material-ui/FlatButton';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 
 export default class Home extends Component {
   state = {
@@ -48,8 +50,9 @@ export default class Home extends Component {
       <div className='container'>
 
         <div style={pStyle}>
-          <Button primary size="large" onClick={() => this.redirect()}>
-          Create Job Card </Button>
+        <MuiThemeProvider>
+          <FlatButton primary={true} label = "Create Job Card" onClick={() => this.redirect()} />
+          </MuiThemeProvider>
         </div>
       <Card onClick={() => this.onCardClick()}
       header='KA 51 RK 1234'
