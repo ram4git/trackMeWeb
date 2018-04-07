@@ -18,7 +18,7 @@ export default class ViewJobCard extends Component {
 
 
   componentDidMount () {
-
+      console.log(this.props);
   }
 
   render() {

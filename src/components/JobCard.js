@@ -17,26 +17,27 @@ export default class JobCard extends Component {
   state = {
     loading: true,
     jobCardID : 0,
-    createFlow : false
+    createFlow : true
   }
 
 
   componentDidMount () {
 
-    console.log(this.props.match.params.id)
-    if(this.props.match.params.id == 0)
-        this.setState({createFlow : true})
+    const jobCardID = this.props.match.params.id
+    if(jobCardID != 0) {
+      this.setState({createFlow : false, jobCardID  })
+    }
 
   }
 
 
 
   render () {
-      const {createFlow} = this.state;
+      const {createFlow, jobCardID} = this.state;
       if(createFlow)
        return (<CreateJobCard  />)
        else
-         return (<ViewJobCard />)
+         return (<ViewJobCard jobCardID={jobCardID} />)
 
 
   }
