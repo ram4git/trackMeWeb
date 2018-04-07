@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import TeamLogo from './TeamLogo'
 import { Link } from 'react-router-dom'
 import { getTeamNames } from '../api'
@@ -8,16 +8,20 @@ import {browserHistory} from 'react-router';
 import { Redirect } from 'react-router';
 import FlatButton from 'material-ui/FlatButton';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import {getAllActiveJobCards} from '../api/allApi.js'
+
 
 export default class Home extends Component {
   state = {
-    teamNames: []
+    jobCards: {}
   }
   componentDidMount () {
-    getTeamNames()
-      .then((teamNames) => this.setState(() => ({
-        teamNames
-      })))
+    getAllActiveJobCards().then((data) => {
+         this.setState({jobCards : data.val()});
+         console.log(this.state.jobCards);
+      }).catch((e) => console.log(e))
   }
 
   redirect() {
@@ -47,12 +51,13 @@ export default class Home extends Component {
       </a>
     )
     return (
+      <Fragment>
+        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+
       <div className='container'>
 
         <div style={pStyle}>
-        <MuiThemeProvider>
           <FlatButton primary={true} label = "Create Job Card" onClick={() => this.redirect()} />
-          </MuiThemeProvider>
         </div>
       <Card onClick={() => this.onCardClick()}
       header='KA 51 RK 1234'
@@ -60,9 +65,10 @@ export default class Home extends Component {
       description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
       extra={extra}
       />
-
-
       </div>
+        </MuiThemeProvider>
+
+      </Fragment>
     )
   }
 }

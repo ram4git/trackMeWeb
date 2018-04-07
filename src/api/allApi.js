@@ -14,3 +14,8 @@ export function createJobCard(data) {
   updates[`${data.id}`] = data;
   return dbRef.update(updates);
 }
+
+export function getAllActiveJobCards() {
+  const dbRef = firebase.database().ref().child('jobCards');
+  return dbRef.once('value');
+}
