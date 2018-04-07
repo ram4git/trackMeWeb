@@ -29,10 +29,21 @@ export default class CreateJobCard extends Component {
    console.log(this.state);
    let data = Object.assign({}, this.state);
   // let copy = {{} , ...this.state};
-   data.date = new Date();
-   data.id = '620'
+   let now = new Date();
+   data.date = now;
+   data.id = this.generateOrderID(data.vehicleNumber , now)
    createJobCard(data).then(console.log('successfully saved')).catch(console.log('error occured'))
    this.setState({ email: '', name: '' })
+ }
+
+ generateOrderID(vehicleNumber , now){
+   let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+   let year = now.getFullYear();
+   let mathRandom = Math.floor((Math.random())*100);
+   let jobCardId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
+   vehicleNumber.toUpperCase() + '-' + mathRandom.toString();
+   return jobCardId;
+
  }
 
 
