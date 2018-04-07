@@ -8,6 +8,8 @@ import { Input, Label, Form , Select,Header, Image,Dropdown,
   Grid, Table, Button, TextArea } from 'semantic-ui-react'
 
 import {createJobCard} from '../api/allApi.js'
+import Rand from 'random-key';
+
 
 
 export default class CreateJobCard extends Component {
@@ -39,9 +41,9 @@ export default class CreateJobCard extends Component {
  generateOrderID(vehicleNumber , now){
    let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
    let year = now.getFullYear();
-   let mathRandom = Math.floor((Math.random())*100);
-   let jobCardId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
-   vehicleNumber.toUpperCase() + '-' + mathRandom.toString();
+   let mathRandom = Rand.generateBase30(2);
+   let jobCardId= (now.getDate()).toString()  + (now.getMonth()+1)  +
+   vehicleNumber.toUpperCase() + '-' + mathRandom;
    return jobCardId;
 
  }

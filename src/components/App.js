@@ -52,6 +52,24 @@ const Articles = (props) => (
   </DynamicImport>
 )
 
+
+const Indents = (props) => (
+  <DynamicImport load={() => import('./Indents')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
+
+const Indent = (props) => (
+  <DynamicImport load={() => import('./Indent')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 class App extends Component {
   render() {
     return (
@@ -66,6 +84,8 @@ class App extends Component {
             <Route path='/request/:id' exact component={Request} />
             <Route path='/jobcards' component={Requests} />
             <Route path='/jobcard/:id' component={JobCard} />
+            <Route path='/indents' component={Indents} />
+            <Route path='/indent/:id' component={Indent} />
 
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>
