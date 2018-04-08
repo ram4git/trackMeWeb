@@ -60,6 +60,7 @@ export default class Home extends Component {
 };
 
  const jobCards = this.state.jobCards;
+ window.localStorage.jobCards = JSON.stringify(jobCards);
  let returnObj = [];
  Object.keys(jobCards).forEach((jobCardNumber) => {
    let jobCardDetails = jobCards[jobCardNumber];

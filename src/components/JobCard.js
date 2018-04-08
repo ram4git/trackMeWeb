@@ -7,8 +7,7 @@ import Loading from './Loading'
 import { Input, Label, Form , Select,Header, Image,Dropdown,
   Grid, Table, Button, TextArea } from 'semantic-ui-react'
 import CreateJobCard  from  './CreateJobCard'
-import ViewJobCard  from  './ViewJobCard'
-
+import ViewJobCard  from  './ViewJobCard';
 
 import {createJobCard} from '../api/allApi.js'
 

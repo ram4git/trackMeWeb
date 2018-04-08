@@ -19,3 +19,8 @@ export function getAllActiveJobCards() {
   const dbRef = firebase.database().ref().child('jobCards');
   return dbRef.once('value');
 }
+
+export function getJobCardDetail(id) {
+  const dbRef = firebase.database().ref().child('jobCards/'+id);
+  return dbRef.once('value');
+}
