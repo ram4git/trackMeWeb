@@ -2,11 +2,13 @@ import React, { Component, Fragment } from 'react'
 import TeamLogo from './TeamLogo'
 import { Link } from 'react-router-dom'
 import { getTeamNames } from '../api'
-import { Card, Icon, Image } from 'semantic-ui-react'
-import {browserHistory} from 'react-router';
+import Card, {CardHeader, CardText, CardActions, CardContent } from 'material-ui/Card';
+import Typography from 'material-ui/Typography'
+import { browserHistory } from 'react-router';
 import { Redirect } from 'react-router';
 import Button from 'material-ui/Button';
-import {getAllActiveJobCards} from '../api/allApi.js'
+import { getAllActiveJobCards } from '../api/allApi.js'
+import SimpleCard from '../lib/SimpleCard.js'
 
 
 export default class Home extends Component {
@@ -34,32 +36,54 @@ export default class Home extends Component {
     if (this.state.redirect) {
     return <Redirect push to="/jobcard/0" />;
    }
-    const { teamNames } = this.state;
 
     const pStyle = {
       float: 'right'
     };
 
-    const extra = (
-      <a>
-       <Icon name='indent' />
-       2 Indents
-      </a>
-    )
-    return (
+    const styles = {
+  card: {
+    minWidth: 100,
+  },
+  bullet: {
+    display: 'inline-block',
+    margin: '0 2px',
+    transform: 'scale(0.8)',
+  },
+  title: {
+    marginBottom: 16,
+    fontSize: 14,
+  },
+  pos: {
+    marginBottom: 12,
+  },
+};
+
+ const jobCards = this.state.jobCards;
+ let returnObj = [];
+ Object.keys(jobCards).forEach((jobCardNumber) => {
+   let jobCardDetails = jobCards[jobCardNumber];
+   let cardProps = {
+     text : {
+       title : jobCardDetails.vehicleNumber,
+       id : jobCardNumber,
+       detail : jobCardDetails.indents
+     },
+     onButtonClickPath : 'jobcard'
+   }
+     returnObj.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+   })
+
+   return (
+
       <Fragment>
 
       <div className='container'>
 
         <div style={pStyle}>
-          <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
+        <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
         </div>
-      <Card onClick={() => this.onCardClick()}
-      header='KA 51 RK 1234'
-      meta='Friend'
-      description='Elliot is a sound engineer living in Nashville who enjoys playing guitar and hanging with his cat.'
-      extra={extra}
-      />
+      {returnObj}
       </div>
 
       </Fragment>
