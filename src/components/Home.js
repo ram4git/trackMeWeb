@@ -52,7 +52,7 @@ export default class Home extends Component {
       <div className='container'>
 
         <div style={pStyle}>
-          <Button primary={true} label = "Create Job Card" onClick={() => this.redirect()} />
+          <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
         </div>
       <Card onClick={() => this.onCardClick()}
       header='KA 51 RK 1234'
