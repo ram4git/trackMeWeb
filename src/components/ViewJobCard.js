@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { Redirect, Link } from 'react-router-dom'
 import TeamLogo from './TeamLogo'
 import Team from './Team'
@@ -7,6 +7,7 @@ import Loading from './Loading'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import { getJobCardDetail } from '../api/allApi.js'
+import SimpleCard from '../lib/SimpleCard.js'
 
 export default class ViewJobCard extends Component {
 
@@ -27,7 +28,6 @@ export default class ViewJobCard extends Component {
       getJobCardDetail(jobCardID).then((data) => {
         console.log(data.val())
            this.setState({jobCard : data.val()});
-
         }).catch((e) => console.log(e))
     }
     this.setState({
@@ -39,10 +39,27 @@ export default class ViewJobCard extends Component {
 
   render() {
   const { jobCard } = this.state;
+  console.log(jobCard);
   if(!jobCard) {
    return null;
  }
+ let returnObj = [];
+ let jobCardIndents = jobCard.indents;
+ let allIndents = '';
+ jobCardIndents.map((indent) => {
+   allIndents+=indent.id
+ let cardProps = {
+   text : {
+     title : indent.id,
+     id : indent.id,
+     detail : indent.status
+   },
+   onButtonClickPath : 'indents'
+ }
+   returnObj.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+ })
     return (
+      <Fragment>
       <Paper>
       <Table>
         <TableBody>
@@ -79,10 +96,6 @@ export default class ViewJobCard extends Component {
             <TableCell>{jobCard.duration}</TableCell>
            </TableRow>
            <TableRow>
-            <TableCell>Indents</TableCell>
-            <TableCell>{jobCard.indents}</TableCell>
-           </TableRow>
-           <TableRow>
             <TableCell>Loading</TableCell>
             <TableCell>{jobCard.loading}</TableCell>
            </TableRow>
@@ -105,6 +118,8 @@ export default class ViewJobCard extends Component {
         </TableBody>
       </Table>
     </Paper>
+    {returnObj}
+    </Fragment>
     )
   }
 }

@@ -47,7 +47,7 @@ function SimpleCard(props) {
             {text.headline}
           </Typography>
           <Typography component="p">
-            Indents = {text.detail}
+            {text.detail}
           </Typography>
         </CardContent>
         <CardActions>

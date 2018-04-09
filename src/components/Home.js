@@ -64,11 +64,14 @@ export default class Home extends Component {
  let returnObj = [];
  Object.keys(jobCards).forEach((jobCardNumber) => {
    let jobCardDetails = jobCards[jobCardNumber];
+   var allIndents = '';
+  jobCardDetails.indents.map((indent,index) => allIndents+=indent.id);
+   console.log(allIndents);
    let cardProps = {
      text : {
        title : jobCardDetails.vehicleNumber,
        id : jobCardNumber,
-       detail : jobCardDetails.indents
+       detail : allIndents
      },
      onButtonClickPath : 'jobcard'
    }

@@ -3,10 +3,10 @@ import TeamLogo from './TeamLogo'
 import { Link } from 'react-router-dom'
 import { getTeamNames } from '../api'
 import { Card, Icon, Image } from 'semantic-ui-react'
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
 import { Redirect } from 'react-router';
 import Button from 'material-ui/Button';
-import {getAllActiveJobCards} from '../api/allApi.js'
+import { getAllActiveJobCards } from '../api/allApi.js'
 
 
 export default class Indents extends Component {
