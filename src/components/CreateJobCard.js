@@ -5,7 +5,7 @@ import Team from './Team'
 import slug from 'slug'
 import Loading from './Loading'
 import { Input, Label, Form , Select,Header, Image,Dropdown,
-  Grid, Table, Button, TextArea } from 'semantic-ui-react'
+  Grid, Table, Button, TextArea } from 'semantic-ui-react';
 
 import {createJobCard} from '../api/allApi.js'
 import Rand from 'random-key';
