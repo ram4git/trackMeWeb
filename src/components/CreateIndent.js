@@ -1,100 +1,118 @@
-import React, { Component } from 'react'
-import { Redirect, Link } from 'react-router-dom'
-import TeamLogo from './TeamLogo'
-import Team from './Team'
-import slug from 'slug'
-import Loading from './Loading';
-import {Header, Button, Icon, Select} from 'semantic-ui-react';
-import { Input, Modal } from 'semantic-ui-react'
-
-export default class CreateIndent extends Component {
-
-
-    state = {
-        indent : {
-            modalNumber: "",
-            lorryNumber: "",
-            jobCard: "",
-            item: []
-        },
-        mainHead : [],
-        part : "",
-        showModal : false
-    }
-
-    componentDidMount(){
-        this._getMainHead();
-    }
-
-    _getMainHead = () => {
-        // AJAX call to get the mainhead
-    }
-
-    _getPart = (mainHead) => {
-        // AJAX call to get the getPart based on the mainPart
-    }
-
-    _createNewIndent = () => {
-        //AJAX CALL TO CREATE INDENT
-    }
-
-    _addItem = () => {
-
-    }
-
-    _showModal = () => {
-        this.setState({
-            showModal : true
-        });
-    }
-
-    _closeModal = () => {
-        this.setState({
-            showModal : false
-        });
-    }
+import React, { Component, Fragment } from 'react'
+import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
+import ViewJobCard from './ViewJobCard'
+import Button from 'material-ui/Button';
+import Dialog from 'material-ui/Dialog';
+import Divider from 'material-ui/Divider';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import IconButton from 'material-ui/IconButton';
+import Typography from 'material-ui/Typography';
+import Slide from 'material-ui/transitions/Slide';
+import Input, { InputLabel } from 'material-ui/Input';
+import { MenuItem } from 'material-ui/Menu';
+import Select from 'material-ui/Select';
+import { FormControl } from 'material-ui/Form';
+import  {DialogContent} from 'material-ui/Dialog';
 
 
-
-  render () {
-      return(
-        <div>
-            <h1>create indent code here</h1>
-            <Input placeholder='Modal' /> <br/>
-            <Input placeholder='Lorry' /> <br/>
-            <Input placeholder='JobCard' /> <br/>
-            <Button content='Add Item' onClick={this.state._addItem} />
-            <Button content='create New Indent' onClick={this.state._createNewIndent} />
-            {
-                this.state.showModal &&
-                <Modal trigger={<Button>Basic Modal</Button>} basic size='small'>
-                    <Header icon='archive' content='Add Item'/>
-                    <Modal.Content>
-
-                        <Select placeholder='Select your country' options={this.state.mainHead}/>
-                        <br/>
-
-                        Part <Input type="text" diabled value={this.state.part}/>
-                        <br/>
-                        Illustration <Input type="text"/>
-                        <Button>Add Image</Button>
-                        Quantity <Input type="text"/>
-                        Required Quantity <Input type="text"/>
-                        <Button onClick={this._showModal}>
-                            Add Item
-                        </Button>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button basic color='red' inverted>
-                            <Icon name='remove'/> No
-                        </Button>
-                        <Button color='green' inverted>
-                            <Icon name='checkmark'/> Yes
-                        </Button>
-                    </Modal.Actions>
-                </Modal>
-            }
-        </div>
-      )
+class CreateIndent extends Component {
+constructor(props) {
+  super(props);
+  this.state = {
+    open: false,
+    age:''
   }
 }
+
+componentDidMount() {
+
+  if(this.props) {
+  this.setState({
+    vehicleNumber : this.props.vehicleNumber,
+    jobCardID : this.props.jobCardID,
+    modelNumber : this.props.modelNumber
+  })
+}
+}
+handleClickOpen = () => {
+    this.setState({ open: true });
+  };
+
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
+
+render() {
+
+    return (
+      <Fragment>
+      <Paper>
+      <Table>
+        <TableBody>
+           <TableRow>
+            <TableCell>Jobcard Id</TableCell>
+            <TableCell>{this.state.jobCardID}</TableCell>
+            </TableRow>
+            <TableRow>
+            <TableCell>Lorry Number</TableCell>
+            <TableCell>{this.state.vehicleNumber}</TableCell>
+            </TableRow>
+            <TableRow>
+            <TableCell>Model Number</TableCell>
+            <TableCell>{this.state.modelNumber}</TableCell>
+           </TableRow>
+        </TableBody>
+      </Table>
+      </Paper>
+      <Button color="secondary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
+      <Dialog
+          fullScreen
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+
+          <DialogContent>
+          <AppBar>
+            <Toolbar>
+              <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+              </IconButton>
+              <Typography variant="title" color="inherit">
+                Indent Details
+              </Typography>
+              <Button color="inherit" onClick={this.handleClose}>
+                save
+              </Button>
+            </Toolbar>
+          </AppBar>
+          <form className='girish' autoComplete="off">
+          <FormControl className='girish'>
+            <InputLabel htmlFor="age-simple">Age</InputLabel>
+            <Select className='girish'
+            value={this.state.age}
+            inputProps={{
+            name: 'age',
+            id: 'age-simple',
+          }}         >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={10}>Ten</MenuItem>
+              <MenuItem value={20}>Twenty</MenuItem>
+              <MenuItem value={30}>Thirty</MenuItem>
+            </Select>
+          </FormControl>
+          </form>
+          </DialogContent>
+        </Dialog>
+        <div>
+
+        </div>
+      </Fragment>
+    )
+  }
+}
+
+export default CreateIndent

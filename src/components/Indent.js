@@ -19,7 +19,8 @@ export default class Indent extends Component {
 
 
   componentDidMount () {
-
+    const { params } = this.props.location;
+    this.setState({ params  });
     const indentID = this.props.match.params.id
     if(indentID != 0) {
       this.setState({createFlow : false, indentID  })
@@ -31,11 +32,15 @@ export default class Indent extends Component {
 
   render () {
     console.log(this.state);
-      const {createFlow, indentID} = this.state;
-      if(createFlow)
-       return (<CreateIndent  />)
-       else
-         return (<ViewIndent indentID={indentID} />)
+      const {createFlow, indentID, params} = this.state;
+      if(createFlow && params)
+       return (<CreateIndent  jobCardID={params.jobCardID}
+         vehicleNumber={params.vehicleNumber}
+         modelNumber={params.modelNumber} />)
+       else if(params)
+         return (<ViewIndent indentID={indentID} {...params} />)
+         else
+         return null;
 
 
   }

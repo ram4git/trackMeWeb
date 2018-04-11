@@ -225,6 +225,15 @@ a {
     font-size: 12px;
   }
 
+  .root {
+display: 'flex';
+flex-wrap: 'wrap';
+}
+.girish {
+margin-top: '100px' !important;
+
+}
+
   .article {
     padding: 5px;
     margin: 5px;

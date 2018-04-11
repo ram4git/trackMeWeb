@@ -7,6 +7,7 @@ import Loading from './Loading'
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Paper from 'material-ui/Paper';
 import { getJobCardDetail } from '../api/allApi.js'
+import Button from 'material-ui/Button';
 import SimpleCard from '../lib/SimpleCard.js'
 
 export default class ViewJobCard extends Component {
@@ -37,7 +38,22 @@ export default class ViewJobCard extends Component {
       console.log(this.props);
   }
 
+  redirect() {
+    this.setState({redirect: true});
+  }
+
   render() {
+    if (this.state.redirect) {
+    return <Redirect push to={{pathname: '/indent/0',
+    params: {jobCardID: this.state.id,
+             vehicleNumber : this.state.jobCard.vehicleNumber,
+             modelNumber : 'MK123'}
+           }}/>;
+         }
+
+   const pStyle = {
+     float: 'right'
+   };
   const { jobCard } = this.state;
   console.log(jobCard);
   if(!jobCard) {
@@ -60,6 +76,9 @@ export default class ViewJobCard extends Component {
  })
     return (
       <Fragment>
+      <div style={pStyle}>
+      <Button color="secondary" variant="raised" onClick={() => this.redirect()} >Create Indent</Button>
+      </div>
       <Paper>
       <Table>
         <TableBody>
