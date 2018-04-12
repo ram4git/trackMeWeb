@@ -22,7 +22,7 @@ constructor(props) {
   super(props);
   this.state = {
     open: false,
-    age:''
+    mainHead:''
   }
 }
 
@@ -44,6 +44,11 @@ handleClickOpen = () => {
     this.setState({ open: false });
   };
 
+  handlePropChange = prop => event => {
+      this.setState({
+        [prop] : event.target.value
+      })
+  };
 
 render() {
 
@@ -87,15 +92,16 @@ render() {
               </Button>
             </Toolbar>
           </AppBar>
-          <form className='girish' autoComplete="off">
-          <FormControl className='girish'>
-            <InputLabel htmlFor="age-simple">Age</InputLabel>
-            <Select className='girish'
-            value={this.state.age}
+          <form className='addItemForm' autoComplete="off">
+          <FormControl className='addItemSelect'>
+            <InputLabel htmlFor="mainHead">Group/Main Head</InputLabel>
+            <Select
+            value={this.state.mainHead}
+            onChange={this.handlePropChange('mainHead')}
             inputProps={{
-            name: 'age',
-            id: 'age-simple',
-          }}         >
+            name: 'mainHead',
+            id: 'mainHead',
+            }}>
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>

@@ -47,7 +47,7 @@ export default class ViewJobCard extends Component {
     return <Redirect push to={{pathname: '/indent/0',
     params: {jobCardID: this.state.id,
              vehicleNumber : this.state.jobCard.vehicleNumber,
-             modelNumber : 'MK123'}
+             modelNumber : this.state.jobCard.modelNumber || 'MK1312'}
            }}/>;
          }
 

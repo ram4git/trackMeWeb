@@ -226,20 +226,12 @@ a {
   }
 
   .root {
-display: 'flex';
-flex-wrap: 'wrap';
-}
-.girish {
-margin-top: '100px' !important;
-
-}
-
-  .article {
-    padding: 5px;
-    margin: 5px;
+    display: 'flex';
+    flex-wrap: 'wrap';
   }
-}
 
+
+}
 .fade-enter {
   opacity: 0;
   z-index: 1;
@@ -256,4 +248,18 @@ margin-top: '100px' !important;
 
 .card {
   margin-top: 40px;
+}
+
+.addItemForm {
+  margin-top: 70px;
+  margin-left: 20px;
+}
+
+.addItemSelect {
+  width:200px;
+}
+
+.article {
+  padding: 5px;
+  margin: 5px;
 }
