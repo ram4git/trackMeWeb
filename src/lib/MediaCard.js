@@ -4,7 +4,7 @@ import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
-import GridList, { GridListTile } from 'material-ui/GridList';
+import GridList from 'material-ui/GridList';
 
 const styles = {
   card: {
@@ -20,6 +20,11 @@ function SimpleMediaCard(props) {
   return (
     <div>
       <Card>
+      <GridList cellHeight={100}  className='partImage'>
+    {
+        <img src={text.screenShot}  />
+    }
+    </GridList>
         <CardContent>
           <Typography gutterBottom variant="headline" component="h2">
             {text.title}
