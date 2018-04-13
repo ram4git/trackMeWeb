@@ -26,12 +26,12 @@ export default class Home extends Component {
     this.setState({redirect: true});
   }
 
-  onCardClick() {
-    this.setState({cardClicked: true});
+  onLorryClick() {
+    this.setState({lorryButtonClicked: true});
   }
   render() {
-    if(this.state.cardClicked) {
-      return <Redirect push to="/jobcard/1" />
+    if(this.state.lorryButtonClicked) {
+      return <Redirect push to="/lorry/0" />
     }
     if (this.state.redirect) {
     return <Redirect push to="/jobcard/0" />;
@@ -43,7 +43,7 @@ export default class Home extends Component {
 
  const jobCards = this.state.jobCards;
  window.localStorage.jobCards = JSON.stringify(jobCards);
- let returnObj = [];
+ let jobCardsList = [];
  Object.keys(jobCards).forEach((jobCardNumber) => {
    let jobCardDetails = jobCards[jobCardNumber];
    var allIndents = '';
@@ -57,7 +57,7 @@ export default class Home extends Component {
      },
      onButtonClickPath : 'jobcard'
    }
-     returnObj.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+     jobCardsList.push(<div className='card'><SimpleCard {...cardProps} /></div>)
    })
 
    return (
@@ -69,7 +69,10 @@ export default class Home extends Component {
         <div style={pStyle}>
         <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
         </div>
-      {returnObj}
+        <div>
+        <Button color="primary" onClick={() => this.onLorryClick()} >Add Lorry</Button>
+        </div>
+      {jobCardsList}
       </div>
 
       </Fragment>
