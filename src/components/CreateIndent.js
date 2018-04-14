@@ -18,6 +18,12 @@ import { FormControl } from 'material-ui/Form';
 import  {DialogContent} from 'material-ui/Dialog';
 import GridList, { GridListTile } from 'material-ui/GridList';
 import MediaCard from '../lib/MediaCard.js'
+import TextField from 'material-ui/TextField';
+import CloseIcon from '@material-ui/icons/Close';
+import {saveIndent} from '../api/allApi.js'
+
+
+
 
 class CreateIndent extends Component {
 constructor(props) {
@@ -29,6 +35,7 @@ constructor(props) {
     showLiveCameraFeed: true,
     items: []
   }
+  this.handleChange.bind(this);
 }
 
 componentDidMount() {
@@ -74,24 +81,33 @@ capture() {
         <Webcam
           audio={false}
           ref={this.setRef.bind(this)}
+          height={480}
+          width={640}
           screenshotFormat='image/jpeg'
-          width={400}
           onClick={this.capture.bind(this)}
         />
       );
     }
     return (
-      <GridList cellHeight={200} >
-    {
-        <img src={this.state.screenShot}  />
-    }
-  </GridList>
+        <img src={this.state.screenShot} style={{height:'640px'}} />
     );
   }
 
 handleClickOpen = () => {
-    this.setState({ open: true });
+    this.setState({ open: true , showLiveCameraFeed : true});
   };
+
+onSubmit = () => {
+  console.log(this.state);
+  //change id later on...for now let it be jobCardID
+
+  const payload = {
+    indentID : this.state.jobCardID,
+    items : this.state.items,
+    jobCardID : this.state.jobCardID
+  }
+  saveIndent(payload).then(console.log('Indent saved successfully')).catch(alert('could not save Indent'))
+}
 
   handleClose = () => {
     this.setState({open: false});
@@ -104,25 +120,35 @@ handleClickOpen = () => {
   };
 
   saveIndents = () => {
-    const { mainHead, partNumber, screenShot } = this.state;
+    const { mainHead, partNumber, screenShot ,quantityRequired , items  } = this.state;
     let newItem = {};
 
     newItem.mainHead = mainHead;
     newItem.partNumber = partNumber;
+    newItem.partName = 'Gear box';
+    newItem.quantityRequired = quantityRequired;
+    newItem.quantityInStores = '120';
     newItem.screenShot = screenShot;
-    console.log(newItem);
 
-    const items = this.state.items;
-    console.log(items);
+
     items.push(newItem);
+
+    this.webcam=null;
     this.setState({
       open: false,
       mainHead: '',
       partNumber: '',
-      showLiveCameraFeed: true,
+      showLiveCameraFeed: false,
       items: items
     });
   }
+
+//why is this syntax different ?
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
 
 
 render() {
@@ -158,7 +184,9 @@ render() {
         </TableBody>
       </Table>
       </Paper>
-      <Button color="secondary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
+      <Button color="primary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
+      <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
+
       <Dialog
           fullScreen
           open={this.state.open}
@@ -169,12 +197,13 @@ render() {
           <AppBar>
             <Toolbar>
               <IconButton color="inherit" onClick={this.handleClose} aria-label="Close">
+                <CloseIcon />
               </IconButton>
-              <Typography variant="title" color="inherit">
+              <Typography variant="title" color="inherit" style={{flex:1}}>
                 Indent Details
               </Typography>
-              <Button color="inherit" onClick={this.handleClose}>
-                save
+              <Button color="inherit" onClick={this.saveIndents}>
+                SAVE
               </Button>
             </Toolbar>
           </AppBar>
@@ -191,13 +220,16 @@ render() {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={'engine'}>Engine</MenuItem>
+              <MenuItem value={'gear'}>Gear</MenuItem>
+              <MenuItem value={'battery'}>Battery</MenuItem>
+              <MenuItem value={'brakes'}>Brake</MenuItem>
+              <MenuItem value={'tiers'}>Tiers</MenuItem>
+
             </Select>
           </FormControl>
           </form>
-          <form className='addItemForm' autoComplete="off">
+          <form className='partImage' autoComplete="off">
           <FormControl className='addItemSelect'>
             <InputLabel htmlFor="partNumber">Item/Part</InputLabel>
             <Select
@@ -210,21 +242,38 @@ render() {
               <MenuItem value="">
                 <em>None</em>
               </MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
+              <MenuItem value={10}>Gear Box</MenuItem>
+              <MenuItem value={20}>Lights</MenuItem>
+              <MenuItem value={30}>Tyres</MenuItem>
             </Select>
           </FormControl>
           </form>
-          <GridList cellHeight={200} className='partImage'>
-        {
-            <img src={require('../background.jpg')}  />
-        }
-      </GridList>
-      <div onClick={this.capture.bind(this)} >
-      {this.renderCamera() }
-      </div>
-      <Button color="secondary" variant="raised" onClick={this.saveIndents}>Done</Button>
+          <TextField className="partImage"
+             id="quantity"
+             label="Quantity Required"
+             value={this.state.quantityRequired}
+             onChange={this.handleChange('quantityRequired')}
+             margin="normal"
+          />
+
+          <h3 className='partImage'>Reference Image of the component is displayed below : </h3>
+          <GridList cellHeight='auto' cols={2} >
+
+            <GridListTile key='referenceImage' >
+              <img src={require('../background.jpg')} alt='Reference image'  />
+            </GridListTile>
+
+            <GridListTile key='webcamImage' >
+              <div onClick={this.capture.bind(this)} >
+                {this.renderCamera() }
+              </div>
+            </GridListTile>
+
+          </GridList>
+
+          <GridList cellHeight='auto' cols={1} className='partImage'>
+
+          </GridList>
       </DialogContent>
     </Dialog>
     {savedIndentsArray}

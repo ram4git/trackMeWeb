@@ -43,3 +43,14 @@ export function getLorryDetail(id) {
   const dbRef = firebase.database().ref().child('lorries/'+id);
   return dbRef.once('value');
 }
+
+
+export function saveIndent(data) {
+  const dbRef = firebase.database().ref();const updates={};
+  updates['indents/'+data.indentID] = data;
+
+  const jobCardIndentsRef = firebase.database().ref().child('jobCards/'+data.jobCardID + '/indents');
+  jobCardIndentsRef.push(data);
+
+  return dbRef.update(updates);
+}

@@ -6,33 +6,65 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import GridList from 'material-ui/GridList';
 
-const styles = {
+const classes = {
+
   card: {
-    maxWidth: 345,
+   display: 'flex',
+   flex:1
   },
-  media: {
-    height: 200,
+  details: {
+   display: 'flex',
+   flexDirection: 'row',
+   justifyContent: 'spaceBetween'
   },
+  content: {
+   flex: '1 0 auto',
+  },
+   cover: {
+     width: 200,
+     height: 200,
+     flex:0.5,
+     marginLeft : 20
+   },
+   text: {
+   marginBottom: 16,
+   marginLeft : 20,
+   fontSize: 24,
+  },
+  textDiv : {
+    flex:0.5
+  }
 };
 
 function SimpleMediaCard(props) {
   const { classes, text } = props;
   return (
     <div>
-      <Card>
-      <GridList cellHeight={100}  className='partImage'>
-    {
-        <img src={text.screenShot}  />
-    }
-    </GridList>
+      <Card className={classes.card}>
+      <div className={classes.textDiv}>
         <CardContent>
-          <Typography gutterBottom variant="headline" component="h2">
-            {text.title}
-          </Typography>
-          <Typography gutterBottom variant="headline" component="h2">
+          <Typography variant="headline" className={classes.text}>  {text.title}</Typography>
+          <Typography variant="headline" className={classes.text}>  {text.title}</Typography>
+          <Typography variant="subheading" className={classes.text} color="textSecondary">
             {text.number}
           </Typography>
         </CardContent>
+
+      </div>
+      <div className={classes.card}>
+
+        <CardMedia
+         className={classes.cover}
+         image={text.screenShot}
+         title="Live from space album cover"
+        />
+        <CardMedia
+         className={classes.cover}
+         image={require('../background.jpg')}
+         title="Live from space album cover"
+        />
+        </div>
+
       </Card>
     </div>
   );
@@ -42,4 +74,4 @@ SimpleMediaCard.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleMediaCard)
+export default withStyles(classes)(SimpleMediaCard)
