@@ -20,7 +20,8 @@ import GridList, { GridListTile } from 'material-ui/GridList';
 import MediaCard from '../lib/MediaCard.js'
 import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
-import {saveIndent} from '../api/allApi.js'
+import {saveIndent} from '../api/allApi.js';
+import { Redirect, Link } from 'react-router-dom'
 
 
 
@@ -33,6 +34,7 @@ constructor(props) {
     mainHead:'',
     partNumber:'',
     showLiveCameraFeed: true,
+    navigateBackToJobPage : false,
     items: []
   }
   this.handleChange.bind(this);
@@ -98,7 +100,7 @@ handleClickOpen = () => {
   };
 
 onSubmit = () => {
-  console.log(this.state);
+
   //change id later on...for now let it be jobCardID
 
   const payload = {
@@ -106,7 +108,11 @@ onSubmit = () => {
     items : this.state.items,
     jobCardID : this.state.jobCardID
   }
-  saveIndent(payload).then(console.log('Indent saved successfully')).catch(alert('could not save Indent'))
+  saveIndent(payload).then(() => {
+    this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
+
+  }
+  ).catch(() =>alert('could not save Indent'))
 }
 
   handleClose = () => {
@@ -139,6 +145,7 @@ onSubmit = () => {
       mainHead: '',
       partNumber: '',
       showLiveCameraFeed: false,
+      quantityRequired:'',
       items: items
     });
   }
@@ -153,6 +160,15 @@ onSubmit = () => {
 
 render() {
   let savedIndentsArray = [];
+  const {navigateBackToJobPage , jobCardID} = this.state;
+
+  if(navigateBackToJobPage) {
+    const url = "/jobcard/"+ jobCardID;
+    return <Redirect push to={url}/>
+
+  }
+
+
   let itemsArray = this.state.items;
   itemsArray.map((indent) => {
     let mediaCardProps = {
