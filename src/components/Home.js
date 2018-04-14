@@ -40,18 +40,20 @@ export default class Home extends Component {
  let jobCardsList = [];
  Object.keys(jobCards).forEach((jobCardNumber) => {
    let jobCardDetails = jobCards[jobCardNumber];
-   var allIndents = '';
-  jobCardDetails.indents.map((indent,index) => allIndents+=indent.id);
-   console.log(allIndents);
-   let cardProps = {
-     text : {
-       title : jobCardDetails.vehicleNumber,
-       id : jobCardNumber,
-       detail : allIndents
-     },
-     onButtonClickPath : 'jobcard'
+   var allIndents = 'Indents : ';
+   if(jobCardDetails.indents) {
+     jobCardDetails.indents.map((indent,index) => allIndents=allIndents + indent.id + '    ');
    }
+    let cardProps = {
+       text : {
+         title : jobCardDetails.vehicleNumber,
+         id : jobCardNumber,
+         detail : allIndents
+       },
+       onButtonClickPath : 'jobcard'
+     }
      jobCardsList.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+
    })
 
    return (

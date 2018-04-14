@@ -38,10 +38,10 @@ function SimpleCard(props) {
       <Card className={classes.card}>
         <CardContent>
           <Typography className={classes.title} color="textSecondary">
-            {text.title}
+            {text.id}
           </Typography>
           <Typography variant="headline" component="h2">
-            {text.id}
+            {text.title}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
             {text.headline}
