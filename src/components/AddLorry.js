@@ -9,17 +9,26 @@ import { Input, Label, Form , Select,Header, Image,Dropdown,
 
 import { addLorry } from '../api/allApi.js'
 import Rand from 'random-key';
-
+import TextField from 'material-ui/TextField';
 
 
 export default class AddLorry extends Component {
   state = {
-    loading: true
+    loading: true,
+    navigateToHomePage : false
   }
 
 
   componentDidMount () {
   //  console.log(this.props.match.params.id)
+  }
+
+  handleDateChange = (event, object) => {
+    console.log(event.target.value)
+    console.log(object);
+    this.setState({
+      dateOfPurchase: event.target.value
+    })
   }
 
   handleChange = (e, {name , value}) =>{
@@ -30,27 +39,28 @@ export default class AddLorry extends Component {
  handleSubmit = () => {
    console.log(this.state);
    let data = Object.assign({}, this.state);
+   delete data['navigateToHomePage']
+   delete data['loading']
   // let copy = {{} , ...this.state};
    let now = new Date();
-   data.date = now;
-   data.id = this.generateOrderID(data.vehicleNumber , now)
-   addLorry(data).then(console.log('successfully saved')).catch(console.log('error occured'))
+   data.lastModifiedTime = now;
+   addLorry(data).then(() => {
+    alert('successfully saved');
+    this.setState({
+      navigateToHomePage: true
+    })
+   }
+   ).catch(console.log('error occured'))
    this.setState({ email: '', name: '' })
- }
-
- generateOrderID(vehicleNumber , now){
-   let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-   let year = now.getFullYear();
-   let mathRandom = Rand.generateBase30(2);
-   let lorryID = (now.getDate()).toString()  + (now.getMonth()+1)  +
-   vehicleNumber.toUpperCase() + '-' + mathRandom;
-   return lorryID;
-
  }
 
 
 
   render () {
+    const { navigateToHomePage } = this.state;
+    if(navigateToHomePage) {
+      return <Redirect push to="/lorries" />
+    }
 
     const pStyle = {
       marginLeft: '40px',
@@ -112,6 +122,9 @@ export default class AddLorry extends Component {
          <Form.Field width={4} control={Input} label='Vehicle Code' name="vehicleCode" placeholder='xxxx'
          onChange={this.handleChange} >
           </Form.Field>
+          <Form.Field width={4} control={Select} options={options} label='Vehicle Type' name="vehicleType" placeholder='xxxx'
+          onChange={this.handleChange} >
+           </Form.Field>
        </Form.Group>
 
     <Form.Group style={mStyle} widths={3}>
@@ -137,6 +150,17 @@ export default class AddLorry extends Component {
      onChange={this.handleChange} >
       </Form.Field>
    </Form.Group>
+   <form  noValidate>
+     <TextField
+       id="date"
+       label="Date Of Purchase"
+       type="date"
+       onChange={this.handleDateChange}
+       InputLabelProps={{
+         shrink: true,
+       }}
+     />
+   </form>
   <Form.Field control={Button} color='green' content='SUBMIT' width={3} />
  </Form>
 </Fragment>

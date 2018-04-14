@@ -26,13 +26,7 @@ export default class Home extends Component {
     this.setState({redirect: true});
   }
 
-  onLorryClick() {
-    this.setState({lorryButtonClicked: true});
-  }
   render() {
-    if(this.state.lorryButtonClicked) {
-      return <Redirect push to="/lorry/0" />
-    }
     if (this.state.redirect) {
     return <Redirect push to="/jobcard/0" />;
    }
@@ -68,9 +62,6 @@ export default class Home extends Component {
 
         <div style={pStyle}>
         <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
-        </div>
-        <div>
-        <Button color="primary" onClick={() => this.onLorryClick()} >Add Lorry</Button>
         </div>
       {jobCardsList}
       </div>

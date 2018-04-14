@@ -70,6 +70,14 @@ const Indent = (props) => (
   </DynamicImport>
 )
 
+const Lorries = (props) => (
+  <DynamicImport load={() => import('./Lorries')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 const Lorry = (props) => (
   <DynamicImport load={() => import('./Lorry')}>
     {(Component) => Component === null
@@ -94,6 +102,7 @@ class App extends Component {
             <Route path='/jobcard/:id' component={JobCard} />
             <Route path='/indents' component={Indents} />
             <Route path='/indent/:id' component={Indent} />
+            <Route path='/lorries' component={Lorries} />
             <Route path='/lorry/:id' component={Lorry} />
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>

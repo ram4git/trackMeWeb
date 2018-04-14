@@ -13,16 +13,16 @@ import ViewLorry from './ViewLorry'
 export default class Lorry extends Component {
   state = {
     loading: true,
-    lorryID : 0,
+     lorryNumber: 0,
     createFlow : true
   }
 
 
   componentDidMount () {
 
-    const lorryID = this.props.match.params.id
-    if(lorryID != 0) {
-      this.setState({createFlow : false, lorryID  })
+    const lorryNumber = this.props.match.params.id
+    if(lorryNumber != 0) {
+      this.setState({createFlow : false, lorryNumber  })
     }
 
   }
@@ -30,11 +30,11 @@ export default class Lorry extends Component {
 
 
   render () {
-      const {createFlow, lorryID} = this.state;
+      const {createFlow, lorryNumber} = this.state;
       if(createFlow)
        return (<AddLorry  />)
        else
-         return (<ViewLorry lorryID={lorryID} />)
+         return (<ViewLorry lorryNumber={lorryNumber} />)
 
 
   }
