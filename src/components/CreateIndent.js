@@ -133,7 +133,7 @@ onSubmit = () => {
     newItem.partNumber = partNumber;
     newItem.partName = 'Gear box';
     newItem.quantityRequired = quantityRequired;
-    newItem.quantityInStores = '120';
+    newItem.quantityStores = '120';
     newItem.screenShot = screenShot;
 
 

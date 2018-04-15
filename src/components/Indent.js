@@ -37,8 +37,8 @@ export default class Indent extends Component {
        return (<CreateIndent  jobCardID={params.jobCardID}
          vehicleNumber={params.vehicleNumber}
          modelNumber={params.modelNumber} />)
-       else if(params)
-         return (<ViewIndent indentID={indentID} {...params} />)
+       else if(indentID !=0)
+         return (<ViewIndent indentID={indentID} />)
          else
          return null;
 

@@ -13,10 +13,10 @@ const styles = {
     flexDirection: 'row'
   },
   content : {
-    flex:0.9
+    flex:0.8
   },
   actions: {
-    flex:0.1
+    flex:0.2
   },
   title: {
     marginBottom: 10,
@@ -31,7 +31,8 @@ const styles = {
 
 function SimpleCard(props) {
   const { classes, text, onButtonClickPath } = props;
-  const MyLink = props => <Link to={`/${onButtonClickPath}/${text.id}`} {...props} />
+  const MyLink = props => <Link to={`/${onButtonClickPath}/${text.id}`}
+  {...props} />
 
 
   return (

@@ -47,7 +47,7 @@ export default class ViewJobCard extends Component {
     return <Redirect push to={{pathname: '/indent/0',
     params: {jobCardID: this.state.id,
              vehicleNumber : this.state.jobCard.vehicleNumber,
-             modelNumber : this.state.jobCard.modelNumber || 'MK1312'}
+             modelNumber : this.state.jobCard.modelNumber }
            }}/>;
          }
 
@@ -69,7 +69,7 @@ export default class ViewJobCard extends Component {
        id : indent.indentID,
        detail : indent.status
      },
-     onButtonClickPath : 'indents'
+     onButtonClickPath : 'indent'
    }
      returnObj.push(<div className='card'><SimpleCard {...cardProps} /></div>)
    })

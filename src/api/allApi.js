@@ -57,3 +57,15 @@ export function saveIndent(data) {
                  });
   return dbRef.update(updates);
 }
+
+
+export function getIndent(id) {
+  const dbRef = firebase.database().ref().child('indents/'+'123');
+  return dbRef.once('value');
+}
+
+
+export function getPartCount(modelNumber, mainHead, partNumber) {
+  const dbRef = firebase.database().ref().child('parts/'+ modelNumber + '/' + mainHead + '/' + partNumber);
+  return dbRef.once('value');
+}
