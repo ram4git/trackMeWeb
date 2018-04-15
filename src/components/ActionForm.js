@@ -18,6 +18,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent} from '../api/allApi.js';
 import Button from 'material-ui/Button';
 import { updateIndent, updatePartCount } from '../api/allApi.js'
+import Rand from 'random-key';
+import { reserveParts } from '../api/allApi.js';
 
 
 
@@ -69,11 +71,12 @@ export default class ActionForm extends Component {
 
   onIndentActionTaken = () => {
     const {updatedItemsFromCard, actionTaken , indentDetails } = this.state;
-    let msg = '', valid=true , data= {};
+    let msg = '' , data= {};
 
     //move below to constants
 
     if('COMPLETE_RETURN_TO_GARAGE'===actionTaken) {
+      let  valid=true;
       //all items approved qty == required Qty
       Object.keys(updatedItemsFromCard).map((item)=>{
         if(item.quantityApproved != item.quantityRequired){
@@ -110,11 +113,109 @@ export default class ActionForm extends Component {
         data.message = msg;
 
     }else if('PARTIAL_RETURN_TO_GARAGE' === actionTaken){
+      let valid=false;
+      Object.keys(updatedItemsFromCard).map((item)=>{
+        if(item.quantityApproved != '0'){
+            valid=true;
+        }
+      });
+
+      let splitIndentItems = [], indentItemsCopy=[];
+      const splitIndentDetails = Object.assign({} , indentDetails);
+      if(valid){
+        indentDetails.items.map((indentItem) => {
+          let updatedItemFromCard = updatedItemsFromCard[indentItem.partNumber];
+          if(updatedItemFromCard['quantityApproved'] != '' && updatedItemFromCard['quantityApproved'] !='0'){
+            indentItem['quantityApproved'] = updatedItemFromCard['quantityApproved'];
+            indentItem['quantityPurchase'] = '0';
+            indentItem['quantityRequired'] = updatedItemFromCard['quantityApproved']
+            indentItemsCopy.push(indentItem);
+          }else {
+            indentItem['quantityRequired'] = updatedItemFromCard['quantityPurchase'];
+            indentItem['quantityApproved'] = '0';
+            indentItem['quantityPurchase'] = updatedItemFromCard['quantityPurchase']
+            splitIndentItems.push(indentItem);
+          }
+        })
+        indentDetails.items = indentItemsCopy;
+        indentDetails.status='ITEMS_RETURNED_OLD_PARTS_EXPECTED';
+        indentDetails.currentOwner = 'GARAGE';
+        indentDetails.actionUpdateMsg= 'All items returned to garage';
+        indentDetails.actionUpdateTime= new Date();
+        //call to update the count
+        updatePartCount(indentDetails).
+            then()
+        .catch(()=> alert('error occured fetching part count'))
+
+       //call to update the indent details
+       updateIndent(indentDetails).then(alert('success')).catch(alert('error'))
+        msg = 'Indent updated successfully'
+
+
+        splitIndentDetails.items=splitIndentItems;
+        splitIndentDetails.status='FORWARDED_TO_PURCHASE';
+        splitIndentDetails.currentOwner = 'PURCHASE';
+        splitIndentDetails.actionUpdateMsg= 'Indent forwarded to purchase';
+        splitIndentDetails.actionUpdateTime= new Date();
+
+        let indentIDNew = splitIndentDetails.jobCardID +  Rand.generateBase30(2);
+
+        const payload = {
+          indentID : indentIDNew ,
+          items : splitIndentDetails.items,
+          jobCardID : splitIndentDetails.jobCardID,
+          modelNumber : splitIndentDetails.modelNumber
+        }
+
+        saveIndent(payload).then(alert('success')).catch(alert('error'));
+        updateIndent(splitIndentDetails).then(alert('success')).catch(alert('error'))
+         msg = 'Indent updated successfully'
+
+
+      }
+
 
     }else if('FORWARD_TO_PURCHASE' === actionTaken){
 
+      let  valid=false;
+      //atleast one item purchase quantity is > 0
+      Object.keys(updatedItemsFromCard).map((item)=>{
+        if(item.quantityPurchase != '' || item.quantityPurchase != '0'){
+            valid=true;
+        }
+      })
+
+      if(valid) {
+
+        //indentDetails is the input - copy all the modifications done as part of this actionform to the input
+
+        indentDetails.items.map((indentItem) => {
+          indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
+          indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+        })
+        indentDetails.status='FORWARDED_TO_PURCHASE';
+        indentDetails.currentOwner = 'PURCHASE';
+        indentDetails.actionUpdateMsg= 'Forwarded to purchase';
+        indentDetails.actionUpdateTime= new Date();
+
+
+        //call to update the count
+        reserveParts(indentDetails).
+            then()
+        .catch(()=> alert('error occured updating part count'))
+
+       //call to update the indent details
+       //use this flag not to deduct the count again
+       indentDetails.countUpdated = true;
+       updateIndent(indentDetails).then(alert('success')).catch(alert('error'))
+        msg = 'Indent updated successfully'
+      }
+
+        data.message = msg;
 
     }else if('ASSIGN_TO_ADMIN' === actionTaken){
+
+    }else if('CLOSE' == actionTaken) {
 
     }
     this.setState({

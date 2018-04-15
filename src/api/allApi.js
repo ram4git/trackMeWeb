@@ -72,24 +72,46 @@ export function getPartCount(modelNumber, mainHead, partNumber) {
 
 
 export function updatePartCount(indentDetails) {
-  let updates = {}; let items = indentDetails.items;
-  const dbRef = firebase.database().ref().child('parts/' + indentDetails.modelNumber + '/' );
-  items.map((item) => {
-      updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
-  })
-  return dbRef.update(updates);
+  let updates = {}; let items = indentDetails.items;const dbRef = firebase.database().ref();
+  if(indentDetails.countUpdated) {
+    items.map((item) => {
+        updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] = null;
+    })
+
+    const reservationsRef = dbRef.child('parts/'+ indentDetails.modelNumber + '/' )
+
+    return reservationsRef.update(updates);
+
+
+  }else {
+    const partsRef =  dbRef.child('parts/' + indentDetails.modelNumber + '/' );
+    items.map((item) => {
+        updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+    })
+
+    return partsRef.update(updates);
+
+  }
+
 }
 
 
 export function updateIndent(indentDetails) {
-
   const historyRef = firebase.database().ref(`indents/${indentDetails.indentID}/history/`);
   const arrKey = historyRef.push().key;
-
   const updates = {};
   updates[`indents/${indentDetails.indentID}/history/${arrKey}`] = indentDetails;
-
   const dbRef = firebase.database().ref();
   return dbRef.update(updates);
+}
 
+
+export function reserveParts(indentDetails){
+  let updates = {}; let items = indentDetails.items;
+  const dbRef = firebase.database().ref().child('parts/' + indentDetails.modelNumber + '/' );
+  items.map((item) => {
+      updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+      updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] =  item.quantityApproved
+  })
+  return dbRef.update(updates);
 }
