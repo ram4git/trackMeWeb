@@ -9,17 +9,26 @@ import { Input, Label, Form , Select,Header, Image,Dropdown,
 
 import {createJobCard} from '../api/allApi.js'
 import Rand from 'random-key';
-
+import { getLorryDetail }  from '../api/allApi';
 
 
 export default class CreateJobCard extends Component {
   state = {
-    loading: true
+    loading: true,
+    lorryObj : {}
   }
 
 
   componentDidMount () {
   //  console.log(this.props.match.params.id)
+  }
+
+  handleVehicleChange = (e, {name, value}) => {
+    let vehicleValue = value.toUpperCase();
+    getLorryDetail(vehicleValue).then((data) => {
+      let lorryObj = data.val() || {};
+      this.setState({lorryObj})
+    }).catch((e) => console.log(e))
   }
 
   handleChange = (e, {name , value}) =>{
@@ -45,10 +54,7 @@ export default class CreateJobCard extends Component {
    let jobCardId= (now.getDate()).toString()  + (now.getMonth()+1)  +
    vehicleNumber.toUpperCase() + '-' + mathRandom;
    return jobCardId;
-
  }
-
-
 
   render () {
 
@@ -101,19 +107,21 @@ export default class CreateJobCard extends Component {
     console.log(match);
     const { name, email } = this.state
 
+    const { lorryObj } = this.state;
+
 
     return (
       <div>
-
         <Form style={pStyle} onSubmit={this.handleSubmit}>
           <Form.Field  inline={true} control={Input}
           label={<Label color="teal" size="large">Vehicle Number</Label>}
            >
           <Input size="large"
-          placeholder='Search...' name="vehicleNumber" onChange={this.handleChange}
+          placeholder='Search...' name="vehicleNumber" onChange={this.handleVehicleChange}
           icon={{ name: 'search', circular: true, link: true }}
           />
           </Form.Field>
+
           <Grid style={mStyle} divided='vertically'>
     <Grid.Row columns={3}>
       <Grid.Column>
@@ -128,7 +136,7 @@ export default class CreateJobCard extends Component {
       </Header>
       </Table.Cell>
       <Table.Cell>
-      22
+      {lorryObj.make}
       </Table.Cell>
       </Table.Row>
       <Table.Row>
@@ -140,7 +148,7 @@ export default class CreateJobCard extends Component {
       </Header>
       </Table.Cell>
       <Table.Cell>
-      15
+      {lorryObj.numberOfTyres}
       </Table.Cell>
       </Table.Row>
 
@@ -159,7 +167,7 @@ export default class CreateJobCard extends Component {
       </Header>
       </Table.Cell>
       <Table.Cell>
-        M1312
+        {lorryObj.model}
       </Table.Cell>
       </Table.Row>
       <Table.Row>
