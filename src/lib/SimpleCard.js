@@ -9,11 +9,14 @@ import { Link } from 'react-router-dom';
 const styles = {
   card: {
     minWidth: 100,
+    display: 'flex',
+    flexDirection: 'row'
   },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+  content : {
+    flex:0.9
+  },
+  actions: {
+    flex:0.1
   },
   title: {
     marginBottom: 10,
@@ -28,19 +31,17 @@ const styles = {
 
 function SimpleCard(props) {
   const { classes, text, onButtonClickPath } = props;
-  const bull = <span className={classes.bullet}>•</span>;
-
   const MyLink = props => <Link to={`/${onButtonClickPath}/${text.id}`} {...props} />
 
 
   return (
     <div>
       <Card className={classes.card}>
-        <CardContent>
+        <CardContent className={classes.content}>
           <Typography className={classes.title} color="textSecondary">
             {text.id}
           </Typography>
-          <Typography variant="headline" component="h2">
+          <Typography variant="headline" component="h4">
             {text.title}
           </Typography>
           <Typography className={classes.pos} color="textSecondary">
@@ -50,7 +51,7 @@ function SimpleCard(props) {
             {text.detail}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions className={classes.actions}>
           <Button variant="raised" color="secondary" size="small"
                 component={MyLink}>VIEW MORE</Button>
         </CardActions>

@@ -61,14 +61,12 @@ export default class ViewJobCard extends Component {
  }
  let returnObj = [];
  let jobCardIndents = jobCard.indents;
- let allIndents = '';
  if(jobCardIndents) {
    jobCardIndents.map((indent) => {
-     allIndents+=indent.id
    let cardProps = {
      text : {
-       title : indent.id,
-       id : indent.id,
+       title : indent.indentID,
+       id : indent.indentID,
        detail : indent.status
      },
      onButtonClickPath : 'indents'
@@ -140,7 +138,7 @@ export default class ViewJobCard extends Component {
         </TableBody>
       </Table>
     </Paper>
-      {this.returnObj}
+      {returnObj}
     </Fragment>
     )
   }
