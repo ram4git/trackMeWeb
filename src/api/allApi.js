@@ -69,3 +69,27 @@ export function getPartCount(modelNumber, mainHead, partNumber) {
   const dbRef = firebase.database().ref().child('parts/'+ modelNumber + '/' + mainHead + '/' + partNumber);
   return dbRef.once('value');
 }
+
+
+export function updatePartCount(indentDetails) {
+  let updates = {}; let items = indentDetails.items;
+  const dbRef = firebase.database().ref().child('parts/' + indentDetails.modelNumber + '/' );
+  items.map((item) => {
+      updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+  })
+  return dbRef.update(updates);
+}
+
+
+export function updateIndent(indentDetails) {
+
+  const historyRef = firebase.database().ref(`indents/${indentDetails.indentID}/history/`);
+  const arrKey = historyRef.push().key;
+
+  const updates = {};
+  updates[`indents/${indentDetails.indentID}/history/${arrKey}`] = indentDetails;
+
+  const dbRef = firebase.database().ref();
+  return dbRef.update(updates);
+
+}

@@ -17,6 +17,8 @@ import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent} from '../api/allApi.js';
 import Button from 'material-ui/Button';
+import { updateIndent, updatePartCount } from '../api/allApi.js'
+
 
 
 
@@ -38,6 +40,7 @@ export default class ActionForm extends Component {
     this.setState({
         indentID,
         indentDetails,
+        modelNumber : indentDetails.modelNumber,
         loading : true
     });
     //how to achieve synchronization - study later
@@ -65,22 +68,12 @@ export default class ActionForm extends Component {
   };
 
   onIndentActionTaken = () => {
-    console.log(this.props);
-    this.setState({
-      openDialog : false
-    },
-    this.props.onIndentActionTaken())
-  }
+    const {updatedItemsFromCard, actionTaken , indentDetails } = this.state;
+    let msg = '', valid=true , data= {};
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-    let actionValue = event.target.value;
     //move below to constants
 
-    const {updatedItemsFromCard} = this.state;
-    let msg = '', valid=true;
-
-    if('COMPLETE_RETURN_TO_GARAGE'===actionValue) {
+    if('COMPLETE_RETURN_TO_GARAGE'===actionTaken) {
       //all items approved qty == required Qty
       Object.keys(updatedItemsFromCard).map((item)=>{
         if(item.quantityApproved != item.quantityRequired){
@@ -91,18 +84,51 @@ export default class ActionForm extends Component {
         }
       })
 
-    }else if('PARTIAL_RETURN_TO_GARAGE' === actionValue){
+      if(valid) {
 
-    }else if('FORWARD_TO_PURCHASE' === actionValue){
+        //indentDetails is the input - copy all the modifications done as part of this actionform to the input
+
+        indentDetails.items.map((indentItem) => {
+          indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
+          indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+        })
+        indentDetails.status='ITEMS_RETURNED_OLD_PARTS_EXPECTED';
+        indentDetails.currentOwner = 'GARAGE';
+        indentDetails.actionUpdateMsg= 'All items returned to garage';
+        indentDetails.actionUpdateTime= new Date();
+
+        //call to update the count
+        updatePartCount(indentDetails).
+            then()
+        .catch(()=> alert('error occured fetching part count'))
+
+       //call to update the indent details
+       updateIndent(indentDetails).then(alert('success')).catch(alert('error'))
+        msg = 'Indent updated successfully'
+      }
+
+        data.message = msg;
+
+    }else if('PARTIAL_RETURN_TO_GARAGE' === actionTaken){
+
+    }else if('FORWARD_TO_PURCHASE' === actionTaken){
 
 
-    }else if('ASSIGN_TO_ADMIN' === actionValue){
+    }else if('ASSIGN_TO_ADMIN' === actionTaken){
 
     }
+    this.setState({
+      openDialog : false
+    },
+    this.props.onIndentActionTaken(data))
+  }
+
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
+    let actionValue = event.target.value;
   };
 
   onItemLocked = (params) => {
-    alert('received')
     console.log(params);
     const {updatedItemsFromCard} = this.state;
     updatedItemsFromCard[params.partNumber] = params;
@@ -169,6 +195,7 @@ export default class ActionForm extends Component {
                  <MenuItem value={'PARTIAL_RETURN_TO_GARAGE'}>Partial Return to Garage</MenuItem>
                  <MenuItem value={'FORWARD_TO_PURCHASE'}>Forward to Purchase</MenuItem>
                  <MenuItem value={'ASSIGN_TO_ADMIN'}>Assign to Admin</MenuItem>
+                 <MenuItem value={'CLOSE'}>CLOSE</MenuItem>
                </Select>
           </DialogActions>
     </Dialog>
