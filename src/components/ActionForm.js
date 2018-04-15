@@ -155,7 +155,7 @@ export default class ActionForm extends Component {
           </DialogContent>
           <DialogActions>
               <Select
-             value={this.state.action}
+             value={this.state.actionTaken}
              onChange={this.handleChange}
              inputProps={{
                name: 'actionTaken',
