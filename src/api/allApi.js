@@ -59,7 +59,6 @@ export function saveIndent(data) {
   return dbRef.update(updates);
 }
 
-<<<<<<< HEAD
 
 export function getIndent(id) {
   const dbRef = firebase.database().ref().child('indents/'+'123');
@@ -117,7 +116,7 @@ export function reserveParts(indentDetails){
   })
   return dbRef.update(updates);
 }
-=======
+
 export function loginUser(email, password) {
 const firebaseAuth = firebase.auth();
 return firebaseAuth.signInWithEmailAndPassword(email, password)
@@ -128,4 +127,3 @@ export function getRole(uid) {
   const dbRef = firebase.database().ref().child('idVsRole/' + uid);
   return dbRef.once('value');
 }
->>>>>>> b46c126... login logout
