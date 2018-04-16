@@ -4,6 +4,13 @@ import Navbar from './Navbar'
 import Loading from './Loading'
 import DynamicImport from './DynamicImport'
 
+if (window.location.pathname !== '/login') {
+  const localStorage = window.localStorage;
+  const { email, uid } = localStorage;
+  if(!email || !uid)
+    window.location = '/login';
+}
+
 const Home = (props) => (
   <DynamicImport load={() => import('./Home')}>
     {(Component) => Component === null
@@ -86,6 +93,22 @@ const Lorry = (props) => (
   </DynamicImport>
 )
 
+const Login = (props) => (
+  <DynamicImport load={() => import('./Login')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
+const Jobcards = (props) => (
+  <DynamicImport load={() => import('./Jobcards')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 class App extends Component {
   render() {
     return (
@@ -95,10 +118,11 @@ class App extends Component {
 
           <Switch>
             <Route path='/' exact component={Home} />
+            <Route path='/login' exact component={Login} />
             <Route path='/requests' component={Requests} />
             <Route path='/settings' component={Settings} />
             <Route path='/request/:id' exact component={Request} />
-            <Route path='/jobcards' component={Requests} />
+            <Route path='/jobcards' component={Jobcards} />
             <Route path='/jobcard/:id' component={JobCard} />
             <Route path='/indents' component={Indents} />
             <Route path='/indent/:id' component={Indent} />

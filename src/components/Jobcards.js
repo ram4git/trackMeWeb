@@ -11,7 +11,7 @@ import { getAllActiveJobCards } from '../api/allApi.js'
 import SimpleCard from '../lib/SimpleCard.js'
 
 
-export default class Home extends Component {
+export default class Jobcards extends Component {
   state = {
     jobCards: {}
   }
@@ -27,13 +27,6 @@ export default class Home extends Component {
   }
 
   render() {
-    if(localStorage.role=='GARAGE') {
-      return <Redirect push to="/jobcards" />
-    }
-
-    if(localStorage.role=='STORE') {
-      return <Redirect push to="/indents" />
-    }
 
     if (this.state.redirect) {
     return <Redirect push to="/jobcard/0" />;

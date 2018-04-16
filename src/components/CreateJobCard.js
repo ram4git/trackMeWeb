@@ -179,7 +179,7 @@ export default class CreateJobCard extends Component {
       </Header>
       </Table.Cell>
       <Table.Cell>
-        Krishna
+        {lorryObj.driverName || 'Not Available'}
       </Table.Cell>
       </Table.Row>
 
