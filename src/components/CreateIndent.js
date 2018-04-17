@@ -107,7 +107,8 @@ onSubmit = () => {
     indentID : this.state.jobCardID,
     items : this.state.items,
     jobCardID : this.state.jobCardID,
-    modelNumber : this.state.modelNumber
+    modelNumber : this.state.modelNumber,
+    createdAt : new Date().getTime()
   }
   saveIndent(payload).then(() => {
     this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
