@@ -119,7 +119,6 @@ class App extends Component {
     if(token)
       nav=  <Navbar />
       
-      
     return (
       <Router basename={'/'}>
         <div>

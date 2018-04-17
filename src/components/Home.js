@@ -9,73 +9,38 @@ import { Redirect } from 'react-router';
 import Button from 'material-ui/Button';
 import { getAllActiveJobCards } from '../api/allApi.js'
 import SimpleCard from '../lib/SimpleCard.js'
+import Loading from './Loading';
+import DynamicImport from './DynamicImport';
+
+
+const Jobcards = (props) => (
+  <DynamicImport load={() => import('./Jobcards')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
+const Indents = (props) => (
+  <DynamicImport load={() => import('./Indents')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
 
 
 export default class Home extends Component {
-  state = {
-    jobCards: {}
-  }
-  componentDidMount () {
-    getAllActiveJobCards().then((data) => {
-         this.setState({jobCards : data.val()});
-         console.log(this.state.jobCards);
-      }).catch((e) => console.log(e))
-  }
 
-  redirect() {
-    this.setState({redirect: true});
+  componentDidMount () {
+    
   }
 
   render() {
-    if(localStorage.role=='GARAGE') {
-      return <Redirect push to="/jobcards" />
-    }
-
-    if(localStorage.role=='STORE') {
-      return <Redirect push to="/indents" />
-    }
-
-    if (this.state.redirect) {
-    return <Redirect push to="/jobcard/0" />;
-   }
-
-    const pStyle = {
-      float: 'right'
-    };
-
- const jobCards = this.state.jobCards;
- window.localStorage.jobCards = JSON.stringify(jobCards);
- let jobCardsList = [];
- Object.keys(jobCards).forEach((jobCardNumber) => {
-   let jobCardDetails = jobCards[jobCardNumber];
-   var allIndents = 'Indents : ';
-   if(jobCardDetails.indents) {
-     jobCardDetails.indents.map((indent,index) => allIndents=allIndents + indent.id + '    ');
-   }
-    let cardProps = {
-       text : {
-         title : jobCardDetails.vehicleNumber,
-         id : jobCardNumber,
-         detail : allIndents
-       },
-       onButtonClickPath : 'jobcard'
-     }
-     jobCardsList.push(<div className='card'><SimpleCard {...cardProps} /></div>)
-
-   })
-
    return (
-
       <Fragment>
-
-      <div className='container'>
-
-        <div style={pStyle}>
-        <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
-        </div>
-      {jobCardsList}
-      </div>
-
+        {localStorage.role=='GARAGE' && <Jobcards /> }
+        {localStorage.role=='STORE' && <Indents /> }
       </Fragment>
     )
   }

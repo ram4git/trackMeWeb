@@ -7,6 +7,9 @@ const logout = () => {
  try {
      localStorage.removeItem('email');
      localStorage.removeItem('token');
+     localStorage.removeItem('role');
+     localStorage.removeItem('jobCards');
+
 
      let arr=[];
 

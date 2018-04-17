@@ -24,7 +24,6 @@ class Login extends Component {
             try {
               const localStorage = window.localStorage;
               localStorage.email = payload.email;
-              localStorage.name = payload.displayName;
               localStorage.token = payload.uid;
             } catch (e) {
               alert(
@@ -40,6 +39,9 @@ class Login extends Component {
               })
 
               localStorage.role = result;
+              //ugly hack but confirm with Ram on doing it the best way - here 
+              // Unable to propagate the token info to navbar using redirect
+              window.location.href="/";
             })
           }else {
             alert("Invalid username / password");
@@ -51,10 +53,10 @@ class Login extends Component {
 
 
   render() {
-    const { loginSuccess } = this.state
-    if(loginSuccess) {
-      return <Redirect push to='/' />
-    }
+    // const { loginSuccess } = this.state
+    // if(loginSuccess) {
+    //   return <Redirect push to='/' />
+    // }
 
     return (
       <div className='login-form'>
