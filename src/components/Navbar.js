@@ -36,6 +36,7 @@ export default function Navbar () {
       <nav className='nav-links'>
       <Link to='/jobcards'>Jobcards</Link>
        <Link to='/lorries'>Lorries</Link>
+       <Link to='/indents'>Indents</Link>
         <Link to='/requests'>Requests</Link>
         <Link to='/settings'>Settings</Link>
         <Link to='/search'>Search</Link>

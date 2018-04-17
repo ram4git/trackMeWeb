@@ -60,8 +60,15 @@ export function saveIndent(data) {
 }
 
 
+
+
 export function getIndent(id) {
   const dbRef = firebase.database().ref().child('indents/'+'123');
+  return dbRef.once('value');
+}
+
+export function getAllIndents() {
+  const dbRef = firebase.database().ref().child('indents');
   return dbRef.once('value');
 }
 

@@ -27,7 +27,11 @@ const styles = {
   },
 };
 
-
+const flexContainer = {
+  display : 'flex',
+  flexDirection : 'row',
+  height: '60px'
+}
 
 function SimpleCard(props) {
   const { classes, text, onButtonClickPath } = props;
@@ -38,17 +42,17 @@ function SimpleCard(props) {
   return (
     <div>
       <Card className={classes.card}>
-        <CardContent className={classes.content}>
-          <Typography className={classes.title} color="textSecondary">
+        <CardContent className={classes.content} style={flexContainer}>
+          <Typography className={classes.title} color="textSecondary" style={{fontSize:'25px',marginBotton:'5px'}}>
             {text.id}
           </Typography>
-          <Typography variant="headline" component="h4">
+          <Typography variant="headline" component="h4" style={{margin:'15px', fontSize:'20px'}}>
             {text.title}
           </Typography>
-          <Typography className={classes.pos} color="textSecondary">
+          <Typography className={classes.pos} color="textSecondary" style={{margin:'15px'}}>
             {text.headline}
           </Typography>
-          <Typography component="p">
+          <Typography component="p" style={{margin:'15px'}}>
             {text.detail}
           </Typography>
         </CardContent>
