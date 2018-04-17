@@ -6,7 +6,7 @@ const logout = () => {
 
  try {
      localStorage.removeItem('email');
-     localStorage.removeItem('uid');
+     localStorage.removeItem('token');
 
      let arr=[];
 

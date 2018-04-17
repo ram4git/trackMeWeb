@@ -6,8 +6,8 @@ import DynamicImport from './DynamicImport'
 
 if (window.location.pathname !== '/login') {
   const localStorage = window.localStorage;
-  const { email, uid } = localStorage;
-  if(!email || !uid)
+  const { email, token } = localStorage;
+  if(!email || !token)
     window.location = '/login';
 }
 
@@ -110,12 +110,20 @@ const Jobcards = (props) => (
 )
 
 class App extends Component {
+  
+  
+  
   render() {
+    const token = window.localStorage.token;
+    let nav;
+    if(token)
+      nav=  <Navbar />
+      
+      
     return (
       <Router basename={'/'}>
         <div>
-          <Navbar />
-
+          {nav}
           <Switch>
             <Route path='/' exact component={Home} />
             <Route path='/login' exact component={Login} />
