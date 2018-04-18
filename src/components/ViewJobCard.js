@@ -138,6 +138,7 @@ export default class ViewJobCard extends Component {
         </TableBody>
       </Table>
     </Paper>
+    <h2>Indents for job : </h2>
       {returnObj}
     </Fragment>
     )
