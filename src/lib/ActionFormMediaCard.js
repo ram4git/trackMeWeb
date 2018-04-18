@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Webcam from 'react-webcam';
 import { withStyles } from 'material-ui/styles';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
@@ -46,7 +47,12 @@ const classes = {
 
 
 class ActionFormMediaCard extends React.Component {
-  state = { quantityApproved: '', quantityPurchase : '' };
+  state = {
+    quantityApproved: '',
+    quantityPurchase : '' ,
+    showLiveCameraFeed: true,
+    webcamClicked: false
+  };
 
   handleChange = name => event => {
     this.setState({
@@ -85,11 +91,63 @@ class ActionFormMediaCard extends React.Component {
     })
   }
 
+  onCameraClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({webcamClicked: true})
+  }
+  setRef(webcam) {
+      this.webcam = webcam;
+    }
 
- render(){
+  renderCamera() {
+    return (
+      <div>
+        { this.renderImage() }
+      </div>
+    );
+  }
+
+  capture() {
+      if(this.state.showLiveCameraFeed) {
+        const screenShot = this.webcam.getScreenshot();
+        this.setState({
+          screenShot,
+          showLiveCameraFeed: false
+        });
+      } else {
+        this.setState({
+          showLiveCameraFeed: true
+        });
+      }
+      console.log(this.state)
+    }
+
+   renderImage() {
+      if(this.state.showLiveCameraFeed) {
+        return (
+          <Webcam
+            audio={false}
+            ref={this.setRef.bind(this)}
+            height={240}
+            width={220}
+            screenshotFormat='image/jpeg'
+            onClick={this.capture.bind(this)}
+          />
+        );
+      }
+      return (
+          <img src={this.state.screenShot} style={{height:'220px'}} />
+      );
+    }
+
+
+
+ render() {
 
   const { classes, item } = this.props;
-  const {isLocked} = this.state;
+  const { isLocked, webcamClicked, showLiveCameraFeed } = this.state;
+  console.log(showLiveCameraFeed)
   return (
     <div>
       <Card className={classes.card}>
@@ -144,12 +202,12 @@ class ActionFormMediaCard extends React.Component {
          image={require('../background.jpg')}
          title="Live from space album cover"
         />
-        <CardMedia
-         className={classes.cover}
-         image={item.screenShot}
-         title="Live from space album cover"
-        />
-
+        <div onClick={this.capture.bind(this)} >
+          { !webcamClicked ?
+            <Button color="primary" onClick={this.onCameraClick}>
+            Capture
+            </Button> : this.renderCamera() }
+        </div>
         </div>
 
       </Card>
