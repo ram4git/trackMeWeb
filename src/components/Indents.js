@@ -9,15 +9,18 @@ import { Redirect } from 'react-router';
 import Button from 'material-ui/Button';
 import { getAllIndents } from '../api/allApi.js'
 import SimpleCard from '../lib/SimpleCard.js'
+import { CircularProgress } from 'material-ui/Progress';
 
 
 export default class Jobcards extends Component {
   state = {
-    indents: {}
+    indents: {},
+    loadedData : false
   }
   componentDidMount () {
     getAllIndents().then((data) => {
-         this.setState({indents : data.val()});
+         this.setState({indents : data.val(),
+          loadedData : true});
          console.log(this.state.indents);
       }).catch((e) => console.log(e))
   }
@@ -30,7 +33,7 @@ export default class Jobcards extends Component {
       float: 'right'
     };
 
- const indents = this.state.indents;
+ const {indents, loadedData}  = this.state;
  window.localStorage.indents = JSON.stringify(indents);
  let indentCardsList = [];
  Object.keys(indents).forEach((indent) => {
@@ -52,9 +55,13 @@ export default class Jobcards extends Component {
       <Fragment>
 
       <div className='container'>
-      {indentCardsList}
+      <h2 style={{marginTop:'50px'}}>All open <span style={{color:'blue'}}>INDENTS</span> displayed below</h2>
+      { loadedData ? indentCardsList : 
+      <div style={{height:'100px', width:'200px', marginLeft : '40%', marginTop : '25%'}}>
+      <CircularProgress style={{display:'inline'}} size={10} />
       </div>
-
+      }
+      </div>
       </Fragment>
     )
   }
