@@ -22,8 +22,9 @@ import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent,getItemsForModelNumber} from '../api/allApi.js';
 import { Redirect, Link } from 'react-router-dom'
-
-
+import { uploadImage, downloadImage } from '../api/allApi.js';
+import * as firebase from 'firebase';
+import FireBaseTools from '../api/firebase-tools'
 
 
 class CreateIndent extends Component {
@@ -43,7 +44,7 @@ constructor(props) {
 componentDidMount() {
 
   if(this.props) {
-    
+
   this.setState({
     vehicleNumber : this.props.vehicleNumber,
     jobCardID : this.props.jobCardID,
@@ -84,6 +85,7 @@ capture() {
         showLiveCameraFeed: true
       });
     }
+    console.log(this.state)
   }
 
  renderImage() {
@@ -110,7 +112,6 @@ handleClickOpen = () => {
 
 onSubmit = () => {
 
-  //change id later on...for now let it be jobCardID
 
   const payload = {
     indentID : this.state.jobCardID,
@@ -134,11 +135,11 @@ onSubmit = () => {
       this.setState({
         [prop] : event.target.value
       });
-      
+
   };
 
   saveIndents = () => {
-    const { mainHead, partNumber, screenShot ,quantityRequired , items  } = this.state;
+    const { mainHead, partNumber, screenShot ,quantityRequired , items } = this.state;
     let newItem = {};
 
     newItem.mainHead = mainHead;
@@ -146,10 +147,21 @@ onSubmit = () => {
     newItem.partName = 'Gear box';
     newItem.quantityRequired = quantityRequired;
     newItem.quantityStores = '120';
-    newItem.screenShot = screenShot;
 
+    if(screenShot) {
+    uploadImage(screenShot, this.state.jobCardID, window.localStorage.role, '999').then((snapshot) => {
+      newItem.screenShot = snapshot.downloadURL;
+      items.push(newItem);
+      this._save(items);
+      }).catch((e) => console.log(e))
+    } else {
+      items.push(newItem);
+      this._save(items);
+    }
 
-    items.push(newItem);
+  }
+
+  _save = (items) => {
 
     this.webcam=null;
     this.setState({
@@ -160,6 +172,7 @@ onSubmit = () => {
       quantityRequired:'',
       items: items
     });
+
   }
 
 //why is this syntax different ?
@@ -168,8 +181,18 @@ onSubmit = () => {
       [name]: event.target.value,
     });
   };
-  
-  
+
+
+
+download = () => {
+  const storageRef = firebase.storage().ref();
+  let indentId = this.state.jobCardID;
+  let role = window.localStorage.role;
+  let path = 'indents/'+indentId+'/'+role+'/'+'999'+'.jpeg';
+  return storageRef.child(path).getDownloadURL().then(function(url) {
+    let URL = url;
+  }).catch((e) => console.log(e))
+}
 
 render() {
   let savedIndentsArray = [];
@@ -178,7 +201,6 @@ render() {
   if(navigateBackToJobPage) {
     const url = "/jobcard/"+ jobCardID;
     return <Redirect push to={url}/>
-
   }
 
   let mainHeadLists = [];
@@ -189,8 +211,8 @@ render() {
         mainHeadLists.push(menuItem);
     })
   }
-    
-  let partNumberOptions = [];  
+
+  let partNumberOptions = [];
   if(mainHead) {
     let partsOfMainHead = parts[mainHead] || [];
     Object.keys(partsOfMainHead).map((partKey) => {
@@ -199,7 +221,7 @@ render() {
         partNumberOptions.push(menuItem);
     })
   }
-  
+
 
   let itemsArray = this.state.items;
   itemsArray.map((indent) => {
@@ -234,7 +256,8 @@ render() {
       </Paper>
       <Button color="primary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
       <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
-
+      <Button color="secondary" variant="raised" onClick={this.download}>Download</Button>
+      <img src='https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/indents%2Findentid%2Fstore%2F123?alt=media&token=26741b58-25cf-4eb6-b707-e6ed054e733b' />
       <Dialog
           fullScreen
           open={this.state.open}

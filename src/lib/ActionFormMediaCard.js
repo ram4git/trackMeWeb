@@ -10,7 +10,7 @@ import TextField from 'material-ui/TextField';
 import Icon from 'material-ui/Icon';
 import LockOpen from '@material-ui/icons/LockOpen';
 import Locked from '@material-ui/icons/Lock';
-
+import Videocam from '@material-ui/icons/Videocam';
 
 const classes = {
 
@@ -145,9 +145,15 @@ class ActionFormMediaCard extends React.Component {
 
  render() {
 
+const btnStyle = {
+  position: 'absolute',
+  top:'80px',
+  left:'100px',
+  height: '50px'
+}
   const { classes, item } = this.props;
-  const { isLocked, webcamClicked, showLiveCameraFeed } = this.state;
-  console.log(showLiveCameraFeed)
+  const { isLocked, webcamClicked, showLiveCameraFeed, screenShot } = this.state;
+  console.log(screenShot)
   return (
     <div>
       <Card className={classes.card}>
@@ -202,10 +208,11 @@ class ActionFormMediaCard extends React.Component {
          image={require('../background.jpg')}
          title="Live from space album cover"
         />
-        <div onClick={this.capture.bind(this)} >
+        <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
           { !webcamClicked ?
-            <Button color="primary" onClick={this.onCameraClick}>
-            Capture
+            <Button variant="fab" color="primary"  style={btnStyle}
+                  onClick={this.onCameraClick}>
+              <Videocam/>
             </Button> : this.renderCamera() }
         </div>
         </div>

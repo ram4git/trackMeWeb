@@ -29,12 +29,18 @@ const classes = {
    text: {
    marginBottom: 16,
    marginLeft : 20,
-   fontSize: 24,
+   fontSize: 18,
   },
   textDiv : {
     flex:0.5
   }
 };
+
+const flexContainer = {
+  display : 'flex',
+  flexDirection : 'row',
+  height: '60px'
+}
 
 function SimpleMediaCard(props) {
   const { classes, text } = props;
@@ -42,9 +48,13 @@ function SimpleMediaCard(props) {
     <div>
       <Card className={classes.card}>
       <div className={classes.textDiv}>
-        <CardContent>
-          <Typography variant="headline" className={classes.text}>  {text.title}</Typography>
-          <Typography variant="headline" className={classes.text}>  {text.title}</Typography>
+        <CardContent style={flexContainer}>
+          <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
+          {text.title}
+          </Typography>
+          <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
+          {text.title}
+          </Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
             {text.number}
           </Typography>
@@ -53,16 +63,6 @@ function SimpleMediaCard(props) {
       </div>
       <div className={classes.card}>
 
-        <CardMedia
-         className={classes.cover}
-         image={text.screenShot}
-         title="Live from space album cover"
-        />
-        <CardMedia
-         className={classes.cover}
-         image={require('../background.jpg')}
-         title="Live from space album cover"
-        />
         </div>
 
       </Card>

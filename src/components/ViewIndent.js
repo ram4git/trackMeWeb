@@ -28,7 +28,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent} from '../api/allApi.js';
 import ActionForm from './ActionForm';
 import Snackbar from 'material-ui/Snackbar';
-
+import GridlistImage from '../lib/GridlistImage.js'
 
 
 
@@ -195,7 +195,12 @@ export default class ViewIndent extends Component {
           </TableBody>
         </Table>
         </Paper>
+
+
+
         {cardsArray}
+        
+      <GridlistImage />
         <Button color="primary" variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
       </Fragment>
       )

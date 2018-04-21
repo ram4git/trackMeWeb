@@ -1,7 +1,6 @@
 import * as firebase from 'firebase';
 import FireBaseTools from './firebase-tools'
 
-
 export function getStoreCases() {
   const dbRef = firebase.database().ref().child('roles/store/openCases');
   return dbRef.once('value');
@@ -63,7 +62,7 @@ export function saveIndent(data) {
 
 
 export function getIndent(id) {
-  const dbRef = firebase.database().ref().child('indents/'+'123');
+  const dbRef = firebase.database().ref().child('indents/'+id);
   return dbRef.once('value');
 }
 
@@ -135,7 +134,23 @@ export function getRole(uid) {
   return dbRef.once('value');
 }
 
+
 export function getItemsForModelNumber(modelNumber) {
   const dbRef = firebase.database().ref().child('items/' + modelNumber);
   return dbRef.once('value');
 }
+
+export function uploadImage(file, indentId, role, partNumber) {
+  const storageRef = firebase.storage().ref();
+  const path = 'indents/'+indentId+'/'+role+'/'+partNumber+'.jpeg';
+  const imgRef = storageRef.child(path);
+  return  imgRef.putString(file)
+}
+
+
+export function downloadImage(path) {
+  const storageRef = firebase.storage().ref();
+  return storageRef.child(path).getDownloadURL().then(function(url) {
+    console.log(url)
+  }).catch((e) => console.log(e))
+  }
