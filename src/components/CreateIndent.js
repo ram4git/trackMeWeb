@@ -20,7 +20,7 @@ import GridList, { GridListTile } from 'material-ui/GridList';
 import MediaCard from '../lib/MediaCard.js'
 import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
-import {saveIndent} from '../api/allApi.js';
+import {saveIndent,getItemsForModelNumber} from '../api/allApi.js';
 import { Redirect, Link } from 'react-router-dom'
 
 
@@ -43,12 +43,21 @@ constructor(props) {
 componentDidMount() {
 
   if(this.props) {
+    
   this.setState({
     vehicleNumber : this.props.vehicleNumber,
     jobCardID : this.props.jobCardID,
     modelNumber : this.props.modelNumber
   })
-}
+  getItemsForModelNumber('M1312').then((data) => {
+     let parts = data.val(); let listOfMainHeads = [];
+     Object.keys(parts).map((mainHead) => {
+        listOfMainHeads.push(mainHead);
+     })
+     this.setState({listOfMainHeads, parts})
+  })
+  }
+
 }
 
 setRef(webcam) {
@@ -124,7 +133,8 @@ onSubmit = () => {
   handlePropChange = prop => event => {
       this.setState({
         [prop] : event.target.value
-      })
+      });
+      
   };
 
   saveIndents = () => {
@@ -158,11 +168,12 @@ onSubmit = () => {
       [name]: event.target.value,
     });
   };
-
+  
+  
 
 render() {
   let savedIndentsArray = [];
-  const {navigateBackToJobPage , jobCardID} = this.state;
+  const {navigateBackToJobPage , jobCardID, listOfMainHeads, mainHead, parts } = this.state;
 
   if(navigateBackToJobPage) {
     const url = "/jobcard/"+ jobCardID;
@@ -170,6 +181,25 @@ render() {
 
   }
 
+  let mainHeadLists = [];
+  if(listOfMainHeads) {
+    listOfMainHeads.forEach((mainHead) => {
+      console.log('mainhead = ' + mainHead);
+      let menuItem = <MenuItem value={mainHead}>{mainHead}</MenuItem>;
+        mainHeadLists.push(menuItem);
+    })
+  }
+    
+  let partNumberOptions = [];  
+  if(mainHead) {
+    let partsOfMainHead = parts[mainHead] || [];
+    Object.keys(partsOfMainHead).map((partKey) => {
+      let partDetail = partsOfMainHead[partKey];
+      let menuItem = <MenuItem value={partKey}>{partDetail.name}</MenuItem>;
+        partNumberOptions.push(menuItem);
+    })
+  }
+  
 
   let itemsArray = this.state.items;
   itemsArray.map((indent) => {
@@ -235,15 +265,7 @@ render() {
             name: 'mainHead',
             id: 'mainHead',
             }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={'engine'}>Engine</MenuItem>
-              <MenuItem value={'gear'}>Gear</MenuItem>
-              <MenuItem value={'battery'}>Battery</MenuItem>
-              <MenuItem value={'brakes'}>Brake</MenuItem>
-              <MenuItem value={'tiers'}>Tiers</MenuItem>
-
+            {  mainHeadLists }
             </Select>
           </FormControl>
           </form>
@@ -257,12 +279,7 @@ render() {
             name: 'partNumber',
             id: 'partNumber',
             }}>
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value={10}>Gear Box</MenuItem>
-              <MenuItem value={20}>Lights</MenuItem>
-              <MenuItem value={30}>Tyres</MenuItem>
+            {partNumberOptions}
             </Select>
           </FormControl>
           </form>
