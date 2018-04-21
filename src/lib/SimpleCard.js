@@ -13,14 +13,15 @@ const styles = {
     flexDirection: 'row'
   },
   content : {
-    flex:0.8
+    flex:0.9
   },
   actions: {
-    flex:0.2
+    flex:0.1
   },
   title: {
-    marginBottom: 10,
-    fontSize: 50,
+    fontSize:'18px',
+    color: 'black' ,
+    width:'200px'
   },
   pos: {
     marginBottom: 12,
@@ -43,16 +44,17 @@ function SimpleCard(props) {
     <div>
       <Card className={classes.card}>
         <CardContent className={classes.content} style={flexContainer}>
-          <Typography className={classes.title} color="textSecondary" style={{fontSize:'25px',marginBotton:'5px'}}>
+          <Typography className={classes.title} color="textSecondary" >
             {text.id}
           </Typography>
-          <Typography variant="headline" component="h4" style={{margin:'15px', fontSize:'20px'}}>
+          <Typography variant="headline" component="h4" style={{marginLeft:'25px', fontSize:'20px',
+                    width:'200px'}}>
             {text.title}
           </Typography>
           <Typography className={classes.pos} color="textSecondary" style={{margin:'15px'}}>
             {text.headline}
           </Typography>
-          <Typography component="p" style={{margin:'15px'}}>
+          <Typography component="p" style={{}}>
             {text.detail}
           </Typography>
         </CardContent>

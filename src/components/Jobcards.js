@@ -58,17 +58,15 @@ export default class Jobcards extends Component {
    })
 
    return (
-
       <Fragment>
-
-      <div className='container'>
-
-        <div style={pStyle}>
-        <Button color="primary" onClick={() => this.redirect()} >Create Job Card</Button>
-        </div>
-      {jobCardsList}
+        <div className='container'>
+          <div style={pStyle}>
+          <Button variant="raised" color="primary" style={{backgroundColor : "#1976d2"}}onClick={() => this.redirect()} >Create Job Card</Button>
+          </div>
+          <h2 style={{marginTop:'50px'}}>All open jobcards displayed below</h2>
+        
+          {jobCardsList}
       </div>
-
       </Fragment>
     )
   }
