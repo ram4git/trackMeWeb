@@ -20,7 +20,7 @@ import GridList, { GridListTile } from 'material-ui/GridList';
 import MediaCard from '../lib/MediaCard.js'
 import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
-import {saveIndent,getItemsForModelNumber} from '../api/allApi.js';
+import {saveIndent,getItemsForModelNumber, updateIndent} from '../api/allApi.js';
 import { Redirect, Link } from 'react-router-dom'
 import { uploadImage, downloadImage } from '../api/allApi.js';
 import * as firebase from 'firebase';
@@ -136,6 +136,8 @@ onSubmit = () => {
       count = count + 1;
       if(count === items.length) {
         saveIndent(payload).then(() => {
+          //update the history
+          updateIndent(payload) //fire and forget - dont resolve promise
           this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
 
         }
