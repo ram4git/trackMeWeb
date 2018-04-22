@@ -50,11 +50,15 @@ export function saveIndent(data) {
   updates['indents/'+data.indentID] = data;
 
   const jobCardIndentsRef = firebase.database().ref().child('jobCards/'+data.jobCardID + '/indents');
+  if(jobCardIndentsRef)
   jobCardIndentsRef.transaction(function(indents){
                      indents=indents||[];
                      indents.push(data);
                      return indents;
                  });
+  else {
+    jobCardIndentsRef.push(data);
+  }
   return dbRef.update(updates);
 }
 

@@ -79,7 +79,7 @@ export default class ViewJobCard extends Component {
     return (
       <Fragment>
       <div style={pStyle}>
-      <Button color="secondary" variant="raised" onClick={() => this.redirect()} >Create Indent</Button>
+      <Button color="primary" variant="raised" onClick={() => this.redirect()} >Create Indent</Button>
       </div>
       <Paper style={{margin:'5%', width:'30%'}}>
       <Table>

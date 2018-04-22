@@ -10,7 +10,9 @@ const classes = {
 
   card: {
    display: 'flex',
-   flex:1
+   flex:1,
+   width:'70%',
+   marginLeft : '5%'
   },
   details: {
    display: 'flex',
@@ -32,14 +34,14 @@ const classes = {
    fontSize: 18,
   },
   textDiv : {
-    flex:0.5
+    flex:0.7
   }
 };
 
 const flexContainer = {
   display : 'flex',
   flexDirection : 'row',
-  height: '60px'
+  height: '200px'
 }
 
 function SimpleMediaCard(props) {
@@ -53,18 +55,16 @@ function SimpleMediaCard(props) {
           {text.title}
           </Typography>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
-          {text.title}
+          {text.name}
           </Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
             {text.number}
           </Typography>
         </CardContent>
-
       </div>
-      <div className={classes.card}>
-
-        </div>
-
+      <div>
+        <img src={text.screenShot} style={{height:'200px'}}/>
+      </div>
       </Card>
     </div>
   );

@@ -25,6 +25,7 @@ import { Redirect, Link } from 'react-router-dom'
 import { uploadImage, downloadImage } from '../api/allApi.js';
 import * as firebase from 'firebase';
 import FireBaseTools from '../api/firebase-tools'
+import Delete from '@material-ui/icons/Delete';
 
 
 class CreateIndent extends Component {
@@ -112,19 +113,39 @@ handleClickOpen = () => {
 
 onSubmit = () => {
 
+   const {items }  =  this.state; 
+   const  indentID = this.state.jobCardID;// change later
+   
 
   const payload = {
-    indentID : this.state.jobCardID,
-    items : this.state.items,
+    indentID,
+    items ,
     jobCardID : this.state.jobCardID,
-    modelNumber : this.state.modelNumber,
+    modelNumber : this.state.modelNumber || 'M1312',
     createdAt : new Date().getTime()
   }
-  saveIndent(payload).then(() => {
-    this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
+  
+  items.forEach((item) => {
+    let count = 0;
+    if(item.screenShot) {
+    uploadImage(item.screenShot, this.state.jobCardID, window.localStorage.role, '999').then((snapshot) => {
+      item.screenShot = snapshot.downloadURL;
+      count = count + 1;
+      if(count === items.length) {
+        saveIndent(payload).then(() => {
+          this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
 
-  }
-  ).catch(() =>alert('could not save Indent'))
+        }
+        ).catch(() =>alert('could not save Indent'))
+      }
+        
+      }).catch((e) => console.log(e))
+    } 
+  })
+  
+
+  
+  
 }
 
   handleClose = () => {
@@ -135,34 +156,29 @@ onSubmit = () => {
       this.setState({
         [prop] : event.target.value
       });
+      
+    
+      if(prop === 'partNumber') {
+        const parts = this.state.parts;
+        const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
+        this.setState({ partName })
+      }
 
   };
 
   saveIndents = () => {
-    const { mainHead, partNumber, screenShot ,quantityRequired , items } = this.state;
+    const { mainHead, partNumber, screenShot ,quantityRequired, partName , items } = this.state;
     let newItem = {};
 
     newItem.mainHead = mainHead;
     newItem.partNumber = partNumber;
-    newItem.partName = 'Gear box';
+    newItem.partName = partName;
     newItem.quantityRequired = quantityRequired;
     newItem.quantityStores = '120';
-
-    if(screenShot) {
-    uploadImage(screenShot, this.state.jobCardID, window.localStorage.role, '999').then((snapshot) => {
-      newItem.screenShot = snapshot.downloadURL;
-      items.push(newItem);
-      this._save(items);
-      }).catch((e) => console.log(e))
-    } else {
-      items.push(newItem);
-      this._save(items);
-    }
-
-  }
-
-  _save = (items) => {
-
+    newItem.screenShot = screenShot;
+    
+    items.push(newItem);
+    
     this.webcam=null;
     this.setState({
       open: false,
@@ -172,8 +188,8 @@ onSubmit = () => {
       quantityRequired:'',
       items: items
     });
-
   }
+
 
 //why is this syntax different ?
   handleChange = name => event => {
@@ -228,15 +244,30 @@ render() {
     let mediaCardProps = {
       text : {
         title : indent.mainHead,
+        name : indent.partName,
         number : indent.partNumber,
         screenShot : indent.screenShot
       }
     }
-    savedIndentsArray.push(<div className='card'><MediaCard {...mediaCardProps} /></div>)
+    savedIndentsArray.push(<div className='card'><MediaCard {...mediaCardProps} />
+      <div style={{float:'right', marginRight :'20%'}}>
+      <Delete  style={{fontSize:'50px'}}/>
+      </div>
+    </div>)
   })
+  
+  const pStyle = {
+    float: 'right',
+    margin: '3%'
+  };
+  
     return (
       <Fragment>
-      <Paper>
+      <h2 style={{ marginLeft :'5%'}} >Creating INDENT for job...</h2>
+      <div style={pStyle}>
+      <Button color="primary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
+      </div>
+      <Paper style={{width:'30%', margin: '5%'}}>
       <Table>
         <TableBody>
            <TableRow>
@@ -254,10 +285,6 @@ render() {
         </TableBody>
       </Table>
       </Paper>
-      <Button color="primary" variant="raised" onClick={this.handleClickOpen}>Add Item</Button>
-      <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
-      <Button color="secondary" variant="raised" onClick={this.download}>Download</Button>
-      <img src='https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/indents%2Findentid%2Fstore%2F123?alt=media&token=26741b58-25cf-4eb6-b707-e6ed054e733b' />
       <Dialog
           fullScreen
           open={this.state.open}
@@ -335,6 +362,12 @@ render() {
       </DialogContent>
     </Dialog>
     {savedIndentsArray}
+    
+    { savedIndentsArray.length > 0  && 
+    <div style={{marginLeft : '45%',marginTop:'5%'}}>
+    <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
+    </div> }
+    
   </Fragment>
     )
   }
