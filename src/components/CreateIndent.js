@@ -129,7 +129,7 @@ onSubmit = () => {
     let count = 0;
     if(item.screenShot) {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
-      //let buf = new Buffer(img, 'base64');
+    //  let buf = new Buffer(img, 'base64');
 
     uploadImage(img, this.state.jobCardID, window.localStorage.role, item.partNumber).then((snapshot) => {
       item.screenShot = snapshot.downloadURL;

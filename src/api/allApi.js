@@ -148,7 +148,7 @@ export function uploadImage(file, indentId, role, partNumber) {
   const storageRef = firebase.storage().ref();
   const path = 'indents/'+indentId+'/'+role+'/'+partNumber+'.jpeg';
   const imgRef = storageRef.child(path);
-  return  imgRef.putString(file)
+  return  imgRef.putString(file, 'base64')
 }
 
 
