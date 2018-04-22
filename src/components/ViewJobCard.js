@@ -52,7 +52,8 @@ export default class ViewJobCard extends Component {
          }
 
    const pStyle = {
-     float: 'right'
+     float: 'right',
+     margin: '3%'
    };
   const { jobCard } = this.state;
   console.log(jobCard);
@@ -71,7 +72,7 @@ export default class ViewJobCard extends Component {
      },
      onButtonClickPath : 'indent'
    }
-     returnObj.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+     returnObj.push(<div style = {{width :'70%', marginLeft:'5%'}} className='card'><SimpleCard {...cardProps} /></div>)
    })
  }
 
@@ -80,7 +81,7 @@ export default class ViewJobCard extends Component {
       <div style={pStyle}>
       <Button color="secondary" variant="raised" onClick={() => this.redirect()} >Create Indent</Button>
       </div>
-      <Paper>
+      <Paper style={{margin:'5%', width:'30%'}}>
       <Table>
         <TableBody>
            <TableRow>
@@ -138,7 +139,7 @@ export default class ViewJobCard extends Component {
         </TableBody>
       </Table>
     </Paper>
-    <h2>Indents for job : </h2>
+    <h2 style={{ marginLeft :'5%'}} >Indents for job : </h2>
       {returnObj}
     </Fragment>
     )
