@@ -128,7 +128,10 @@ onSubmit = () => {
   items.forEach((item) => {
     let count = 0;
     if(item.screenShot) {
-    uploadImage(item.screenShot, this.state.jobCardID, window.localStorage.role, '999').then((snapshot) => {
+      let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
+      //let buf = new Buffer(img, 'base64');
+
+    uploadImage(img, this.state.jobCardID, window.localStorage.role, item.partNumber).then((snapshot) => {
       item.screenShot = snapshot.downloadURL;
       count = count + 1;
       if(count === items.length) {
