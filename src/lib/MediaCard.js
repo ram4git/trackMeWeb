@@ -11,7 +11,7 @@ const classes = {
   card: {
    display: 'flex',
    flex:1,
-   width:'70%',
+   width:'47%',
    marginLeft : '5%'
   },
   details: {
@@ -61,9 +61,6 @@ function SimpleMediaCard(props) {
             {text.number}
           </Typography>
         </CardContent>
-      </div>
-      <div>
-        <img src={text.screenShot} style={{height:'200px'}}/>
       </div>
       </Card>
     </div>

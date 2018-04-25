@@ -3,20 +3,23 @@ import Button from 'material-ui/Button';
 import { Redirect } from 'react-router';
 import { getAllLorryDetails } from '../api/allApi.js'
 import SimpleCard from '../lib/SimpleCard.js'
+import { CircularProgress } from 'material-ui/Progress';
 
 
 class Lorries extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      lorryDetails: {}
+      lorryDetails: {},
+      loadedData : false
     }
   }
 
   componentDidMount() {
     getAllLorryDetails().then((data) => {
       this.setState({
-        lorryDetails: data.val()
+        lorryDetails: data.val(),
+        loadedData : true
       }, console.log(this.state))
     }).catch((e) => console.log(e))
   }
@@ -32,6 +35,7 @@ class Lorries extends Component {
     const pStyle = {
       float: 'right'
     };
+    const { loadedData } = this.state;
     const lorryDetails = this.state.lorryDetails;
     let lorryDetailsArray = [];
     Object.keys(lorryDetails).forEach((lorry) => {
@@ -39,20 +43,29 @@ class Lorries extends Component {
     console.log(lorries);
     let cardProps = {
       text : {
-        title : lorries.vehicleNumber,
-        id : lorries.vehicleNumber,
+        title : lorry,
+        id : lorry,
         detail : lorries.chasisNumber
       },
       onButtonClickPath : 'lorry'
     }
-    lorryDetailsArray.push(<div className='card'><SimpleCard {...cardProps}/></div>)
+    lorryDetailsArray.push(<div className='card' key={lorries.vehicleCode}><SimpleCard {...cardProps}/></div>)
   })
     return (
       <Fragment>
+      <div className='container'>
       <div style={pStyle}>
-      <Button color="primary" onClick={() => this.onLorryClick()} >Add Lorry</Button>
+      <Button variant="raised" color="primary" onClick={() => this.onLorryClick()} style={{backgroundColor : "#1976d2"}}>
+      Add Lorry
+      </Button>
       </div>
-      {lorryDetailsArray}
+      <h2 style={{marginTop:'50px'}}>All open <span style={{color:"#1976d2"}}>LORRIES</span> displayed below</h2>
+      { loadedData ? lorryDetailsArray :
+      <div style={{height:'100px', width:'200px', marginLeft : '40%', marginTop : '25%'}}>
+      <CircularProgress style={{display:'inline'}} size={10} />
+      </div>
+    }
+    </div>
       </Fragment>
     )
   }

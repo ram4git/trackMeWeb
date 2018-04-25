@@ -11,6 +11,9 @@ import Icon from 'material-ui/Icon';
 import LockOpen from '@material-ui/icons/LockOpen';
 import Locked from '@material-ui/icons/Lock';
 import Videocam from '@material-ui/icons/Videocam';
+import { updateIndent } from '../api/allApi.js';
+import * as firebase from 'firebase';
+import FireBaseTools from '../api/firebase-tools.js';
 
 const classes = {
 
@@ -145,6 +148,7 @@ class ActionFormMediaCard extends React.Component {
 
  render() {
 
+
 const btnStyle = {
   position: 'absolute',
   top:'80px',
@@ -206,7 +210,6 @@ const btnStyle = {
         <CardMedia
          className={classes.cover}
          image={require('../background.jpg')}
-         title="Live from space album cover"
         />
         <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
           { !webcamClicked ?

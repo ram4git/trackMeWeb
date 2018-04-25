@@ -5,7 +5,6 @@ import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
 
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -13,11 +12,13 @@ const styles = theme => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
+    marginLeft: '50px'
   },
   gridList: {
     flexWrap: 'nowrap',
     // Promote the list into his own layer on Chrome. This cost memory but helps keeping high FPS.
     transform: 'translateZ(0)',
+    width: '120%'
   },
   title: {
     color: theme.palette.primary.light,
@@ -28,120 +29,45 @@ const styles = theme => ({
   },
 });
 
-function SingleLineGridList(props) {
-  const { classes } = props;
+class SingleLineGridList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+
+  render() {
+  const { classes, urls } = this.props;
+  console.log(urls)
+
+  let imagesArray = [];
+  urls.map((url)=> {
+    imagesArray.push(
+    <GridListTile>
+      <img src={url} />
+      <GridListTileBar
+        title='Rice'
+        classes={{
+          root: classes.titleBar,
+          title: classes.title,
+        }}
+        actionIcon={
+          <IconButton>
+            <StarBorderIcon className={classes.title} />
+          </IconButton>
+        }
+      />
+    </GridListTile>
+  )
+  })
 
   return (
     <div className={classes.root}>
-      <GridList className={classes.gridList} cols={4}>
-          <GridListTile>
-            <img src={require('../background2.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../bg.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../bg2.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../background.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../bg2.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../bg2.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-          <GridListTile>
-            <img src={require('../bg2.jpg')} />
-            <GridListTileBar
-              title='Rice'
-              classes={{
-                root: classes.titleBar,
-                title: classes.title,
-              }}
-              actionIcon={
-                <IconButton>
-                  <StarBorderIcon className={classes.title} />
-                </IconButton>
-              }
-            />
-          </GridListTile>
-      </GridList>
+    <GridList className={classes.gridList} cols={4}>
+    {imagesArray}
+    </GridList>
     </div>
   );
+}
 }
 
 SingleLineGridList.propTypes = {

@@ -48,6 +48,8 @@ export default class CreateJobCard extends Component {
  }
 
  generateOrderID(vehicleNumber , now){
+   if(!vehicleNumber)
+   return null
    let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
    let year = now.getFullYear();
    let mathRandom = Rand.generateBase30(2);

@@ -47,7 +47,7 @@ export default class Jobcards extends Component {
    let jobCardDetails = jobCards[jobCardNumber];
    var allIndents = 'Indents : ';
    if(jobCardDetails.indents) {
-     jobCardDetails.indents.map((indent,index) => allIndents=allIndents + indent.id + '    ');
+     jobCardDetails.indents.map((indent,index) => allIndents=allIndents + indent.indentID + '    ');
    }
     let cardProps = {
        text : {
@@ -57,7 +57,7 @@ export default class Jobcards extends Component {
        },
        onButtonClickPath : 'jobcard'
      }
-     jobCardsList.push(<div className='card'><SimpleCard {...cardProps} /></div>)
+     jobCardsList.push(<div className='card' key={jobCardNumber}><SimpleCard {...cardProps} /></div>)
 
    })
 
@@ -65,15 +65,17 @@ export default class Jobcards extends Component {
       <Fragment>
         <div className='container'>
           <div style={pStyle}>
-          <Button variant="raised" color="primary" style={{backgroundColor : "#1976d2"}}onClick={() => this.redirect()} >Create Job Card</Button>
+          <Button variant="raised" color="primary" style={{backgroundColor : "#1976d2"}}onClick={() => this.redirect()} >
+          Create Job Card
+          </Button>
           </div>
           <h2 style={{marginTop:'50px'}}>All open <span style={{color:"#1976d2"}}>JOBCARDS</span> displayed below</h2>
-          { loadedData ? jobCardsList : 
+          { loadedData ? jobCardsList :
           <div style={{height:'100px', width:'200px', marginLeft : '40%', marginTop : '25%'}}>
           <CircularProgress style={{display:'inline'}} size={10} />
           </div>
           }
-        }
+        
       </div>
       </Fragment>
     )

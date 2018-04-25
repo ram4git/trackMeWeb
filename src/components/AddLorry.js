@@ -25,7 +25,6 @@ export default class AddLorry extends Component {
 
   handleDateChange = (event, object) => {
     console.log(event.target.value)
-    console.log(object);
     this.setState({
       dateOfPurchase: event.target.value
     })
@@ -50,7 +49,7 @@ export default class AddLorry extends Component {
       navigateToHomePage: true
     })
    }
-   ).catch(console.log('error occured'))
+ ).catch((e) => console.log(e))
    this.setState({ email: '', name: '' })
  }
 

@@ -47,7 +47,7 @@ export default class Jobcards extends Component {
    },
    onButtonClickPath : 'indent'
  }
- indentCardsList.push(<div className='card'><SimpleCard {...cardProps}/></div>)
+ indentCardsList.push(<div className='card' key={indentDetails.indentID}><SimpleCard {...cardProps}/></div>)
 })
 
    return (
@@ -56,7 +56,7 @@ export default class Jobcards extends Component {
 
       <div className='container'>
       <h2 style={{marginTop:'50px'}}>All open <span style={{color:'blue'}}>INDENTS</span> displayed below</h2>
-      { loadedData ? indentCardsList : 
+      { loadedData ? indentCardsList :
       <div style={{height:'100px', width:'200px', marginLeft : '40%', marginTop : '25%'}}>
       <CircularProgress style={{display:'inline'}} size={10} />
       </div>

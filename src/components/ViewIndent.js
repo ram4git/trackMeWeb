@@ -25,7 +25,7 @@ import GridList, { GridListTile } from 'material-ui/GridList';
 import MediaCard from '../lib/MediaCard.js'
 import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
-import {saveIndent} from '../api/allApi.js';
+import { saveIndent, getAllIndents } from '../api/allApi.js';
 import ActionForm from './ActionForm';
 import Snackbar from 'material-ui/Snackbar';
 import GridlistImage from '../lib/GridlistImage.js'
@@ -47,14 +47,33 @@ export default class ViewIndent extends Component {
   }
 
   componentDidMount() {
+
+    //  { "B12": [1,2,] , "T20"}, [4,5] }
     const {indentID} = this.props;
     getIndent(indentID).then((data)=> {
       this.setState({
         indentID : indentID,
-        indentDetails : data.val()
-      })
-    }).catch(() => alert('Could not fetch indent details'))
+        indentDetails : data.val(),
 
+      });
+      let partNumberVsImageURL = {};
+        let indentHistory = data.val().history || {} ; let count=0;
+      Object.keys(indentHistory).map((key) => {
+        count += 1;
+        let historyObjItems = indentHistory[key]['items'];
+        historyObjItems.forEach((item) => {
+          let imageURLArray = partNumberVsImageURL[item.partNumber] || [];
+          imageURLArray.push(item.screenShot);
+          partNumberVsImageURL[item.partNumber] = imageURLArray;
+
+          if(count === Object.keys(indentHistory).length) {
+            this.setState({
+              partNumberVsImageURL
+            })
+          }
+        })
+     })
+   }).catch((e) => console.log(e))
   }
 
 
@@ -133,14 +152,21 @@ export default class ViewIndent extends Component {
     openDialog : false})
   }
 
+
   onClose =  () => {
     this.setState({
       openDialog : false
     })
   }
 
+
   render() {
-    const {navigateBackToJobPage , indentID, indentDetails, openDialog,renderSnackBar } = this.state;
+    const { navigateBackToJobPage,
+            indentID,
+            indentDetails,
+            openDialog,
+            renderSnackBar,
+            partNumberVsImageURL } = this.state;
 
     if(navigateBackToJobPage) {
       const url = "/jobcard/"+ indentDetails.jobCardID;
@@ -166,8 +192,9 @@ export default class ViewIndent extends Component {
 
     let cardsArray =  [];
 
-    if(!indentDetails|| Object.keys(indentDetails).length == 0)
+    if(!indentDetails|| Object.keys(indentDetails).length == 0 || !partNumberVsImageURL)
       return null;
+
 
     indentDetails.items.map((indent) => {
       let mediaCardProps = {
@@ -177,7 +204,12 @@ export default class ViewIndent extends Component {
           screenShot : indent.screenShot
         }
       }
-      cardsArray.push(<div className='card'><MediaCard {...mediaCardProps} /></div>)
+      let partImageURLs = partNumberVsImageURL[indent.partNumber] || []
+
+      cardsArray.push(<div className='card' key={indent.partNumber}>
+                        <MediaCard {...mediaCardProps} />
+                        <GridlistImage urls= {partImageURLs} />
+                      </div>)
     })
       return (
         <Fragment>
@@ -196,11 +228,8 @@ export default class ViewIndent extends Component {
         </Table>
         </Paper>
 
-
-
         {cardsArray}
-        
-      <GridlistImage />
+
         <Button color="primary" variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
       </Fragment>
       )

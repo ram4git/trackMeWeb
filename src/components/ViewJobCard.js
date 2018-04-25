@@ -72,7 +72,9 @@ export default class ViewJobCard extends Component {
      },
      onButtonClickPath : 'indent'
    }
-     returnObj.push(<div style = {{width :'70%', marginLeft:'5%'}} className='card'><SimpleCard {...cardProps} /></div>)
+     returnObj.push(<div style = {{width :'70%', marginLeft:'5%'}} key={indent.indentID} className='card'>
+                     <SimpleCard {...cardProps} />
+                    </div>)
    })
  }
 
