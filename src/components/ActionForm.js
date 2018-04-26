@@ -100,6 +100,8 @@ export default class ActionForm extends Component {
         indentDetails.status='ITEMS_RETURNED_OLD_PARTS_EXPECTED';
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.actionUpdateMsg= 'All items returned to garage';
+        indentDetails.currentOwner = 'GARAGE';
+        indentDetails.status = 'OPEN';
         indentDetails.actionUpdateTime= new Date().toString();
 
         //call to update the count
@@ -242,7 +244,7 @@ export default class ActionForm extends Component {
 
   render(){
 
-    const { itemsInActionForm = [], indentID } = this.state;
+    const { itemsInActionForm = [], indentID, actionTaken } = this.state;
     let cardsArray =  [];
     if(itemsInActionForm) {
       itemsInActionForm.map((itemInActionForm) => {
@@ -255,7 +257,7 @@ export default class ActionForm extends Component {
             quantityStores : itemInActionForm.quantityStores || '24'
           }
         }
-        cardsArray.push(<div className='card'><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
+        cardsArray.push(<div className='card' style={{marginTop : '5%'}}><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
       })
     }
 
@@ -275,32 +277,36 @@ export default class ActionForm extends Component {
                   <Typography variant="title" color="inherit" style={{flex:1}}>
                     Resolving Indent ...
                   </Typography>
-                  <Button color="inherit" onClick={this.onIndentActionTaken}>
+                  <Typography variant="title" color="inherit" style={{color:'white'}}>
+                    Action
+                  </Typography>
+                  <DialogActions style={{backgroundColor:'lightgoldenrodyellow'}}>
+                      <Select style={{color:'black'}}
+                     value={this.state.actionTaken}
+                     onChange={this.handleChange}
+                     inputProps={{
+                       name: 'actionTaken',
+                       id: 'actionTaken',
+                         }}
+                         >
+                         <MenuItem value="">
+                           <em>None</em>
+                         </MenuItem>
+                         <MenuItem value={'COMPLETE_RETURN_TO_GARAGE'}>Complete Return to Garage</MenuItem>
+                         <MenuItem value={'PARTIAL_RETURN_TO_GARAGE'}>Partial Return to Garage</MenuItem>
+                         <MenuItem value={'FORWARD_TO_PURCHASE'}>Forward to Purchase</MenuItem>
+                         <MenuItem value={'ASSIGN_TO_ADMIN'}>Assign to Admin</MenuItem>
+                         <MenuItem value={'CLOSE'}>CLOSE</MenuItem>
+                       </Select>
+                  </DialogActions>
+                  { actionTaken !== 'NO_ACTION' && <Button color="inherit" onClick={this.onIndentActionTaken}>
                     DONE
-                  </Button>
+                  </Button> }
                 </Toolbar>
               </AppBar>
             {cardsArray}
           </DialogContent>
-          <DialogActions>
-              <Select
-             value={this.state.actionTaken}
-             onChange={this.handleChange}
-             inputProps={{
-               name: 'actionTaken',
-               id: 'actionTaken',
-                 }}
-                 >
-                 <MenuItem value="">
-                   <em>None</em>
-                 </MenuItem>
-                 <MenuItem value={'COMPLETE_RETURN_TO_GARAGE'}>Complete Return to Garage</MenuItem>
-                 <MenuItem value={'PARTIAL_RETURN_TO_GARAGE'}>Partial Return to Garage</MenuItem>
-                 <MenuItem value={'FORWARD_TO_PURCHASE'}>Forward to Purchase</MenuItem>
-                 <MenuItem value={'ASSIGN_TO_ADMIN'}>Assign to Admin</MenuItem>
-                 <MenuItem value={'CLOSE'}>CLOSE</MenuItem>
-               </Select>
-          </DialogActions>
+
     </Dialog>
 
 

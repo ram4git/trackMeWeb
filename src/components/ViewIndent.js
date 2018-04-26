@@ -222,12 +222,22 @@ export default class ViewIndent extends Component {
               <TableCell>Lorry Number</TableCell>
               <TableCell>{indentDetails.vehicleNumber}</TableCell>
               </TableRow>
+              <TableRow>
+              <TableCell>Current Owner</TableCell>
+              <TableCell>{indentDetails.currentOwner}</TableCell>
+              </TableRow>
+              <TableRow>
+              <TableCell>STATUS</TableCell>
+              <TableCell><span style={{color:"blue"}}>{indentDetails.status}</span></TableCell>
+              </TableRow>
           </TableBody>
         </Table>
         </Paper>
         {cardsArray}
+        <div style={{marginLeft : '45%',marginTop:'5%'}}>
+        <Button color="secondary" style={{}} variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
+        </div>
 
-        <Button color="primary" variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
       </Fragment>
       )
     }

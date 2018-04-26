@@ -123,7 +123,9 @@ onSubmit = () => {
     jobCardID : this.state.jobCardID,
     modelNumber : this.state.modelNumber || 'M1312',
     createdAt : new Date().toString(),
-    vehicleNumber : this.state.vehicleNumber
+    vehicleNumber : this.state.vehicleNumber,
+    currentOwner : 'STORE',
+    status : 'OPEN'
   }
   let count = 0;
 

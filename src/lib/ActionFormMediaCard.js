@@ -11,7 +11,8 @@ import Icon from 'material-ui/Icon';
 import LockOpen from '@material-ui/icons/LockOpen';
 import Locked from '@material-ui/icons/Lock';
 import Videocam from '@material-ui/icons/Videocam';
-import { updateIndent, uploadImage } from '../api/allApi.js';
+import { uploadImage } from '../api/allApi.js';
+import Table, { TableBody, TableCell, TableRow } from 'material-ui/Table';
 
 
 const classes = {
@@ -30,9 +31,8 @@ const classes = {
   },
    cover: {
      width: 200,
-     height: 200,
      flex:0.5,
-     marginLeft : 20
+     margin : '20px'
    },
    text: {
    marginBottom: 16,
@@ -41,6 +41,16 @@ const classes = {
   },
   textDiv : {
     flex:0.5
+  },
+  label : {
+    fontSize : '16px',
+    color : 'rgba(0, 0, 0, 0.54)',
+    margin : '10px'
+  },
+  value : {
+    fontSize : '16px',
+    color : 'black',
+    margin : '10px'
   }
 };
 
@@ -120,14 +130,14 @@ class ActionFormMediaCard extends React.Component {
         this.setState({
           showLiveCameraFeed: false
         });
-        
+
         let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
         let role = window.localStorage.role
         uploadImage(img, this.state.indentID, role, this.state.partNumber).then((snapshot) => {
           let URL = snapshot.downloadURL;
           this.setState({screenShot : URL});
         }).catch((e) => console.log(e));
-        
+
       } else {
         this.setState({
           showLiveCameraFeed: true
@@ -142,15 +152,15 @@ class ActionFormMediaCard extends React.Component {
           <Webcam
             audio={false}
             ref={this.setRef.bind(this)}
-            height={240}
-            width={220}
+            height={350}
+            width={400}
             screenshotFormat='image/jpeg'
             onClick={this.capture.bind(this)}
           />
         );
       }
       return (
-          <img src={this.state.screenShot} style={{height:'220px'}} />
+          <img src={this.state.screenShot} style={{height:'340', margin:'20px'}} />
       );
     }
 
@@ -161,7 +171,7 @@ class ActionFormMediaCard extends React.Component {
    const {  classes } = this.props;
 
    if(screenShot) {
-  
+
   }
 
 const btnStyle = {
@@ -177,14 +187,27 @@ const btnStyle = {
       <Card className={classes.card}>
       <div className={classes.textDiv}>
         <CardContent>
-          <Typography variant="headline" className={classes.text}>  {mainHead}</Typography>
-          <Typography variant="headline" className={classes.text}>  {partNumber}</Typography>
-          <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {quantityStores}
-          </Typography>
-          <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {quantityRequired}
-          </Typography>
+        <Table>
+          <TableBody>
+             <TableRow>
+              <TableCell className={classes.label}>Group :</TableCell>
+              <TableCell className={classes.value}>{mainHead}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.label}>Part Number : </TableCell>
+                <TableCell className={classes.value}>{partNumber}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.label}>Qty(stores): </TableCell>
+                <TableCell className={classes.value}>{quantityStores}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className={classes.label}>Qty(Reqd) : </TableCell>
+                <TableCell className={classes.value}>{quantityRequired}</TableCell>
+              </TableRow>
+          </TableBody>
+        </Table>
+
           <div style = { isLocked ? {display:'none'} : {}}>
           <TextField id="quantityApproved"
              label="Quantity Approved"

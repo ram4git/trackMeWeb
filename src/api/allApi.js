@@ -65,7 +65,7 @@ export function saveIndent(data) {
   const updates={};
   updates['indents/'+data.indentID] = data;
 
-  const jobCardIndentsRef = firebase.database().ref().child('jobCards/'+data.jobCardID + '/indents');
+  const jobCardIndentsRef = dbRef.child('jobCards/'+data.jobCardID + '/indents');
   jobCardIndentsRef.transaction(function(indents){
                      indents=indents||[];
                      indents.push(data);
@@ -127,6 +127,11 @@ export function updateIndent(indentDetails) {
     updatedTime : indentDetails.createdAt || '',
     items : indentDetails.items
   };
+
+const indentsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/currentOwner`);
+
+indentsRef.set(indentDetails.currentOwner);
+
   updates[`indents/${indentDetails.indentID}/history/${arrKey}`] = historyPayload;
   const dbRef = firebase.database().ref();
   return dbRef.update(updates);
