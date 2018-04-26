@@ -27,6 +27,7 @@ import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import { saveIndent, getAllIndents } from '../api/allApi.js';
 import ActionForm from './ActionForm';
+import GarageActionForm from './GarageActionForm';
 import Snackbar from 'material-ui/Snackbar';
 import GridlistImage from '../lib/GridlistImage.js'
 
@@ -126,6 +127,11 @@ export default class ViewIndent extends Component {
 
   handleUpdateClicked = () => {
       this.setState({ openDialog: true , showLiveCameraFeed : true});
+      if(window.location.role==='STORE') {
+        return <ActionForm />
+      } else if(window.location.role==='GARAGE') {
+        return <GarageActionForm />
+      }
     };
 
     handleClose = () => {
