@@ -44,13 +44,16 @@ function SimpleMediaCard(props) {
       <div className={classes.textDiv}>
         <CardContent  className={classes.flexContainer}>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
-          {text.title}
+          {text.mainHead}
           </Typography>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
-          {text.name}
+          {text.partNumber}
           </Typography>
-          <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {text.number}
+          <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
+            {text.partName}
+          </Typography>
+          <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
+            {text.quantityRequired}
           </Typography>
         </CardContent>
       </div>

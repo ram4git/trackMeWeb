@@ -63,7 +63,10 @@ export default class ViewIndent extends Component {
         let historyObjItems = indentHistory[key]['items'];
         historyObjItems.forEach((item) => {
           let imageURLArray = partNumberVsImageURL[item.partNumber] || [];
-          imageURLArray.push(item.screenShot);
+          imageURLArray.push({
+            updatedBy : indentHistory[key]['updatedBy'],
+            screenShot : item.screenShot
+          });
           partNumberVsImageURL[item.partNumber] = imageURLArray;
 
           if(count === Object.keys(indentHistory).length) {
@@ -198,8 +201,10 @@ export default class ViewIndent extends Component {
     indentDetails.items.map((indent) => {
       let mediaCardProps = {
         text : {
-          title : indent.mainHead,
-          number : indent.partNumber
+          mainHead : indent.mainHead,
+          partNumber : indent.partNumber,
+          partName : indent.partName,
+          quantityRequired : indent.quantityRequired
           }
       }
       let partImageURLs = partNumberVsImageURL[indent.partNumber] || []
@@ -224,7 +229,7 @@ export default class ViewIndent extends Component {
               </TableRow>
               <TableRow>
               <TableCell>Current Owner</TableCell>
-              <TableCell>{indentDetails.currentOwner}</TableCell>
+              <TableCell><span style={{color:"red"}}>{indentDetails.currentOwner}</span></TableCell>
               </TableRow>
               <TableRow>
               <TableCell>STATUS</TableCell>
@@ -234,9 +239,11 @@ export default class ViewIndent extends Component {
         </Table>
         </Paper>
         {cardsArray}
+        {window.localStorage.role === indentDetails.currentOwner &&
         <div style={{marginLeft : '45%',marginTop:'5%'}}>
         <Button color="secondary" style={{}} variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
         </div>
+        }
 
       </Fragment>
       )

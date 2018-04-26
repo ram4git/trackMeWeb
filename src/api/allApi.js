@@ -125,7 +125,8 @@ export function updateIndent(indentDetails) {
   const updates = {};
   let historyPayload = {
     updatedTime : indentDetails.createdAt || '',
-    items : indentDetails.items
+    items : indentDetails.items,
+    updatedBy : window.localStorage.role
   };
 
 const indentsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/currentOwner`);

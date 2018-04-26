@@ -113,9 +113,9 @@ handleClickOpen = () => {
 
 onSubmit = () => {
 
-   const {items }  =  this.state; 
+   const {items }  =  this.state;
    const  indentID = this.state.jobCardID;// change later
-   
+
 
   const payload = {
     indentID,
@@ -140,23 +140,23 @@ onSubmit = () => {
       if(count === items.length) {
         saveIndent(payload).then(() => {
           //update the history
-        
-          
+
+
           updateIndent(payload) //fire and forget - dont resolve promise
-          
+
           this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
 
         }
         ).catch(() =>alert('could not save Indent'))
       }
-        
-      }).catch((e) => console.log(e))
-    } 
-  })
-  
 
-  
-  
+      }).catch((e) => console.log(e))
+    }
+  })
+
+
+
+
 }
 
   handleClose = () => {
@@ -167,8 +167,8 @@ onSubmit = () => {
       this.setState({
         [prop] : event.target.value
       });
-      
-    
+
+
       if(prop === 'partNumber') {
         const parts = this.state.parts;
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
@@ -187,9 +187,9 @@ onSubmit = () => {
     newItem.quantityRequired = quantityRequired;
     newItem.quantityStores = '120';
     newItem.screenShot = screenShot;
-    
+
     items.push(newItem);
-    
+
     this.webcam=null;
     this.setState({
       open: false,
@@ -254,21 +254,22 @@ render() {
   itemsArray.map((indent) => {
     let mediaCardProps = {
       text : {
-        title : indent.mainHead,
-        name : indent.partName,
-        number : indent.partNumber,
+        mainHead : indent.mainHead,
+        partName : indent.partName,
+        partNumber : indent.partNumber,
+        quantityRequired: indent.quantityRequired,
         screenShot : indent.screenShot
       }
     }
     savedIndentsArray.push(<div className='card' style={{width:'70%'}}><MediaCard {...mediaCardProps} />
     </div>)
   })
-  
+
   const pStyle = {
     float: 'right',
     margin: '3%'
   };
-  
+
     return (
       <Fragment>
       <h2 style={{ marginLeft :'5%'}} >Creating INDENT for job...</h2>
@@ -370,12 +371,12 @@ render() {
       </DialogContent>
     </Dialog>
     {savedIndentsArray}
-    
-    { savedIndentsArray.length > 0  && 
+
+    { savedIndentsArray.length > 0  &&
     <div style={{marginLeft : '45%',marginTop:'5%'}}>
     <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
     </div> }
-    
+
   </Fragment>
     )
   }

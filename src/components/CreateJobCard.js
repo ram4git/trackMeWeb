@@ -110,7 +110,7 @@ export default class CreateJobCard extends Component {
       { key: 'ui', text: 'UI Design', value: 'ui' },
       { key: 'ux', text: 'User Experience', value: 'ux' },
     ];
-    
+
     const complaintTypeOptions = [
       { key: 'electrical', text: 'Electrical', value: 'Electrical' },
       { key: 'mechanical', text: 'Mechanical', value: 'Mechanical' },
@@ -135,12 +135,12 @@ export default class CreateJobCard extends Component {
     const { loading, teamNames, articles,name, email, lorryObj , navigateBack=false } = this.state
     const { match } = this.props
 
- 
+
     if(navigateBack) {
       const url = "/jobcards";
       return <Redirect push to={url}/>
     }
-      
+
 
     return (
       <div>
@@ -255,7 +255,7 @@ export default class CreateJobCard extends Component {
            onChange={this.handleChange}
          />
 
-         <Form.Select fluid label='Mechanic Alloted' name="mechanicAllotted" options={options} placeholder='Raju' onChange={this.handleChange}/>
+         <Form.Select fluid label='Mechanic Alloted' name="mechanicAllotted" options={checkedByOptions} placeholder='Raju' onChange={this.handleChange}/>
 
 
   </Form.Group>

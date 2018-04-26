@@ -22,11 +22,12 @@ const styles = theme => ({
     marginLeft : '2%'
   },
   title: {
-    color: theme.palette.primary.light,
+    color: '#de0c2f',
   },
   titleBar: {
     background:
       'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
+      color :'#de0c2f'
   },
 });
 
@@ -44,18 +45,13 @@ class SingleLineGridList extends React.Component {
   urls.map((url)=> {
     imagesArray.push(
     <GridListTile>
-      <img src={url} />
+      <img src={url.screenShot} />
       <GridListTileBar
-        title='Rice'
+        title={url.updatedBy}
         classes={{
           root: classes.titleBar,
           title: classes.title,
         }}
-        actionIcon={
-          <IconButton>
-            <StarBorderIcon className={classes.title} />
-          </IconButton>
-        }
       />
     </GridListTile>
   )
