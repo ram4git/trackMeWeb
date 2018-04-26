@@ -11,9 +11,8 @@ import Icon from 'material-ui/Icon';
 import LockOpen from '@material-ui/icons/LockOpen';
 import Locked from '@material-ui/icons/Lock';
 import Videocam from '@material-ui/icons/Videocam';
-import { updateIndent } from '../api/allApi.js';
-import * as firebase from 'firebase';
-import FireBaseTools from '../api/firebase-tools.js';
+import { updateIndent, uploadImage } from '../api/allApi.js';
+
 
 const classes = {
 
@@ -64,7 +63,8 @@ class ActionFormMediaCard extends React.Component {
   };
 
   componentDidMount () {
-    const { mainHead, partNumber, quantityStores, quantityRequired  } = this.props.item;
+    const { indentID } = this.props;
+    const { mainHead, partNumber, quantityStores, quantityRequired  } = this.props.items;
     this.setState({
       mainHead ,
       partNumber,
@@ -147,7 +147,24 @@ class ActionFormMediaCard extends React.Component {
 
 
  render() {
+   const { screenShot, partNumber } = this.state;
+   const { indentID, items, classes } = this.props;
+   console.log(this.props)
+ if(screenShot) {
+   const payload = {
+     indentID,
+     items,
+     createdAt : new Date().getTime()
+   }
+    let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
+    let role = window.location.role
+  uploadImage(img, indentID, role, partNumber).then((snapshot) => {
+    let URL = snapshot.downloadURL;
+    console.log(URL);
+    updateIndent(payload)
 
+  }).catch((e) => console.log(e));
+}
 
 const btnStyle = {
   position: 'absolute',
@@ -155,21 +172,19 @@ const btnStyle = {
   left:'100px',
   height: '50px'
 }
-  const { classes, item } = this.props;
-  const { isLocked, webcamClicked, showLiveCameraFeed, screenShot } = this.state;
-  console.log(screenShot)
+  const { isLocked, webcamClicked, showLiveCameraFeed } = this.state;
   return (
     <div>
       <Card className={classes.card}>
       <div className={classes.textDiv}>
         <CardContent>
-          <Typography variant="headline" className={classes.text}>  {item.mainHead}</Typography>
-          <Typography variant="headline" className={classes.text}>  {item.partNumber}</Typography>
+          <Typography variant="headline" className={classes.text}>  {items.mainHead}</Typography>
+          <Typography variant="headline" className={classes.text}>  {items.partNumber}</Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {item.quantityStores}
+            {items.quantityStores}
           </Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {item.quantityRequired}
+            {items.quantityRequired}
           </Typography>
           <div style = { isLocked ? {display:'none'} : {}}>
           <TextField id="quantityApproved"

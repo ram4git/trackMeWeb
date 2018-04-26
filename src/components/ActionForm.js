@@ -240,20 +240,20 @@ export default class ActionForm extends Component {
 
   render(){
 
-    const { itemsInActionForm = [] } = this.state;
+    const { itemsInActionForm = [], indentID } = this.state;
     let cardsArray =  [];
     if(itemsInActionForm) {
       itemsInActionForm.map((itemInActionForm) => {
         let mediaCardProps = {
-          item : {
+          items : {
             mainHead : itemInActionForm.mainHead,
             partNumber : itemInActionForm.partNumber,
             screenShot : itemInActionForm.screenShot,
-            quantityRequired: itemsInActionForm.quantityRequired,
-            quantityStores : itemsInActionForm.quantityStores || '24'
+            quantityRequired: itemInActionForm.quantityRequired,
+            quantityStores : itemInActionForm.quantityStores || '24'
           }
         }
-        cardsArray.push(<div className='card'><ActionFormMediaCard {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
+        cardsArray.push(<div className='card'><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
       })
     }
 
