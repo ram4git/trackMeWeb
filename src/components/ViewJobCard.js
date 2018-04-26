@@ -119,10 +119,6 @@ export default class ViewJobCard extends Component {
             <TableCell>{jobCard.duration}</TableCell>
            </TableRow>
            <TableRow>
-            <TableCell>Loading</TableCell>
-            <TableCell>{jobCard.loading}</TableCell>
-           </TableRow>
-           <TableRow>
             <TableCell>Mechanic Allotted</TableCell>
             <TableCell>{jobCard.mechanicAllotted}</TableCell>
            </TableRow>
@@ -131,8 +127,8 @@ export default class ViewJobCard extends Component {
             <TableCell>{jobCard.odometerReading}</TableCell>
            </TableRow>
            <TableRow>
-            <TableCell>Preset Reading</TableCell>
-            <TableCell>{jobCard.presetReading}</TableCell>
+            <TableCell>Present Reading</TableCell>
+            <TableCell>{jobCard.presentReading}</TableCell>
            </TableRow>
            <TableRow>
             <TableCell>Previous Meter Reading</TableCell>

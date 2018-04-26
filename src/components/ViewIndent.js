@@ -130,7 +130,7 @@ export default class ViewIndent extends Component {
     };
 
     handleCloseSnackBar = () => {
-      this.setState({renderSnackBar: false});
+      this.setState({renderSnackBar: false}, ()=>{window.location.href='/indent/'+ this.state.indentID});
     };
 
     handlePropChange = prop => event => {
@@ -147,7 +147,6 @@ export default class ViewIndent extends Component {
     };
 
   onIndentActionTaken(params){
-    alert('action taken');
     this.setState({renderSnackBar : true,
     openDialog : false})
   }
@@ -200,9 +199,8 @@ export default class ViewIndent extends Component {
       let mediaCardProps = {
         text : {
           title : indent.mainHead,
-          number : indent.partNumber,
-          screenShot : indent.screenShot
-        }
+          number : indent.partNumber
+          }
       }
       let partImageURLs = partNumberVsImageURL[indent.partNumber] || []
 
@@ -213,7 +211,7 @@ export default class ViewIndent extends Component {
     })
       return (
         <Fragment>
-        <Paper>
+        <Paper style={{margin:'5%', width:'30%'}}>
         <Table>
           <TableBody>
              <TableRow>
@@ -227,7 +225,6 @@ export default class ViewIndent extends Component {
           </TableBody>
         </Table>
         </Paper>
-
         {cardsArray}
 
         <Button color="primary" variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>

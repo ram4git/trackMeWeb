@@ -11,7 +11,6 @@ const classes = {
   card: {
    display: 'flex',
    flex:1,
-   width:'47%',
    marginLeft : '5%'
   },
   details: {
@@ -22,12 +21,6 @@ const classes = {
   content: {
    flex: '1 0 auto',
   },
-   cover: {
-     width: 200,
-     height: 200,
-     flex:0.5,
-     marginLeft : 20
-   },
    text: {
    marginBottom: 16,
    marginLeft : 20,
@@ -35,22 +28,21 @@ const classes = {
   },
   textDiv : {
     flex:0.7
+  },
+  flexContainer : {
+    display : 'flex',
+    flexDirection : 'row'
   }
 };
 
-const flexContainer = {
-  display : 'flex',
-  flexDirection : 'row',
-  height: '200px'
-}
 
 function SimpleMediaCard(props) {
   const { classes, text } = props;
   return (
     <div>
-      <Card className={classes.card}>
+      <Card className={classes.card} style={ text.screenShot ?  {height: '200px'} : {height:'60px'} }>
       <div className={classes.textDiv}>
-        <CardContent style={flexContainer}>
+        <CardContent  className={classes.flexContainer}>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
           {text.title}
           </Typography>
@@ -61,6 +53,9 @@ function SimpleMediaCard(props) {
             {text.number}
           </Typography>
         </CardContent>
+      </div>
+      <div style={{flex:0.3}}>
+        <img src={text.screenShot} style={{height:'200px'}}/>
       </div>
       </Card>
     </div>

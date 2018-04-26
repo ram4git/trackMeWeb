@@ -94,11 +94,13 @@ export default class ActionForm extends Component {
         indentDetails.items.map((indentItem) => {
           indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
+
         })
         indentDetails.status='ITEMS_RETURNED_OLD_PARTS_EXPECTED';
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.actionUpdateMsg= 'All items returned to garage';
-        indentDetails.actionUpdateTime= new Date();
+        indentDetails.actionUpdateTime= new Date().toString();
 
         //call to update the count
         updatePartCount(indentDetails).
@@ -106,7 +108,7 @@ export default class ActionForm extends Component {
         .catch(()=> alert('error occured fetching part count'))
 
        //call to update the indent details
-       updateIndent(indentDetails).then(alert('success')).catch(alert('error'))
+       updateIndent(indentDetails).then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
         msg = 'Indent updated successfully'
       }
 

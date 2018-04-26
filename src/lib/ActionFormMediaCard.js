@@ -63,9 +63,11 @@ class ActionFormMediaCard extends React.Component {
   };
 
   componentDidMount () {
-    const { indentID } = this.props;
+    const { indentID , items } = this.props;
     const { mainHead, partNumber, quantityStores, quantityRequired  } = this.props.items;
     this.setState({
+      indentID,
+      partNumber,
       mainHead ,
       partNumber,
       quantityStores,
@@ -81,7 +83,8 @@ class ActionFormMediaCard extends React.Component {
       quantityRequired : this.state.quantityRequired,
       quantityStores : this.state.quantityStores,
       quantityPurchase : this.state.quantityPurchase,
-      quantityApproved : this.state.quantityApproved
+      quantityApproved : this.state.quantityApproved,
+      screenShot : this.state.screenShot
     }
     this.setState({
       isLocked : true
@@ -115,9 +118,16 @@ class ActionFormMediaCard extends React.Component {
       if(this.state.showLiveCameraFeed) {
         const screenShot = this.webcam.getScreenshot();
         this.setState({
-          screenShot,
           showLiveCameraFeed: false
         });
+        
+        let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
+        let role = window.localStorage.role
+        uploadImage(img, this.state.indentID, role, this.state.partNumber).then((snapshot) => {
+          let URL = snapshot.downloadURL;
+          this.setState({screenShot : URL});
+        }).catch((e) => console.log(e));
+        
       } else {
         this.setState({
           showLiveCameraFeed: true
@@ -147,24 +157,12 @@ class ActionFormMediaCard extends React.Component {
 
 
  render() {
-   const { screenShot, partNumber } = this.state;
-   const { indentID, items, classes } = this.props;
-   console.log(this.props)
- if(screenShot) {
-   const payload = {
-     indentID,
-     items,
-     createdAt : new Date().getTime()
-   }
-    let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
-    let role = window.location.role
-  uploadImage(img, indentID, role, partNumber).then((snapshot) => {
-    let URL = snapshot.downloadURL;
-    console.log(URL);
-    updateIndent(payload)
+   const { screenShot,mainHead, partNumber } = this.state;
+   const {  classes } = this.props;
 
-  }).catch((e) => console.log(e));
-}
+   if(screenShot) {
+  
+  }
 
 const btnStyle = {
   position: 'absolute',
@@ -172,19 +170,20 @@ const btnStyle = {
   left:'100px',
   height: '50px'
 }
-  const { isLocked, webcamClicked, showLiveCameraFeed } = this.state;
+  const { isLocked, webcamClicked, showLiveCameraFeed , quantityStores ,
+     quantityApproved , quantityRequired } = this.state;
   return (
     <div>
       <Card className={classes.card}>
       <div className={classes.textDiv}>
         <CardContent>
-          <Typography variant="headline" className={classes.text}>  {items.mainHead}</Typography>
-          <Typography variant="headline" className={classes.text}>  {items.partNumber}</Typography>
+          <Typography variant="headline" className={classes.text}>  {mainHead}</Typography>
+          <Typography variant="headline" className={classes.text}>  {partNumber}</Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {items.quantityStores}
+            {quantityStores}
           </Typography>
           <Typography variant="subheading" className={classes.text} color="textSecondary">
-            {items.quantityRequired}
+            {quantityRequired}
           </Typography>
           <div style = { isLocked ? {display:'none'} : {}}>
           <TextField id="quantityApproved"

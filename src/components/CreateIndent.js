@@ -49,7 +49,7 @@ componentDidMount() {
   this.setState({
     vehicleNumber : this.props.vehicleNumber,
     jobCardID : this.props.jobCardID,
-    modelNumber : this.props.modelNumber
+    modelNumber : this.props.modelNumber || 'M1312'
   })
   getItemsForModelNumber('M1312').then((data) => {
      let parts = data.val(); let listOfMainHeads = [];
@@ -113,20 +113,21 @@ handleClickOpen = () => {
 
 onSubmit = () => {
 
-   const { items }  =  this.state; 
+   const {items }  =  this.state; 
    const  indentID = this.state.jobCardID;// change later
-
+   
 
   const payload = {
     indentID,
     items ,
     jobCardID : this.state.jobCardID,
     modelNumber : this.state.modelNumber || 'M1312',
-    createdAt : new Date().getTime()
+    createdAt : new Date().toString(),
+    vehicleNumber : this.state.vehicleNumber
   }
+  let count = 0;
 
   items.forEach((item) => {
-    let count = 0;
     if(item.screenShot) {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
     //  let buf = new Buffer(img, 'base64');
@@ -137,20 +138,23 @@ onSubmit = () => {
       if(count === items.length) {
         saveIndent(payload).then(() => {
           //update the history
+        
+          
           updateIndent(payload) //fire and forget - dont resolve promise
+          
           this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
 
         }
         ).catch(() =>alert('could not save Indent'))
       }
-
+        
       }).catch((e) => console.log(e))
-    }
+    } 
   })
+  
 
-
-
-
+  
+  
 }
 
   handleClose = () => {
@@ -161,8 +165,8 @@ onSubmit = () => {
       this.setState({
         [prop] : event.target.value
       });
-
-
+      
+    
       if(prop === 'partNumber') {
         const parts = this.state.parts;
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
@@ -181,9 +185,9 @@ onSubmit = () => {
     newItem.quantityRequired = quantityRequired;
     newItem.quantityStores = '120';
     newItem.screenShot = screenShot;
-
+    
     items.push(newItem);
-
+    
     this.webcam=null;
     this.setState({
       open: false,
@@ -254,18 +258,15 @@ render() {
         screenShot : indent.screenShot
       }
     }
-    savedIndentsArray.push(<div className='card'><MediaCard {...mediaCardProps} />
-      <div style={{float:'right', marginRight :'20%'}}>
-      <Delete  style={{fontSize:'50px'}}/>
-      </div>
+    savedIndentsArray.push(<div className='card' style={{width:'70%'}}><MediaCard {...mediaCardProps} />
     </div>)
   })
-
+  
   const pStyle = {
     float: 'right',
     margin: '3%'
   };
-
+  
     return (
       <Fragment>
       <h2 style={{ marginLeft :'5%'}} >Creating INDENT for job...</h2>
@@ -367,12 +368,12 @@ render() {
       </DialogContent>
     </Dialog>
     {savedIndentsArray}
-
-    { savedIndentsArray.length > 0  &&
+    
+    { savedIndentsArray.length > 0  && 
     <div style={{marginLeft : '45%',marginTop:'5%'}}>
     <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
     </div> }
-
+    
   </Fragment>
     )
   }

@@ -25,9 +25,13 @@ export default class CreateJobCard extends Component {
 
   handleVehicleChange = (e, {name, value}) => {
     let vehicleValue = value.toUpperCase();
+    //we should not fire this call for every character change..do it on submit of lens icon
     getLorryDetail(vehicleValue).then((data) => {
       let lorryObj = data.val() || {};
-      this.setState({lorryObj})
+      this.setState({
+        lorryObj,
+        vehicleNumber : vehicleValue
+      })
     }).catch((e) => console.log(e))
   }
 
@@ -41,10 +45,14 @@ export default class CreateJobCard extends Component {
    let data = Object.assign({}, this.state);
   // let copy = {{} , ...this.state};
    let now = new Date();
-   data.date = now;
+   data.date = now.toString();
    data.id = this.generateOrderID(data.vehicleNumber , now)
-   createJobCard(data).then(console.log('successfully saved')).catch(console.log('error occured'))
-   this.setState({ email: '', name: '' })
+   createJobCard(data).then(() => {
+     alert('Successfully saved jobcard');
+     this.setState({ navigateBack: true })
+   }).catch((e) => {
+     console.log(e);
+   })
  }
 
  generateOrderID(vehicleNumber , now){
@@ -82,35 +90,57 @@ export default class CreateJobCard extends Component {
       { key: '10', text: '3 weeks', value: '21' },
       { key: '11', text: '1 month', value: '30' }
     ];
-    const options = [
-  { key: 'angular', text: 'Angular', value: 'angular' },
-  { key: 'css', text: 'CSS', value: 'css' },
-  { key: 'design', text: 'Graphic Design', value: 'design' },
-  { key: 'ember', text: 'Ember', value: 'ember' },
-  { key: 'html', text: 'HTML', value: 'html' },
-  { key: 'ia', text: 'Information Architecture', value: 'ia' },
-  { key: 'javascript', text: 'Javascript', value: 'javascript' },
-  { key: 'mech', text: 'Mechanical Engineering', value: 'mech' },
-  { key: 'meteor', text: 'Meteor', value: 'meteor' },
-  { key: 'node', text: 'NodeJS', value: 'node' },
-  { key: 'plumbing', text: 'Plumbing', value: 'plumbing' },
-  { key: 'python', text: 'Python', value: 'python' },
-  { key: 'rails', text: 'Rails', value: 'rails' },
-  { key: 'react', text: 'React', value: 'react' },
-  { key: 'repair', text: 'Kitchen Repair', value: 'repair' },
-  { key: 'ruby', text: 'Ruby', value: 'ruby' },
-  { key: 'ui', text: 'UI Design', value: 'ui' },
-  { key: 'ux', text: 'User Experience', value: 'ux' },
-]
+        const options = [
+      { key: 'angular', text: 'Angular', value: 'angular' },
+      { key: 'css', text: 'CSS', value: 'css' },
+      { key: 'design', text: 'Graphic Design', value: 'design' },
+      { key: 'ember', text: 'Ember', value: 'ember' },
+      { key: 'html', text: 'HTML', value: 'html' },
+      { key: 'ia', text: 'Information Architecture', value: 'ia' },
+      { key: 'javascript', text: 'Javascript', value: 'javascript' },
+      { key: 'mech', text: 'Mechanical Engineering', value: 'mech' },
+      { key: 'meteor', text: 'Meteor', value: 'meteor' },
+      { key: 'node', text: 'NodeJS', value: 'node' },
+      { key: 'plumbing', text: 'Plumbing', value: 'plumbing' },
+      { key: 'python', text: 'Python', value: 'python' },
+      { key: 'rails', text: 'Rails', value: 'rails' },
+      { key: 'react', text: 'React', value: 'react' },
+      { key: 'repair', text: 'Kitchen Repair', value: 'repair' },
+      { key: 'ruby', text: 'Ruby', value: 'ruby' },
+      { key: 'ui', text: 'UI Design', value: 'ui' },
+      { key: 'ux', text: 'User Experience', value: 'ux' },
+    ];
+    
+    const complaintTypeOptions = [
+      { key: 'electrical', text: 'Electrical', value: 'Electrical' },
+      { key: 'mechanical', text: 'Mechanical', value: 'Mechanical' },
+      { key: 'other', text: 'Other', value: 'Other' }
+    ];
 
-    const { loading, teamNames, articles } = this.state
+    const categoryOptions = [
+      { key: 'engine', text: 'Engine', value: 'Engine' },
+      { key: 'gearbox', text: 'Gear Box', value: 'Gear Box' },
+      { key: 'battery', text: 'Battery', value: 'Battery' },
+      { key: 'other', text: 'Other', value: 'Other' }
+    ];
+
+    const checkedByOptions = [
+      { key: 'Raju', text: 'Raju', value: 'Raju' },
+      { key: 'Venkat', text: 'Venkat', value: 'Venkat' },
+      { key: 'Rakesh', text: 'Rakesh', value: 'Rakesh' },
+      { key: 'Prashant', text: 'Prashant', value: 'Prashant' },
+      { key: 'Kumar', text: 'Kumar', value: 'Kumar' }
+    ];
+
+    const { loading, teamNames, articles,name, email, lorryObj , navigateBack=false } = this.state
     const { match } = this.props
 
-    console.log(match);
-    const { name, email } = this.state
-
-    const { lorryObj } = this.state;
-
+ 
+    if(navigateBack) {
+      const url = "/jobcards";
+      return <Redirect push to={url}/>
+    }
+      
 
     return (
       <div>
@@ -192,17 +222,17 @@ export default class CreateJobCard extends Component {
     </Grid>
     <Form.Group style={mStyle} widths={3}>
          <Form.Field control={Dropdown} fluid label='Complaint Type'
-             placeholder='Skills' fluid multiple selection options={options} name="complaintType"  onChange={this.handleChange}>
+             placeholder='Electrical' fluid multiple selection options={complaintTypeOptions} name="complaintType"  onChange={this.handleChange}>
           </Form.Field>
-         <Form.Select fluid label='Category' options={options}  name="complaintCategory" placeholder='Gender' onChange={this.handleChange} />
-         <Form.Select fluid label='Checked by' options={options}  name="checkedBy" placeholder='Gender' onChange={this.handleChange} />
+         <Form.Select fluid label='Category' options={categoryOptions}  name="complaintCategory"  onChange={this.handleChange} />
+         <Form.Select fluid label='Checked by' options={checkedByOptions}  name="checkedBy"  onChange={this.handleChange} />
 
    </Form.Group>
    <Form.Group style={mStyle} widths={3}>
    <Form.Field width={3} control={Input} label='Previous Meter Reading' name="previousMeterReading" placeholder='3400'
    onChange={this.handleChange} >
     </Form.Field>
-    <Form.Field width={2} control={Input} label='Preset Reading' name="presetReading" placeholder='4300'
+    <Form.Field width={2} control={Input} label='Present Reading' name="presentReading" placeholder='4300'
     onChange={this.handleChange} >
      </Form.Field><Form.Field width={2} control={Input} label='ODOMeter Reading(KM)' name="odometerReading" placeholder='12000'
      onChange={this.handleChange} >

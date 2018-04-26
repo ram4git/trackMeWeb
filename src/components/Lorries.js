@@ -59,7 +59,7 @@ class Lorries extends Component {
       Add Lorry
       </Button>
       </div>
-      <h2 style={{marginTop:'50px'}}>All open <span style={{color:"#1976d2"}}>LORRIES</span> displayed below</h2>
+      <h2 style={{marginTop:'50px'}}>All <span style={{color:"#1976d2"}}>LORRIES</span> displayed below</h2>
       { loadedData ? lorryDetailsArray :
       <div style={{height:'100px', width:'200px', marginLeft : '40%', marginTop : '25%'}}>
       <CircularProgress style={{display:'inline'}} size={10} />

@@ -38,11 +38,11 @@ export default class Jobcards extends Component {
  let indentCardsList = [];
  Object.keys(indents).forEach((indent) => {
    let indentDetails = indents[indent];
-   let now = new Date().getTime()
+   let now = new Date().toString()
  let cardProps = {
    text : {
-     title : indentDetails.indentID,
-     id : indentDetails.vehicleNumber,
+     title : indentDetails.vehicleNumber,
+     id : indentDetails.indentID,
      detail : now
    },
    onButtonClickPath : 'indent'

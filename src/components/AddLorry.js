@@ -83,12 +83,43 @@ export default class AddLorry extends Component {
       { key: '10', text: '3 weeks', value: '21' },
       { key: '11', text: '1 month', value: '30' }
     ];
+    
     const options = [
-  { key: 'ashokleyland', text: 'ASHOK LEYLAND', value: 'ashokleyland' },
-  { key: 'tata', text: 'TATA', value: 'tata' },
-  { key: 'eicher', text: 'EICHER', value: 'eicher' },
-  { key: 'bharatbenz', text: 'BHARAT BENZ', value: 'bharatbenz' }
-]
+      { key: 'ashokleyland', text: 'ASHOK LEYLAND', value: 'ASHOK LEYLAND' },
+      { key: 'tata', text: 'TATA', value: 'TATA' },
+      { key: 'eicher', text: 'EICHER', value: 'EICHER' },
+      { key: 'bharatbenz', text: 'BHARAT BENZ', value: 'BHARAT BENZ' }
+    ]
+
+    const vehicleTypeOptions = [
+    { key: 'lorry', text: 'Lorry', value: 'Lorry' },
+    { key: 'truck', text: 'Truck', value: 'Truck' },
+    { key: 'van', text: 'Van', value: 'Van' },
+    { key: 'auto', text: 'Auto', value: 'Auto' }
+    ]
+
+    const modelOptions = [
+    { key: '2214super', text: '2214 Super', value: '2214 Super' },
+    { key: '1613', text: '1613', value: '1210' },
+    { key: '1210', text: '1210', value: '1210' },
+    { key: '1212', text: '1212', value: '1212' },
+    { key: '1112', text: '1112', value: '1112' },
+    { key: '3723', text: '3723', value: '3723' },
+    { key: '3718', text: '3718', value: '3718' }
+
+    ]
+
+    const tyreOptions = [
+    { key: '6', text: '6', value: '6' },
+    { key: '10', text: '10', value: '10' },
+    { key: '14', text: '14', value: '14' }
+    ]
+
+    const capacityOptions = [
+      { key: '10', text: '10', value: '10' },
+      { key: '17', text: '17', value: '17' },
+      { key: '25', text: '25', value: '25' }
+    ]
 
     const { loading, teamNames, articles } = this.state
     const { match } = this.props
@@ -107,7 +138,7 @@ export default class AddLorry extends Component {
          <Form.Field width={4} control={Input} label='Vehicle Code' name="vehicleCode" placeholder='xxxx'
          onChange={this.handleChange} >
           </Form.Field>
-          <Form.Field width={4} control={Select} options={options} label='Vehicle Type' name="vehicleType" placeholder='xxxx'
+          <Form.Field width={4} control={Select} options={vehicleTypeOptions} label='Vehicle Type' name="vehicleType" placeholder='xxxx'
           onChange={this.handleChange} >
            </Form.Field>
        </Form.Group>
@@ -115,23 +146,23 @@ export default class AddLorry extends Component {
     <Form.Group style={mStyle} widths={3}>
 
          <Form.Select fluid label='Make' options={options}  name="make" placeholder='make' onChange={this.handleChange} />
-         <Form.Select fluid label='Model' options={options}  name="model" placeholder='model' onChange={this.handleChange} />
+         <Form.Select fluid label='Model' options={modelOptions}  name="model" placeholder='model' onChange={this.handleChange} />
 
    </Form.Group>
    <Form.Group style={mStyle} widths={3}>
 
-        <Form.Select fluid label='Number Of Tyres' options={options}  name="numberOfTyres" placeholder='no. of tyres' onChange={this.handleChange} />
-        <Form.Select fluid label='Capacity' options={options}  name="capacity" placeholder='capacity' onChange={this.handleChange} />
+        <Form.Select fluid label='Number Of Tyres' options={tyreOptions}  name="numberOfTyres" placeholder='no. of tyres' onChange={this.handleChange} />
+        <Form.Select fluid label='Capacity (In tonnes)' options={capacityOptions}  name="capacity" placeholder='capacity' onChange={this.handleChange} />
 
   </Form.Group>
    <Form.Group style={mStyle} widths={3}>
    <Form.Field width={3} control={Input} label='VNO' name="vno" placeholder='3400'
    onChange={this.handleChange} >
     </Form.Field>
-    <Form.Field width={3} control={Input} label='Engine Number' name="engineNumber" placeholder='4300'
+    <Form.Field width={3} control={Input} label='Engine Number' name="engineNumber" placeholder='LNH528936'
     onChange={this.handleChange} >
      </Form.Field>
-     <Form.Field width={3} control={Input} label='Chasis Number' name="chasisNumber" placeholder='12000'
+     <Form.Field width={3} control={Input} label='Chasis Number' name="chasisNumber" placeholder='BNR254748'
      onChange={this.handleChange} >
       </Form.Field>
    </Form.Group>
@@ -146,7 +177,7 @@ export default class AddLorry extends Component {
        }}
      />
    </form>
-  <Form.Field control={Button} color='green' content='SUBMIT' width={3} />
+  <Form.Field style={{marginTop : '5%'}} control={Button} color='green' content='SUBMIT' width={3} />
  </Form>
 </Fragment>
     )

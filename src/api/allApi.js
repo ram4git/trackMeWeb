@@ -8,10 +8,26 @@ export function getStoreCases() {
 
 
 export function createJobCard(data) {
-  const dbRef = firebase.database().ref().child('jobCards');
+
+  let payloadForLorries = {};
+  payloadForLorries['jobCardID'] = data.id;
+  payloadForLorries['createdDate'] = data.date;
+ //add later if required
+
+
+  const jobCardsForLorriesRef = firebase.database().ref().
+                                  child(`lorries/${data.vehicleNumber}/jobCards`);
+
+  jobCardsForLorriesRef.transaction(function(jobcards){
+                     jobcards=jobcards||[];
+                     jobcards.push(payloadForLorries);
+                     return jobcards;
+                 });
+  const dbRef = firebase.database().ref().child('jobCards/');
   const updates = {};
   updates[`${data.id}`] = data;
   return dbRef.update(updates);
+
 }
 
 export function getAllActiveJobCards() {
