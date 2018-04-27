@@ -97,7 +97,6 @@ export default class ActionForm extends Component {
           indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
 
         })
-        indentDetails.status='ITEMS_RETURNED_OLD_PARTS_EXPECTED';
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.actionUpdateMsg= 'All items returned to garage';
         indentDetails.currentOwner = 'GARAGE';

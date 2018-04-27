@@ -13,12 +13,13 @@ import Select from 'material-ui/Select';
 import { FormControl } from 'material-ui/Form';
 import  {DialogContent,DialogActions} from 'material-ui/Dialog';
 import GridList, { GridListTile } from 'material-ui/GridList';
-import ActionFormMediaCard from '../lib/ActionFormMediaCard.js'
+import GarageActionCard from '../lib/GarageActionCard.js'
 import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent} from '../api/allApi.js';
 import Button from 'material-ui/Button';
 import Videocam from '@material-ui/icons/Videocam';
+import { updateIndent } from '../api/allApi.js'
 
 
 export default class GarageActionForm extends Component {
@@ -27,9 +28,20 @@ export default class GarageActionForm extends Component {
     this.state = {
       webcamClicked : false,
       openDialog: true,
-      showLiveCameraFeed: true
+      showLiveCameraFeed: true,
+      actionTaken : 'NO_ACTION',
+      updatedItemsFromCard : {}
     }
   }
+
+componentDidMount () {
+  console.log(this.props);
+  this.setState({
+    indentID : this.props.params.indentID,
+    indentDetails : this.props.params.indentDetails
+  })
+}
+
 
   handleClose = () => {
     this.setState({
@@ -86,6 +98,55 @@ export default class GarageActionForm extends Component {
      );
    }
 
+   onItemLocked = (params) => {
+     const {updatedItemsFromCard} = this.state;
+     updatedItemsFromCard[params.partNumber] = params;
+     this.setState({
+       updatedItemsFromCard
+     }, console.log(this.state))
+   }
+
+   handleChange = event => {
+     this.setState({ [event.target.name]: event.target.value });
+     let actionValue = event.target.value;
+   };
+
+
+   onIndentActionTaken = () => {
+     const {updatedItemsFromCard, actionTaken , indentDetails } = this.state;
+     let msg = '' , data= {};
+
+     //move below to constants
+
+     if('ALL_ITEMS_RECEIVED'===actionTaken) {
+
+         indentDetails.items.map((indentItem) => {
+           indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
+
+         })
+         indentDetails.currentOwner = 'GARAGE';
+         indentDetails.actionUpdateMsg= 'All items received by garage';
+         indentDetails.currentOwner = 'STORE';
+         indentDetails.status = 'OPEN';
+         indentDetails.actionUpdateTime= new Date().toString();
+
+
+        //call to update the indent details
+        updateIndent(indentDetails).then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
+         msg = 'Indent updated successfully'
+
+     }else if('WRONG_ITEMS_RECEIVED' === actionTaken){
+
+     }else if('ASSIGN_TO_ADMIN' === actionTaken){
+
+     }else if('CLOSE' == actionTaken) {
+
+     }
+     this.setState({
+       openDialog : false
+     },
+     this.props.onIndentActionTaken(data))
+   }
 
 render() {
 
@@ -95,6 +156,27 @@ render() {
     left:'100px',
     height: '50px'
   }
+  const { indentDetails = [], indentID, actionTaken } = this.state;
+
+
+  let cardsArray =  [];
+  if(indentDetails.items) {
+    indentDetails.items.map((item) => {
+      let mediaCardProps = {
+        items : {
+          mainHead : item.mainHead,
+          partNumber : item.partNumber,
+          GarageActionCard : item.GarageActionCard,
+          screenShot : item.screenShot,
+          quantityRequired: item.quantityRequired
+        }
+      }
+      cardsArray.push(<div className='card' style={{marginTop : '5%'}}>
+      <GarageActionCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} />
+        </div>)
+    })
+  }
+
   const { webcamClicked, showLiveCameraFeed } = this.state
   return (
 
@@ -127,27 +209,18 @@ render() {
                              <MenuItem value="">
                                <em>None</em>
                              </MenuItem>
-                             <MenuItem value={'COMPLETE_RETURN_TO_GARAGE'}>Complete Return to Garage</MenuItem>
-                             <MenuItem value={'PARTIAL_RETURN_TO_GARAGE'}>Partial Return to Garage</MenuItem>
-                             <MenuItem value={'FORWARD_TO_PURCHASE'}>Forward to Purchase</MenuItem>
+                             <MenuItem value={'ALL_ITEMS_RECEIVED'}>All Items Received</MenuItem>
+                             <MenuItem value={'WRONG_ITEMS_RECEIVED'}>Wrong Items Received</MenuItem>
                              <MenuItem value={'ASSIGN_TO_ADMIN'}>Assign to Admin</MenuItem>
-                             <MenuItem value={'CLOSE'}>CLOSE</MenuItem>
                            </Select>
                       </DialogActions>
-                       <Button color="inherit">
+                      { actionTaken !== 'NO_ACTION' && <Button color="inherit" onClick={this.onIndentActionTaken}>
                         DONE
                       </Button> }
                     </Toolbar>
                   </AppBar>
-                  <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
-                    { !webcamClicked ?
-                      <Button variant="fab" color="primary"  style={btnStyle}
-                            onClick={this.onCameraClick}>
-                        <Videocam/>
-                      </Button> : this.renderCamera() }
-                  </div>
+                  {cardsArray}
               </DialogContent>
-
         </Dialog>
   )
 }

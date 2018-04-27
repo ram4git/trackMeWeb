@@ -127,10 +127,10 @@ export default class ViewIndent extends Component {
 
   handleUpdateClicked = () => {
       this.setState({ openDialog: true , showLiveCameraFeed : true});
-      if(window.location.role==='STORE') {
-        return <ActionForm />
-      } else if(window.location.role==='GARAGE') {
-        return <GarageActionForm />
+      if(window.localStorage.role==='STORE') {
+        this.setState({renderSToreActionForm : true})
+      } else if(window.localStorage.role==='GARAGE') {
+        this.setState({renderGarageActionForm : true})
       }
     };
 
@@ -174,17 +174,27 @@ export default class ViewIndent extends Component {
             indentDetails,
             openDialog,
             renderSnackBar,
-            partNumberVsImageURL } = this.state;
+            partNumberVsImageURL,
+            renderSToreActionForm = false,
+            renderGarageActionForm= false,
+            renderDefault = true} = this.state;
 
     if(navigateBackToJobPage) {
       const url = "/jobcard/"+ indentDetails.jobCardID;
       return <Redirect push to={url}/>
-    }else if(openDialog && indentDetails) {
+    }else if(openDialog && indentDetails && renderSToreActionForm) {
       const actionFormParams = {
         indentID,
         indentDetails
       }
       return <ActionForm params={actionFormParams} onIndentActionTaken={this.onIndentActionTaken.bind(this)}
+                      onClose={this.onClose}/>
+    }else if(openDialog && indentDetails && renderGarageActionForm) {
+      const actionFormParams = {
+        indentID,
+        indentDetails
+      }
+      return <GarageActionForm params={actionFormParams} onIndentActionTaken={this.onIndentActionTaken.bind(this)}
                       onClose={this.onClose}/>
     }else if(renderSnackBar){
       return (<Snackbar
