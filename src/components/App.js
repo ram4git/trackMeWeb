@@ -109,16 +109,24 @@ const Jobcards = (props) => (
   </DynamicImport>
 )
 
+const CreatePurchase = (props) => (
+  <DynamicImport load={() => import('./CreatePurchase')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 class App extends Component {
-  
-  
-  
+
+
+
   render() {
     const token = window.localStorage.token;
     let nav;
     if(token)
       nav=  <Navbar />
-      
+
     return (
       <Router basename={'/'}>
         <div>
@@ -135,6 +143,7 @@ class App extends Component {
             <Route path='/indent/:id' component={Indent} />
             <Route path='/lorries' component={Lorries} />
             <Route path='/lorry/:id' component={Lorry} />
+            <Route path='/createpurchase' component={CreatePurchase} />
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>
         </div>
