@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import Navbar from './Navbar'
+import NavigationBar from './NavigationBar'
 import Loading from './Loading'
 import DynamicImport from './DynamicImport'
 
@@ -110,15 +111,15 @@ const Jobcards = (props) => (
 )
 
 class App extends Component {
-  
-  
-  
+
+
+
   render() {
     const token = window.localStorage.token;
     let nav;
     if(token)
-      nav=  <Navbar />
-      
+      nav=  <NavigationBar />
+
     return (
       <Router basename={'/'}>
         <div>
