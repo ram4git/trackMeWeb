@@ -40,7 +40,7 @@ export default function Navbar () {
         <Link to='/requests'>Requests</Link>
         <Link to='/settings'>Settings</Link>
         <Link to='/search'>Search</Link>
-        <Link to= '/logout' onClick={logout} >Logout</Link>
+        <Link to= '/login' onClick={logout} >Logout</Link>
       </nav>
     </div>
   )
