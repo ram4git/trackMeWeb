@@ -22,13 +22,17 @@ const styles = theme => ({
     marginLeft : '2%'
   },
   title: {
-    color: '#de0c2f',
+    color: '#de0c2f'
   },
   titleBar: {
-    background:
-      'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)',
-      color :'#de0c2f'
+      color :'#de0c2f',
+      height : '30px',
+      marginLeft : '10px'
   },
+  image : {
+    borderRadius : '100px',
+    padding : '30px'
+  }
 });
 
 class SingleLineGridList extends React.Component {
@@ -44,10 +48,10 @@ class SingleLineGridList extends React.Component {
   let imagesArray = [];
   urls.map((url)=> {
     imagesArray.push(
-    <GridListTile>
-      <img src={url.screenShot} />
-      <GridListTileBar
-        title={url.updatedBy}
+    <GridListTile style={{height : '240px'}}>
+      <img src={url.screenShot} className={classes.image} />
+      <GridListTileBar style={{backgroundColor : 'white'}}
+        title={url.updatedBy + ' @ ' + url.updatedAt}
         classes={{
           root: classes.titleBar,
           title: classes.title,
@@ -59,7 +63,7 @@ class SingleLineGridList extends React.Component {
 
   return (
     <div className={classes.root}>
-    <GridList className={classes.gridList} cols={4}>
+    <GridList className={classes.gridList} cols={6}>
     {imagesArray}
     </GridList>
     </div>

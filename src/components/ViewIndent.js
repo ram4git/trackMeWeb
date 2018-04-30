@@ -66,6 +66,7 @@ export default class ViewIndent extends Component {
           let imageURLArray = partNumberVsImageURL[item.partNumber] || [];
           imageURLArray.push({
             updatedBy : indentHistory[key]['updatedBy'],
+            updatedAt : indentHistory[key]['updatedTime'],
             screenShot : item.screenShot
           });
           partNumberVsImageURL[item.partNumber] = imageURLArray;

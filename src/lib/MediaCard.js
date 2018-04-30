@@ -31,7 +31,8 @@ const classes = {
   },
   flexContainer : {
     display : 'flex',
-    flexDirection : 'row'
+    flexDirection : 'row',
+    height:'60px'
   }
 };
 

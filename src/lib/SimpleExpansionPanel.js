@@ -4,13 +4,21 @@ import { withStyles } from 'material-ui/styles';
 import ExpansionPanel, {
   ExpansionPanelSummary,
   ExpansionPanelDetails,
+  ExpansionPanelActions
 } from 'material-ui/ExpansionPanel';
 import Typography from 'material-ui/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
+
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import PurchaseOrder from '../components/PurchaseOrder.js';
 import CreatePurchase from '../components/CreatePurchase.js';
+import PurchaseItemCard from '../lib/PurchaseItemCard.js';
+import AddIcon from '@material-ui/icons/Add';
+
+
+
 
 
 const styles = theme => ({
@@ -26,22 +34,18 @@ const styles = theme => ({
 const classes = {
 
   card: {
-    minWidth: 100,
-    display: 'flex',
-    flexDirection: 'row'
+   display: 'flex',
+   flex:1,
+   flexDirection : 'row',
+   marginLeft : '5%'
   },
   details: {
    display: 'flex',
    flexDirection: 'row',
    justifyContent: 'spaceBetween'
   },
-  content: {
-   flex: '1 0 auto',
-  },
    text: {
-   marginBottom: 16,
-   marginLeft : 20,
-   fontSize: 18,
+
   },
   textDiv : {
     flex:0.7
@@ -59,60 +63,40 @@ class SimpleExpansionPanel extends Component  {
 
   constructor(props) {
     super(props);
-    this.state = {
-      purchaseItems : {}
-    }
   }
 
-  onPurchaseClick = (item) => {
-    console.log(item)
-    this.setState({
-      purchaseItems:item
-    })
+  onPurchaseSelect = (indentID, partNumber) => {
+    console.log(' 99999999 ',indentID, partNumber);
+    let purchaseObj = {};
+    purchaseObj['indentID']=indentID;
+    purchaseObj['partNumber']=partNumber;
+    this.props.onIndentItemSelectedForPurchase(purchaseObj);
   }
 
   render() {
 
   const { classes, text } = this.props;
-  const { purchaseItems } = this.state;
   if(!text)
   return null;
-  console.log(this.state)
 
 
-  let expansionItemsArray = []
+  let expansionItemsArray = [] ;     const indentID = text.header;
 
   text.items.map((item) => {
+    let mediaCardProps = {
+      text : {
+        indentID ,
+        mainHead : item.mainHead,
+        partName : item.partName,
+        partNumber : item.partNumber,
+        quantityRequired: item.quantityRequired,
+        screenShot : item.screenShot
+      },
+      onPurchaseSelect : this.onPurchaseSelect
 
+    }
     expansionItemsArray.push(
-      <div className='expCards'>
-      <Card className={classes.card}>
-      <div className={classes.textDiv}>
-        <CardContent  className={classes.flexContainer}>
-          <Typography variant="subheading" className={classes.text} >
-          <strong>Main Head : </strong>{item.mainHead}
-          </Typography>
-          <Typography variant="subheading" className={classes.text} >
-          <strong>Part Name : </strong>{item.partName}
-          </Typography>
-          <Typography variant="subheading" className={classes.text} >
-          <strong>Part Number : </strong>{item.partNumber}
-          </Typography>
-          <Typography variant="subheading" className={classes.text} >
-          <strong>Quantity Required : </strong>{item.quantityRequired}
-          </Typography>
-          <Typography variant="subheading" className={classes.text} >
-          <strong>Quantity Stores : </strong>{item.quantityStores}
-          </Typography>
-        </CardContent>
-
-        <img src={require('../background.jpg')} style={{height:'200px'}}/>
-        </div>
-      </Card>
-      <Button variant="raised"  color="primary" onClick={this.onPurchaseClick.bind(this,item)}>
-      Purchase
-      </Button>
-      </div>
+      <PurchaseItemCard {...mediaCardProps} />
     )
   })
 
@@ -123,7 +107,7 @@ class SimpleExpansionPanel extends Component  {
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.heading}>{text.header}</Typography>
         </ExpansionPanelSummary>
-        <ExpansionPanelDetails>
+        <ExpansionPanelDetails style={{display:'contents'}}>
         {expansionItemsArray}
         </ExpansionPanelDetails>
       </ExpansionPanel>

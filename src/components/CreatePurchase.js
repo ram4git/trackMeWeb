@@ -20,8 +20,30 @@ componentDidMount() {
   }).catch((e) => console.log(e))
 }
 
+  onIndentItemSelectedForPurchase = (indentItem) => {
+   console.log("############" , indentItem);
+   const { purchaseItems={} , indents } =  this.state;
+   const indentID = indentItem['indentID'];
+   const partNumber = indentItem['partNumber'];
+
+   const indentDetails = indents[indentID];
+
+   indentDetails.items.forEach((item) => {
+     if(item.partNumber === partNumber) {
+        const itemsOfIndent =  purchaseItems[indentID] || {}
+        itemsOfIndent[partNumber] = item;
+        purchaseItems[indentID] = itemsOfIndent;
+       this.setState({
+         purchaseItems
+       });
+     }
+   })
+
+
+  }
+
 render() {
-  const { indents } = this.state
+  const { indents, purchaseItems } = this.state
 
   console.log(this.props)
   let indentItemsArr = []
@@ -31,11 +53,12 @@ render() {
           text : {
           header: indent,
           items: indentVal.items
-        }
+        },
+        onIndentItemSelectedForPurchase : this.onIndentItemSelectedForPurchase
+
       }
       indentItemsArr.push(<div key={indent}><SimpleExpansionPanel {...expansionPanelProps} /></div>)
 })
-  console.log(indents)
   return (
     <Fragment>
     <div style={{width: '100%'}}>
@@ -43,7 +66,7 @@ render() {
     {indentItemsArr}
     </div>
     <div style={{float: 'right'}}>
-    <PurchaseOrder />
+    <PurchaseOrder items={purchaseItems} />
     </div>
     </div>
     </Fragment>
