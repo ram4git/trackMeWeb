@@ -18,7 +18,6 @@ class ViewLorry extends Component {
         lorryDetails: data.val(),
         id: lorryNumber
       })
-      console.log(this.state)
     }).catch((e) => console.log(e))
   }
 
@@ -26,7 +25,7 @@ class ViewLorry extends Component {
     const { id, lorryDetails } = this.state;
     if(!lorryDetails)
       return null;
-      
+
     let returnObj = [];
     let lorryJobCards = lorryDetails.jobCards;
     if(lorryJobCards) {
@@ -46,7 +45,6 @@ class ViewLorry extends Component {
     }
 
 
-    console.log(lorryDetails)
     return (
       <Fragment>
       <Paper style={{margin:'5%', width:'30%'}}>

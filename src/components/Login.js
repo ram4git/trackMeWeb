@@ -17,9 +17,7 @@ class Login extends Component {
 
   loginClick = () => {
     const data = Object.assign({}, this.state);
-    console.log(data)
     loginUser(data.email, data.password).then((payload) => {
-      console.log(payload)
       if(!payload.errorCode) {
             try {
               const localStorage = window.localStorage;
@@ -39,7 +37,7 @@ class Login extends Component {
               })
 
               localStorage.role = result;
-              //ugly hack but confirm with Ram on doing it the best way - here 
+              //ugly hack but confirm with Ram on doing it the best way - here
               // Unable to propagate the token info to navbar using redirect
               window.location.href="/";
             })

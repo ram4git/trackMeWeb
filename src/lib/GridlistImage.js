@@ -43,7 +43,6 @@ class SingleLineGridList extends React.Component {
 
   render() {
   const { classes, urls } = this.props;
-  console.log(urls)
 
   let imagesArray = [];
   urls.map((url)=> {

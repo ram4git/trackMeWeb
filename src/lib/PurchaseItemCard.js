@@ -35,11 +35,9 @@ const flexContainer = {
 class PurchaseItemCard extends React.Component {
 
   componentDidMount() {
-    console.log('$$$$$$$$', this.props);
   }
 
 onItemSelectedForPurchase = partNumber => event => {
-    console.log( partNumber );
     this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
 }
 

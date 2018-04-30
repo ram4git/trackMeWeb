@@ -37,7 +37,6 @@ export default class ActionForm extends Component {
 
 
   componentDidMount(){
-    console.log(this.props);
     const { indentID, indentDetails } = this.props.params;
     this.setState({
         indentID,
@@ -233,12 +232,11 @@ export default class ActionForm extends Component {
   };
 
   onItemLocked = (params) => {
-    console.log(params);
     const {updatedItemsFromCard} = this.state;
     updatedItemsFromCard[params.partNumber] = params;
     this.setState({
       updatedItemsFromCard
-    }, console.log(this.state))
+    })
   }
 
   render(){

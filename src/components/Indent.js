@@ -31,7 +31,6 @@ export default class Indent extends Component {
 
 
   render () {
-    console.log(this.state);
       const {createFlow, indentID, params} = this.state;
       if(createFlow && params)
        return (<CreateIndent  jobCardID={params.jobCardID}

@@ -27,7 +27,6 @@ export default class ViewJobCard extends Component {
 }
     if(!jobCard){
       getJobCardDetail(jobCardID).then((data) => {
-        console.log(data.val())
            this.setState({jobCard : data.val()});
         }).catch((e) => console.log(e))
     }
@@ -35,7 +34,6 @@ export default class ViewJobCard extends Component {
       id : jobCardID,
       jobCard
     })
-      console.log(this.props);
   }
 
   redirect() {
@@ -56,7 +54,6 @@ export default class ViewJobCard extends Component {
      margin: '3%'
    };
   const { jobCard } = this.state;
-  console.log(jobCard);
   if(!jobCard) {
    return null;
  }

@@ -66,7 +66,6 @@ class SimpleExpansionPanel extends Component  {
   }
 
   onPurchaseSelect = (indentID, partNumber) => {
-    console.log(' 99999999 ',indentID, partNumber);
     let purchaseObj = {};
     purchaseObj['indentID']=indentID;
     purchaseObj['partNumber']=partNumber;

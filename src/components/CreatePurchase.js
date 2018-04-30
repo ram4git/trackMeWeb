@@ -21,7 +21,6 @@ componentDidMount() {
 }
 
   onIndentItemSelectedForPurchase = (indentItem) => {
-   console.log("############" , indentItem);
    const { purchaseItems={} , indents } =  this.state;
    const indentID = indentItem['indentID'];
    const partNumber = indentItem['partNumber'];

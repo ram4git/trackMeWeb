@@ -21,7 +21,6 @@ export default class Jobcards extends Component {
     getAllIndents().then((data) => {
          this.setState({indents : data.val(),
           loadedData : true});
-         console.log(this.state.indents);
       }).catch((e) => console.log(e))
   }
 

@@ -36,12 +36,10 @@ export default class CreateJobCard extends Component {
   }
 
   handleChange = (e, {name , value}) =>{
-    console.log(value);
       this.setState({ [name]: value } , ()=>{console.log(this.state)});
   }
 
  handleSubmit = () => {
-   console.log(this.state);
    let data = Object.assign({}, this.state);
   // let copy = {{} , ...this.state};
    let now = new Date();

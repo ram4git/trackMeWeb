@@ -177,6 +177,5 @@ export function uploadImage(file, indentId, role, partNumber) {
 export function downloadImage(path) {
   const storageRef = firebase.storage().ref();
   return storageRef.child(path).getDownloadURL().then(function(url) {
-    console.log(url)
   }).catch((e) => console.log(e))
   }

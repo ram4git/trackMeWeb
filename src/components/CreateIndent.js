@@ -86,7 +86,6 @@ capture() {
         showLiveCameraFeed: true
       });
     }
-    console.log(this.state)
   }
 
  renderImage() {
@@ -233,7 +232,6 @@ render() {
   let mainHeadLists = [];
   if(listOfMainHeads) {
     listOfMainHeads.forEach((mainHead) => {
-      console.log('mainhead = ' + mainHead);
       let menuItem = <MenuItem value={mainHead}>{mainHead}</MenuItem>;
         mainHeadLists.push(menuItem);
     })

@@ -23,14 +23,13 @@ export default class Request extends Component {
     //     loading: false
     //   }))
     // })
-    console.log(this.props.match.params.id)
   }
   render () {
     const { loading, teamNames, articles } = this.state
     const { match } = this.props
 
     const { teamId } = match.params;
-    
+
 
     if (
       loading === false &&
@@ -41,7 +40,7 @@ export default class Request extends Component {
 
     return (
       <div>
-      
+
       </div>
     )
   }

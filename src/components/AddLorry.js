@@ -24,14 +24,12 @@ export default class AddLorry extends Component {
   }
 
   handleDateChange = (event, object) => {
-    console.log(event.target.value)
     this.setState({
       dateOfPurchase: event.target.value
     })
   }
 
   handleChange = (e, {name , value}) =>{
-    console.log(value);
       this.setState({ [name]: value } , ()=>{console.log(this.state)});
   }
 
@@ -83,7 +81,7 @@ export default class AddLorry extends Component {
       { key: '10', text: '3 weeks', value: '21' },
       { key: '11', text: '1 month', value: '30' }
     ];
-    
+
     const options = [
       { key: 'ashokleyland', text: 'ASHOK LEYLAND', value: 'ASHOK LEYLAND' },
       { key: 'tata', text: 'TATA', value: 'TATA' },
@@ -124,7 +122,6 @@ export default class AddLorry extends Component {
     const { loading, teamNames, articles } = this.state
     const { match } = this.props
 
-    console.log(match);
     const { name, email } = this.state
 
 

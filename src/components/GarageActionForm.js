@@ -35,7 +35,6 @@ export default class GarageActionForm extends Component {
   }
 
 componentDidMount () {
-  console.log(this.props);
   this.setState({
     indentID : this.props.params.indentID,
     indentDetails : this.props.params.indentDetails
@@ -77,7 +76,6 @@ componentDidMount () {
           showLiveCameraFeed: true
         });
       }
-      console.log(this.state)
     }
 
   renderImage() {
@@ -103,7 +101,7 @@ componentDidMount () {
      updatedItemsFromCard[params.partNumber] = params;
      this.setState({
        updatedItemsFromCard
-     }, console.log(this.state))
+     })
    }
 
    handleChange = event => {

@@ -143,7 +143,6 @@ class ActionFormMediaCard extends React.Component {
           showLiveCameraFeed: true
         });
       }
-      console.log(this.state)
     }
 
    renderImage() {

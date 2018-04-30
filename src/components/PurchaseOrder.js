@@ -17,7 +17,6 @@ export default class PurchaseOrder extends Component {
 
   render() {
     const {items} = this.props;
-    console.log('@@@@@' , items);
 
     let allPurchaseItems = [];
     if(items) {
