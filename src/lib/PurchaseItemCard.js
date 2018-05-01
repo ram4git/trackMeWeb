@@ -46,9 +46,6 @@ class PurchaseItemCard extends React.Component {
 
 onItemSelectedForPurchase = partNumber => event => {
     this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
-    this.setState({
-      addingPurchase: false
-    })
 }
 
 onRemovalOfPurchaseItems = partNumber => event => {
@@ -56,8 +53,7 @@ onRemovalOfPurchaseItems = partNumber => event => {
 }
 
 render() {
-  const { classes, text } = this.props;
-  const { addingPurchase } = this.state;
+  const { classes, text, addingPurchase } = this.props;
 console.log(addingPurchase)
   return (
     <div style={{flex : '90%'}}>
