@@ -6,6 +6,7 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { Link } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 
 const styles = {
 
@@ -33,17 +34,31 @@ const flexContainer = {
 }
 
 class PurchaseItemCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {}
+  }
 
   componentDidMount() {
+    const { addingPurchase } = this.props;
+    this.setState({addingPurchase})
   }
 
 onItemSelectedForPurchase = partNumber => event => {
     this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
+    this.setState({
+      addingPurchase: false
+    })
 }
 
+onRemovalOfPurchaseItems = partNumber => event => {
+  console.log(partNumber)
+}
 
 render() {
   const { classes, text } = this.props;
+  const { addingPurchase } = this.state;
+console.log(addingPurchase)
   return (
     <div style={{flex : '90%'}}>
       <Card>
@@ -86,10 +101,16 @@ render() {
         </div>
 
         <img src={text.screenShot} style={{height:'150px',borderRadius:'100px',width:'30%'}}/>
-        <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber} onClick={this.onItemSelectedForPurchase(text.partNumber)}
+        {addingPurchase ? <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
+        onClick={this.onItemSelectedForPurchase(text.partNumber)}
           className={classes.button}>
          <AddIcon />
-       </Button>
+       </Button> :
+       <Button variant="fab"  color="primary" aria-label="remove" value={text.partNumber}
+       onClick={this.onRemovalOfPurchaseItems(text.partNumber)}
+       className={classes.button}>
+         <RemoveIcon />
+       </Button>}
         </CardContent>
       </Card>
     </div>

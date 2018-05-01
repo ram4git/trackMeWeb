@@ -72,6 +72,7 @@ class SimpleExpansionPanel extends Component  {
     this.props.onIndentItemSelectedForPurchase(purchaseObj);
   }
 
+
   render() {
 
   const { classes, text } = this.props;
@@ -81,7 +82,7 @@ class SimpleExpansionPanel extends Component  {
 
   let expansionItemsArray = [] ;     const indentID = text.header;
 
-  text.items.map((item) => {
+  text.items.map((item, index) => {
     let mediaCardProps = {
       text : {
         indentID ,
@@ -91,11 +92,15 @@ class SimpleExpansionPanel extends Component  {
         quantityRequired: item.quantityRequired,
         screenShot : item.screenShot
       },
-      onPurchaseSelect : this.onPurchaseSelect
+      onPurchaseSelect : this.onPurchaseSelect,
+      onPurchaseRemoval : this.onPurchaseRemoval,
+      addingPurchase : true
 
     }
     expansionItemsArray.push(
+      <div key={index}>
       <PurchaseItemCard {...mediaCardProps} />
+      </div>
     )
   })
 

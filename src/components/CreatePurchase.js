@@ -1,7 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import SimpleExpansionPanel from '../lib/SimpleExpansionPanel.js';
-import { getAllIndents } from '../api/allApi.js';
-import PurchaseOrder from './PurchaseOrder'
+import { getAllIndents, createPurchase } from '../api/allApi.js';
+import PurchaseOrder from './PurchaseOrder';
+import Button from 'material-ui/Button';
 
 
 export default class CreatePurchase extends Component {
@@ -11,6 +12,7 @@ export default class CreatePurchase extends Component {
       indents: {}
     }
 }
+
 
 componentDidMount() {
   getAllIndents().then((data) => {
@@ -37,14 +39,38 @@ componentDidMount() {
        });
      }
    })
+ }
 
+onPurchaseOrderClick = () => {
+  const { purchaseItems } = this.state;
+  console.log(purchaseItems)
+  let now = new Date();
+  let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  let year = now.getFullYear();
+  let mathRandom = Math.floor((Math.random())*1000);
+  let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
+                '-'+ mathRandom.toString();
+  const data = Object.assign({}, purchaseItems);
+  data.id = orderId;
+  console.log(data);
+  createPurchase(data).then(() => {
+    alert('Successfully saved purchase items')
+  }).catch((e) => console.log(e))
 
-  }
+}
 
 render() {
   const { indents, purchaseItems } = this.state
 
   console.log(this.props)
+  console.log(purchaseItems)
+
+  const btnStyle = {
+    position: 'fixed',
+    bottom:'1px',
+    right: '5px'
+  }
+
   let indentItemsArr = []
   Object.keys(indents).map((indent) => {
     const indentVal = indents[indent];
@@ -64,9 +90,14 @@ render() {
     <div style={{float:'left', width: '50%'}}>
     {indentItemsArr}
     </div>
-    <div style={{float: 'right'}}>
+    <div style={{float: 'right', width: '50%'}}>
     <PurchaseOrder items={purchaseItems} />
     </div>
+    </div>
+    <div style={btnStyle}>
+    <Button variant='raised' color='primary' onClick={this.onPurchaseOrderClick}>
+    GENERATE PURCHASE ORDER
+    </Button>
     </div>
     </Fragment>
   )

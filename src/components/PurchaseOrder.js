@@ -22,7 +22,7 @@ export default class PurchaseOrder extends Component {
     if(items) {
     Object.keys(items).forEach((id) => {
       let indentItems = items[id];
-       Object.keys(indentItems).forEach((part) => {
+       Object.keys(indentItems).forEach((part, index) => {
       let item = indentItems[part];
       let mediaCardProps = {
         text : {
@@ -33,13 +33,13 @@ export default class PurchaseOrder extends Component {
           screenShot : item.screenShot
         }
       }
-      allPurchaseItems.push(<div ><PurchaseItemCard {...mediaCardProps} /></div>);
+      allPurchaseItems.push(<div key={item.partNumber}><PurchaseItemCard {...mediaCardProps} /></div>);
     })})
   }
 
 
     return (
-      <div>
+      <div >
         {allPurchaseItems}
      </div>
     )
