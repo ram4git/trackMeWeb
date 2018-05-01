@@ -90,12 +90,11 @@ class SimpleExpansionPanel extends Component  {
         partName : item.partName,
         partNumber : item.partNumber,
         quantityRequired: item.quantityRequired,
-        screenShot : item.screenShot
+        screenShot : item.screenShot,
+        selectedForPurchase : item.selectedForPurchase
       },
       onPurchaseSelect : this.onPurchaseSelect,
-      onPurchaseRemoval : this.onPurchaseRemoval,
-      addingPurchase : true
-
+      onPurchaseRemoval : this.onPurchaseRemoval
     }
     expansionItemsArray.push(
       <div key={index}>

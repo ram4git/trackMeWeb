@@ -40,8 +40,7 @@ class PurchaseItemCard extends React.Component {
   }
 
   componentDidMount() {
-    const { addingPurchase } = this.props;
-    this.setState({addingPurchase})
+
   }
 
 onItemSelectedForPurchase = partNumber => event => {
@@ -53,8 +52,21 @@ onRemovalOfPurchaseItems = partNumber => event => {
 }
 
 render() {
-  const { classes, text, addingPurchase } = this.props;
-console.log(addingPurchase)
+  const { classes, text } = this.props;
+
+  const selectedForPurchase= text.selectedForPurchase || false;
+  const itemInPurchase= text.itemInPurchase || false;
+
+
+  const split = text.split; let indentSplitString = '';
+
+if(split) {
+  Object.keys(split).forEach(indentID => {
+      indentSplitString = indentSplitString + indentID + ' = ' + split[indentID] + '   ';
+  })
+}
+
+
   return (
     <div style={{flex : '90%'}}>
       <Card>
@@ -66,6 +78,9 @@ console.log(addingPurchase)
           </Typography>
           <Typography>
             {text.mainHead}
+          </Typography>
+          <Typography style={{marginTop : '20px'}}>
+            {indentSplitString}
           </Typography>
         </div>
 
@@ -97,16 +112,16 @@ console.log(addingPurchase)
         </div>
 
         <img src={text.screenShot} style={{height:'150px',borderRadius:'100px',width:'30%'}}/>
-        {addingPurchase ? <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
+        {!selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
         onClick={this.onItemSelectedForPurchase(text.partNumber)}
           className={classes.button}>
          <AddIcon />
-       </Button> :
-       <Button variant="fab"  color="primary" aria-label="remove" value={text.partNumber}
-       onClick={this.onRemovalOfPurchaseItems(text.partNumber)}
-       className={classes.button}>
-         <RemoveIcon />
-       </Button>}
+       </Button> }
+       {itemInPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
+       onClick={this.onItemSelectedForPurchase(text.partNumber)}
+         className={classes.button}>
+        <RemoveIcon />
+      </Button> }
         </CardContent>
       </Card>
     </div>

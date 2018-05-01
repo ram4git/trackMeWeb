@@ -30,30 +30,9 @@ export function createJobCard(data) {
 
 }
 
-export function createPurchase(data) {
-  const purchaseId = data.id;
-  const dbRef = firebase.database().ref().child(`purchases/${purchaseId}`);
-  const updates = {};
-  delete data['id'];
-  const items = []
-  const purchaseItem = {}
-  Object.keys(data).forEach((item) => {
-    let itemVal = data[item];
-    console.log(itemVal)
-
-    purchaseItem.indentID = item;
-    Object.keys(itemVal).forEach((key) => {
-      let keyVal = itemVal[key];
-      purchaseItem.mainHead = keyVal.mainHead;
-      purchaseItem.partName = keyVal.partName;
-      purchaseItem.partNumber = keyVal.partNumber;
-      purchaseItem.quantity = keyVal.quantityRequired;
-      items.push(purchaseItem)
-    })
-
-  })
-  updates[`${purchaseItem.partNumber}`] = items;
-  return dbRef.update(updates);
+export function createPurchase(purchaseID, itemsInPurchaseOrder) {
+  const dbRef = firebase.database().ref().child(`purchases/${purchaseID}`);
+     return dbRef.update(itemsInPurchaseOrder);
 }
 
 export function getAllActiveJobCards() {

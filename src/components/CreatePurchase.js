@@ -32,38 +32,58 @@ componentDidMount() {
    indentDetails.items.forEach((item) => {
      if(item.partNumber === partNumber) {
         const itemsOfIndent =  purchaseItems[indentID] || {}
-        itemsOfIndent[partNumber] = item;
+        itemsOfIndent[partNumber] = Object.assign({}, item);
+        item.selectedForPurchase = true;
         purchaseItems[indentID] = itemsOfIndent;
-       this.setState({
-         purchaseItems
-       });
+         this.aggregateItems(purchaseItems);
      }
    })
  }
 
+
+ aggregateItems(purchaseItems) {
+   let { itemsInPurchaseOrder = {} } = this.state ;
+   Object.keys(purchaseItems).forEach((indentID) => {
+     let itemsOfIndent = purchaseItems[indentID];
+
+     Object.keys(itemsOfIndent).forEach((partNumber) => {
+       const it = itemsInPurchaseOrder[partNumber];
+       if(it == null) {
+         const ob = itemsOfIndent[partNumber];
+         const qty = ob['quantityRequired'];
+         ob['split'] = {};
+         ob['split'][indentID] = qty;
+         ob['itemInPurchase'] = true;
+         itemsInPurchaseOrder[partNumber] = ob ;
+       }else {
+         let qty = itemsOfIndent[partNumber]['quantityRequired'];
+         it['split'][indentID] = qty;
+         it['quantityRequired'] = (Number(it['quantityRequired']) +  Number(qty)).toString();
+       }
+     })
+
+   });
+ this.setState({
+   itemsInPurchaseOrder
+ });
+ }
+
 onPurchaseOrderClick = () => {
-  const { purchaseItems } = this.state;
-  console.log(purchaseItems)
+  const { itemsInPurchaseOrder } = this.state;
   let now = new Date();
   let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   let year = now.getFullYear();
   let mathRandom = Math.floor((Math.random())*1000);
   let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
                 '-'+ mathRandom.toString();
-  const data = Object.assign({}, purchaseItems);
-  data.id = orderId;
-  console.log(data);
-  createPurchase(data).then(() => {
+  createPurchase(orderId, itemsInPurchaseOrder).then(() => {
     alert('Successfully saved purchase items')
   }).catch((e) => console.log(e))
 
 }
 
 render() {
-  const { indents, purchaseItems } = this.state
-
-  console.log(this.props)
-  console.log(purchaseItems)
+  const { indents, purchaseItems, itemsInPurchaseOrder } = this.state;
 
   const btnStyle = {
     position: 'fixed',
@@ -91,7 +111,7 @@ render() {
     {indentItemsArr}
     </div>
     <div style={{float: 'right', width: '50%'}}>
-    <PurchaseOrder items={purchaseItems} />
+    <PurchaseOrder items={itemsInPurchaseOrder} />
     </div>
     </div>
     <div style={btnStyle}>

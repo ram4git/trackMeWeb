@@ -20,21 +20,22 @@ export default class PurchaseOrder extends Component {
 
     let allPurchaseItems = [];
     if(items) {
-    Object.keys(items).forEach((id) => {
-      let indentItems = items[id];
-       Object.keys(indentItems).forEach((part, index) => {
-      let item = indentItems[part];
+    Object.keys(items).forEach((partNumber) => {
+      let item = items[partNumber];
       let mediaCardProps = {
         text : {
           mainHead : item.mainHead,
           partName : item.partName,
           partNumber : item.partNumber,
           quantityRequired: item.quantityRequired,
-          screenShot : item.screenShot
+          screenShot : item.screenShot,
+          itemInPurchase : item.itemInPurchase,
+          selectedForPurchase : true,
+          split : item.split
         }
       }
       allPurchaseItems.push(<div key={item.partNumber}><PurchaseItemCard {...mediaCardProps} /></div>);
-    })})
+    })
   }
 
 
