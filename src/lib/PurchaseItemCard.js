@@ -45,6 +45,7 @@ class PurchaseItemCard extends React.Component {
 
 onItemSelectedForPurchase = partNumber => event => {
     this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
+  
 }
 
 onRemovalOfPurchaseItems = partNumber => event => {

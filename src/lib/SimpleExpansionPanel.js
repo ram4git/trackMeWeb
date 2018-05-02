@@ -9,7 +9,6 @@ import ExpansionPanel, {
 import Typography from 'material-ui/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
-
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 import PurchaseOrder from '../components/PurchaseOrder.js';
@@ -81,7 +80,7 @@ class SimpleExpansionPanel extends Component  {
 
 
   let expansionItemsArray = [] ;     const indentID = text.header;
-
+let count = 0;
   text.items.map((item, index) => {
     let mediaCardProps = {
       text : {
@@ -96,6 +95,7 @@ class SimpleExpansionPanel extends Component  {
       onPurchaseSelect : this.onPurchaseSelect,
       onPurchaseRemoval : this.onPurchaseRemoval
     }
+    count +=1;
     expansionItemsArray.push(
       <div key={index}>
       <PurchaseItemCard {...mediaCardProps} />
@@ -103,12 +103,16 @@ class SimpleExpansionPanel extends Component  {
     )
   })
 
+  const iStyle = {margin:'15px',marginLeft:'25px'}
 
   return (
     <div className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading}>{text.header}</Typography>
+          <Typography className={classes.heading} style={iStyle}>{text.header}</Typography>
+          <Typography className={classes.heading} style={iStyle}>Total-{text.numOfItems}</Typography>
+          <Typography className={classes.heading} style={iStyle}>Selected{text.selectedForPurchase}</Typography>
+          <Typography className={classes.heading} style={iStyle}>Pending</Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{display:'contents'}}>
         {expansionItemsArray}
