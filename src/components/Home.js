@@ -29,6 +29,14 @@ const Indents = (props) => (
   </DynamicImport>
 )
 
+const Purchases = (props) => (
+  <DynamicImport load={() => import('./Purchases')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 
 export default class Home extends Component {
 
@@ -41,6 +49,7 @@ export default class Home extends Component {
       <Fragment>
         {localStorage.role=='GARAGE' && <Jobcards /> }
         {localStorage.role=='STORE' && <Indents /> }
+        {localStorage.role=='SECURITY' && <Purchases /> }
       </Fragment>
     )
   }

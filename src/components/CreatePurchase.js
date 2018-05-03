@@ -3,7 +3,6 @@ import SimpleExpansionPanel from '../lib/SimpleExpansionPanel.js';
 import { getAllIndents, createPurchase } from '../api/allApi.js';
 import PurchaseOrder from './PurchaseOrder';
 import Button from 'material-ui/Button';
-import Dialog from 'material-ui/Dialog';
 import List, { ListItem, ListItemText } from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import AppBar from 'material-ui/AppBar';
@@ -14,7 +13,11 @@ import CloseIcon from '@material-ui/icons/Close';
 import Slide from 'material-ui/transitions/Slide';
 import Table from '../lib/Table.js';
 import TextField from 'material-ui/TextField';
-
+import Dialog, { DialogActions,
+                 DialogContent,
+                 DialogContentText,
+                 DialogTitle
+               } from 'material-ui/Dialog';
 
 const styles = {
   appBar: {
@@ -94,16 +97,45 @@ componentDidMount() {
  }
 
 onPurchaseOrderClick = () => {
-  const { itemsInPurchaseOrder } = this.state;
+  const { itemsInPurchaseOrder, companyName, address } = this.state;
+
+  if(!companyName || !address) {
+  return <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Let Google help apps determine location. This means sending anonymous location data to
+              Google, even when no apps are running.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Disagree
+            </Button>
+            <Button onClick={this.handleClose} color="primary" autoFocus>
+              Agree
+            </Button>
+          </DialogActions>
+        </Dialog>
+}
+  else {
+  itemsInPurchaseOrder['companyName'] = companyName;
+  itemsInPurchaseOrder['address'] = address;
   let now = new Date();
   let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   let year = now.getFullYear();
   let mathRandom = Math.floor((Math.random())*1000);
   let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
-                '-'+ mathRandom.toString();
+                 mathRandom.toString();
   createPurchase(orderId, itemsInPurchaseOrder).then(() => {
     alert('Successfully saved purchase items')
   }).catch((e) => console.log(e))
+}
 }
 
   onClickOfPurchaseOrder = () => {
@@ -124,10 +156,10 @@ onPurchaseOrderClick = () => {
   render() {
     const { classes } = this.props;
 
-    const { indents, purchaseItems, itemsInPurchaseOrder } = this.state;
+    const { indents, purchaseItems, itemsInPurchaseOrder, companyName, address } = this.state;
 
-    console.log(itemsInPurchaseOrder);
-
+    console.log(companyName);
+    console.log(address);
 
     const btnStyle = {
       position: 'fixed',
@@ -173,20 +205,20 @@ onPurchaseOrderClick = () => {
           transition={Transition}
         >
           <AppBar>
-            <Toolbar>
-              <IconButton color="inherit"  aria-label="Close" onClick={this.handleClose}>
+            <Toolbar style={{float:'right'}}>
+              <IconButton color="inherit"  aria-label="Close" onClick={this.handleClose} >
                 <CloseIcon />
               </IconButton>
             </Toolbar>
           </AppBar>
           <Table items={itemsInPurchaseOrder}/>
           <div style={{marginTop:'20px', marginLeft:'450px'}}>
-          <TextField label="Company Name" onChange={this.handleChange('Girish')} />
+          <TextField label="Company Name" onChange={this.handleChange('companyName')} />
           </div>
           <div style={{marginTop:'20px', marginLeft:'450px'}}>
-          <TextField label="Address" onChange={this.handleChange('Girish')} />
+          <TextField label="Address" onChange={this.handleChange('address')} />
           </div>
-          <div style={{marginTop:'40px', marginLeft:'500px'}}>
+          <div style={{marginTop:'40px', marginLeft:'480px'}}>
           <Button variant='raised' color='primary' onClick={this.onPurchaseOrderClick}>
           SUBMIT
           </Button>

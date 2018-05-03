@@ -125,6 +125,14 @@ const Purchases = (props) => (
   </DynamicImport>
 )
 
+const ViewPurchase = (props) => (
+  <DynamicImport load={() => import('./ViewPurchase')}>
+    {(Component) => Component === null
+      ? <Loading />
+      : <Component {...props} />}
+  </DynamicImport>
+)
+
 
 class App extends Component {
 
@@ -154,6 +162,7 @@ class App extends Component {
             <Route path='/lorry/:id' component={Lorry} />
             <Route path='/createpurchase' component={CreatePurchase} />
             <Route path='/purchases' component={Purchases} />
+            <Route path='/purchase/:id' component={ViewPurchase} />
             <Route render={() => <h1 className='text-center'>Four oh Four.</h1>} />
           </Switch>
         </div>

@@ -35,6 +35,16 @@ export function createPurchase(purchaseID, itemsInPurchaseOrder) {
      return dbRef.update(itemsInPurchaseOrder);
 }
 
+export function getAllPurchases() {
+  const dbRef = firebase.database().ref().child('purchases');
+  return dbRef.once('value');
+}
+
+export function getPurchaseItem(id) {
+  const dbRef = firebase.database().ref().child('purchases/'+id);
+  return dbRef.once('value');
+}
+
 export function getAllActiveJobCards() {
   const dbRef = firebase.database().ref().child('jobCards');
   return dbRef.once('value');
