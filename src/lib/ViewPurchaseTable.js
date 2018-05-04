@@ -11,6 +11,8 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
+import Webcam from 'react-webcam';
+import Videocam from '@material-ui/icons/Videocam';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 
 
@@ -59,7 +61,8 @@ class ViewPurchaseTable extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false
+      open: false,
+      webcamClicked: false
     }
   }
 
@@ -71,13 +74,63 @@ class ViewPurchaseTable extends React.Component {
     this.setState({ open : true })
   }
 
+  onCameraClick = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    this.setState({webcamClicked: true})
+  }
+  setRef(webcam) {
+      this.webcam = webcam;
+    }
+
+  renderCamera() {
+    return (
+      <div>
+        { this.renderImage() }
+      </div>
+    );
+  }
+
+  renderImage() {
+     if(this.state.showLiveCameraFeed) {
+       return (
+         <Webcam
+           audio={false}
+           ref={this.setRef.bind(this)}
+           height={350}
+           width={400}
+           screenshotFormat='image/jpeg'
+           onClick={this.capture.bind(this)}
+         />
+       );
+     }
+     return (
+         <img src={this.state.screenShot} style={{height:'340', margin:'20px'}} />
+     );
+   }
+
+   capture() {
+       if(this.state.showLiveCameraFeed) {
+         const screenShot = this.webcam.getScreenshot();
+         this.setState({
+           screenShot,
+           showLiveCameraFeed: false
+         });
+       } else {
+         this.setState({
+           showLiveCameraFeed: true
+         });
+       }
+     }
+
+
 
   render() {
   const { classes, items } = this.props;
   if(!items)
   return null;
   console.log(items)
-  const { open } = this.state;
+  const { open, webcamClicked } = this.state;
 
   return (
     <Fragment>
@@ -128,7 +181,13 @@ class ViewPurchaseTable extends React.Component {
               </IconButton>
             </Toolbar>
           </AppBar>
-          
+          <div onClick={this.capture.bind(this)} style={{position:'relative', marginTop:'200px'}}>
+            { !webcamClicked ?
+              <Button variant="fab" color="primary"
+                    onClick={this.onCameraClick}>
+                <Videocam/>
+              </Button> : this.renderCamera() }
+          </div>
           <div>
           <TextField label="text field" />
           </div>
