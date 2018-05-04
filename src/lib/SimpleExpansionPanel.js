@@ -67,6 +67,18 @@ class SimpleExpansionPanel extends Component  {
     }
   }
 
+  componentDidMount() {
+    let sel = 0;
+    this.props.text.items.map((item) => {
+      if(item.selectedForPurchase){
+        sel++;
+      }
+    });
+    this.setState({
+      selectedForPurchase : sel
+    })
+  }
+
   onPurchaseSelect = (indentID, partNumber) => {
     const {selectedForPurchase} = this.state;
     this.setState ({
