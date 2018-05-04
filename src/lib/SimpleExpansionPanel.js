@@ -89,7 +89,7 @@ class SimpleExpansionPanel extends Component  {
 
 
   let expansionItemsArray = [] ;     const indentID = text.header;
-let count = 0;
+  let count = 0;
   text.items.map((item, index) => {
     let mediaCardProps = {
       text : {

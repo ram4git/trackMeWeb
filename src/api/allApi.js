@@ -31,8 +31,30 @@ export function createJobCard(data) {
 }
 
 export function createPurchase(purchaseID, itemsInPurchaseOrder) {
-  const dbRef = firebase.database().ref().child(`purchases/${purchaseID}`);
-     return dbRef.update(itemsInPurchaseOrder);
+  const dbRef = firebase.database().ref();;
+  const updates = {}; let iteratorCount = 0;
+  Object.keys(itemsInPurchaseOrder).forEach((partId) => {
+      let split = itemsInPurchaseOrder[partId].split;iteratorCount++;
+      Object.keys(split).forEach((indentID) => {
+          const indentsRef = dbRef.child('indents/' + indentID + '/items');
+
+          indentsRef.transaction(function(indentItems){
+            if(indentItems) {
+              indentItems.map((item) => {
+                if(item.partNumber === partId) {
+                  item.purchaseID = purchaseID;
+                  item.selectedForPurchase = true;
+                }
+              })
+              return indentItems;
+            }
+          })
+      })
+  })
+
+
+  const purchasesRef = dbRef.child(`purchases/${purchaseID}`)
+     return purchasesRef.update(itemsInPurchaseOrder);
 }
 
 export function getAllPurchases() {
