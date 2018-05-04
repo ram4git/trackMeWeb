@@ -31,7 +31,7 @@ export default class ViewPurchase extends Component {
 
     return (
       <Fragment>
-      <Paper style={{margin:'5%', width:'30%'}}>
+      <Paper style={{margin:'5%',marginLeft:'350px', width:'40%'}}>
       <Table>
         <TableBody>
            <TableRow>

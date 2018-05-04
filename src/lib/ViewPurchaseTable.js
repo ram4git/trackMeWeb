@@ -149,6 +149,8 @@ class ViewPurchaseTable extends React.Component {
         <TableBody>
           {Object.keys(items).map((item, index) => {
             let purchaseItem = items[item];
+            console.log(item);
+            console.log(purchaseItem);
             return (
               <TableRow className={classes.row} key={index}>
                 <CustomTableCell>{index+1}</CustomTableCell>
@@ -160,14 +162,17 @@ class ViewPurchaseTable extends React.Component {
                 <Button onClick={this.onActionButton}>
                 <Done />
                 </Button>
+                <Button>
+                <CloseIcon/>
+                </Button>
                 </CustomTableCell>
-                <CustomTableCell numeric><CloseIcon/></CustomTableCell>
               </TableRow>
             );
           })}
         </TableBody>
       </Table>
     </Paper>
+    <div style={{margin:'5%', width:'30%'}}>
     <Dialog
           fullScreen
           open={this.state.open}
@@ -197,6 +202,7 @@ class ViewPurchaseTable extends React.Component {
           </Button>
           </div>
         </Dialog>
+        </div>
     </Fragment>
   );
 }
