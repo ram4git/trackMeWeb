@@ -194,3 +194,14 @@ export function downloadImage(path) {
   return storageRef.child(path).getDownloadURL().then(function(url) {
   }).catch((e) => console.log(e))
   }
+
+  export function updateIndentStatus(indentID, sts) {
+    const dbRef = firebase.database().ref().child('indents/' + indentID + '/status');
+    dbRef.once('value', function(data) {
+      console.log(data.val());
+    })
+    dbRef.transaction(function(status){
+                       status = sts;
+                       return status;
+                     });
+   }

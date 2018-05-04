@@ -29,7 +29,8 @@ import { saveIndent, getAllIndents } from '../api/allApi.js';
 import ActionForm from './ActionForm';
 import GarageActionForm from './GarageActionForm';
 import Snackbar from 'material-ui/Snackbar';
-import GridlistImage from '../lib/GridlistImage.js'
+import GridlistImage from '../lib/GridlistImage.js';
+import StoreDialog from '../lib/StoreDialog.js';
 
 
 
@@ -178,18 +179,21 @@ export default class ViewIndent extends Component {
             partNumberVsImageURL,
             renderSToreActionForm = false,
             renderGarageActionForm= false,
-            renderDefault = true} = this.state;
+            renderDefault = true, internalState = 'GARAGE_STORE_CONFIRMED'} = this.state;
 
     if(navigateBackToJobPage) {
       const url = "/jobcard/"+ indentDetails.jobCardID;
       return <Redirect push to={url}/>
-    }else if(openDialog && indentDetails && renderSToreActionForm) {
+    }else if(openDialog && indentDetails && renderSToreActionForm && internalState !== 'GARAGE_STORE_CONFIRMED') {
       const actionFormParams = {
         indentID,
         indentDetails
       }
       return <ActionForm params={actionFormParams} onIndentActionTaken={this.onIndentActionTaken.bind(this)}
                       onClose={this.onClose}/>
+    }else if(openDialog && indentDetails && internalState === 'GARAGE_STORE_CONFIRMED') {
+      return <StoreDialog indentID={indentID} onActionTaken={this.onIndentActionTaken.bind(this)} onClose={this.onClose} />
+
     }else if(openDialog && indentDetails && renderGarageActionForm) {
       const actionFormParams = {
         indentID,
