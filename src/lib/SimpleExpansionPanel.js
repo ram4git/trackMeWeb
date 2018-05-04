@@ -62,9 +62,16 @@ class SimpleExpansionPanel extends Component  {
 
   constructor(props) {
     super(props);
+    this.state = {
+      selectedForPurchase : 0
+    }
   }
 
   onPurchaseSelect = (indentID, partNumber) => {
+    const {selectedForPurchase} = this.state;
+    this.setState ({
+      selectedForPurchase : selectedForPurchase + 1
+    })
     let purchaseObj = {};
     purchaseObj['indentID']=indentID;
     purchaseObj['partNumber']=partNumber;
@@ -75,6 +82,8 @@ class SimpleExpansionPanel extends Component  {
   render() {
 
   const { classes, text } = this.props;
+  const {selectedForPurchase} = this.state;
+
   if(!text)
   return null;
 
@@ -103,16 +112,16 @@ let count = 0;
     )
   })
 
-  const iStyle = {margin:'15px',marginLeft:'25px'}
+  const iStyle = {margin:'15px',marginLeft:'100px'}
 
   return (
     <div className={classes.root}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-          <Typography className={classes.heading} style={iStyle}>{text.header}</Typography>
-          <Typography className={classes.heading} style={iStyle}>Total-{text.numOfItems}</Typography>
-          <Typography className={classes.heading} style={iStyle}>Selected{text.selectedForPurchase}</Typography>
-          <Typography className={classes.heading} style={iStyle}>Pending</Typography>
+          <Typography className={classes.heading} style={{width:'25%',fontSize : '16px'}}>{text.header}</Typography>
+          <Typography className={classes.heading} style={iStyle}>Total = <span style={{color:'blue',fontSize:'25px'}}>{text.numOfItems}</span></Typography>
+          <Typography className={classes.heading} style={iStyle}>Purchased = <span style={{color:'green',fontSize:'25px'}}>{selectedForPurchase}</span></Typography>
+          <Typography className={classes.heading} style={iStyle}>Pending = <span style={{color:'red',fontSize:'25px'}}>{text.numOfItems - selectedForPurchase}</span></Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails style={{display:'contents'}}>
         {expansionItemsArray}
