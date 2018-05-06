@@ -51,6 +51,14 @@ export default class ViewPurchase extends Component {
             <TableCell>Address</TableCell>
             <TableCell>{purchaseItem.address}</TableCell>
            </TableRow>
+           <TableRow>
+            <TableCell>Current Owner</TableCell>
+            <TableCell>{purchaseItem.currentOwner}</TableCell>
+           </TableRow>
+           <TableRow>
+            <TableCell>STATUS</TableCell>
+            <TableCell><span style={{color:"red"}}>{ purchaseItem.status || "OPEN"}</span></TableCell>
+           </TableRow>
         </TableBody>
       </Table>
     </Paper>

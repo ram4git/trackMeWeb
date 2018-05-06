@@ -133,7 +133,18 @@ onPurchaseOrderClick = () => {
   let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
                  mathRandom.toString();
   createPurchase(orderId, itemsInPurchaseOrder).then(() => {
-    alert('Successfully saved purchase items')
+    alert('Successfully saved purchase items');
+    setTimeout(function() {
+       this.setState({open: false});
+       const localStorage = window.localStorage;
+       window.location.href='/purchases';
+      try {
+          localStorage.removeItem('keys');
+          localStorage.removeItem('blabla');
+        }catch(e) {
+
+        }
+     }.bind(this), 3000);
   }).catch((e) => console.log(e))
 }
 }

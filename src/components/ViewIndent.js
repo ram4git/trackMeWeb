@@ -179,7 +179,9 @@ export default class ViewIndent extends Component {
             partNumberVsImageURL,
             renderSToreActionForm = false,
             renderGarageActionForm= false,
-            renderDefault = true, internalState = 'GARAGE_STORE_CONFIRMED'} = this.state;
+            renderDefault = true} = this.state;
+
+      const internalState = indentDetails.internalState || 'GARAGE_STORE_CONFIRMED'
 
     if(navigateBackToJobPage) {
       const url = "/jobcard/"+ indentDetails.jobCardID;

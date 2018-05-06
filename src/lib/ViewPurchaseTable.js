@@ -65,8 +65,13 @@ class ViewPurchaseTable extends React.Component {
       open: false,
       webcamClicked: false,
       showLiveCameraFeed: true,
-      itemButtonClicked: false
+      itemButtonClicked: false,
+      renderSnackBar : false
     }
+  }
+
+  componentDidMount() {
+    console.log('mmmm', this.props);
   }
 
   handleClose = () => {
@@ -123,14 +128,17 @@ class ViewPurchaseTable extends React.Component {
      }
 
      onActionButton = (partNumber, quantity, mainHead) => {
-       this.setState({
-         open : true,
-         partNumber
-       })
+       if(window.localStorage.role === 'STORE') {
+       updateItemsQuantity(mainHead, partNumber, quantity);
+       alert('item quantity successfully updated in store');
+        }else if(window.localStorage.role === 'SECURITY'){
+         this.setState({
+          open : true,
+          showLiveCameraFeed : true,
+           partNumber
+        })
 
-       updateItemsQuantity(mainHead, partNumber, quantity).then(() => {
-         alert('successfully updated')
-       }).catch((e) => console.log(e));
+     }
      }
 
      onSubmittingPurchase = (img) => {
@@ -139,9 +147,23 @@ class ViewPurchaseTable extends React.Component {
         let role = window.localStorage.role;
         let imgFile = img.replace(/^data:image\/\w+;base64,/, "");
 
+        let ref = this;
        uploadPurchaseImage(imgFile, purchaseID, role, partNumber).then((snapshot) => {
          console.log(snapshot.downloadURL);
+         let item =  ref.props.items[partNumber];
+         item.screenShot = snapshot.downloadURL;
+         const { items = {} } = ref.state ;
          alert('successfully uploaded');
+
+         items[partNumber] = item;
+         ref.setState({
+           items
+         })
+
+         this.setState({
+           screenShot : null,
+           webcamClicked : false
+         })
        }).catch((e) => console.log(e))
        this.setState({
          open: false
@@ -149,23 +171,45 @@ class ViewPurchaseTable extends React.Component {
      }
 
      onPurchaseSubmitClick = () => {
-       const { items, purchaseID } = this.props;
+       const {  purchaseID } = this.props;
+       let { items  } = this.state;
+       if(!items)
+        items = this.props.items; let status= 'OPEN';
+
+       items['companyName'] = this.props.items.companyName || '';
+       if(this.props.items.currentOwner === 'SECURITY')
+       items['currentOwner'] = 'STORE' ;
+       else if(this.props.items.currentOwner === 'STORE'){
+       items['currentOwner'] = 'STORE' ;
+       status = 'CLOSED';
+       }else if(this.props.items.currentOwner === 'PURCHASE'){
+        items['currentOwner'] = 'SECURITY' ;
+        }
+
+       items['address'] = this.props.items.address || '';
+
+
 
        const payload = {
          items,
          purchaseID,
          createdAt : new Date().toString(),
-         currentOwner : 'STORE'
+         currentOwner : 'STORE',
+         status
        }
          savePurchaseItems(payload).then(() => {
            alert('successfully saved');
+           this.setState({
+              renderSnackBar : true
+           })
          }).catch((e) => console.log(e))
-  }
+       }
 
 
 
   render() {
   const { classes, items, purchaseID } = this.props;
+
   if(!items)
   return null;
   console.log(items)
@@ -215,11 +259,12 @@ class ViewPurchaseTable extends React.Component {
           })}
         </TableBody>
       </Table>
+      {window.localStorage.role === this.props.items.currentOwner &&
       <div style={{marginLeft:'500px', marginTop:'20px'}}>
-      <Button variant='raised' color='secondary' onClick={this.onPurchaseSubmitClick}>
-      SUBMIT
+      <Button variant='raised' color='secondary' onClick={this.onPurchaseSubmitClick.bind(this)}>
+      UPDATE
       </Button>
-      </div>
+      </div> }
     </Paper>
     <div style={{margin:'5%', width:'30%'}}>
     <Dialog
