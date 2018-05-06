@@ -202,8 +202,7 @@ onPurchaseOrderClick = () => {
           fullScreen
           open={this.state.open}
           onClose={this.handleClose}
-          transition={Transition}
-        >
+          transition={Transition}>
           <AppBar>
             <Toolbar style={{float:'right'}}>
               <IconButton color="inherit"  aria-label="Close" onClick={this.handleClose} >

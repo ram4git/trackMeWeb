@@ -7,6 +7,9 @@ import Typography from 'material-ui/Typography';
 import { Link } from 'react-router-dom';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import Dialog from 'material-ui/Dialog';
+
 
 const styles = {
 
@@ -36,7 +39,7 @@ const flexContainer = {
 class PurchaseItemCard extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {zoomInImage : false}
   }
 
   componentDidMount() {
@@ -44,12 +47,25 @@ class PurchaseItemCard extends React.Component {
   }
 
 onItemSelectedForPurchase = partNumber => event => {
-    this.props.onPurchaseSelect(this.props.text.indentID, partNumber)    
+    this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
 }
 
 onRemovalOfPurchaseItems = partNumber => event => {
   console.log(partNumber)
 }
+
+  showImage = image => event => {
+    this.setState({
+      zoomInImage : true,
+      zoomInURL : image
+    })
+  }
+
+  closeZoomInImage = () => {
+    this.setState({
+      zoomInImage : false
+    })
+  }
 
 render() {
   const { classes, text } = this.props;
@@ -59,12 +75,20 @@ render() {
 
 
   const split = text.split; let indentSplitString = '';
+  const {zoomInImage, zoomInURL} = this.state;
 
 if(split) {
   Object.keys(split).forEach(indentID => {
       indentSplitString = indentSplitString + indentID + ' = ' + split[indentID] + '   ';
   })
 }
+
+  if(zoomInImage)
+   return  <Dialog
+      open={this.state.zoomInImage}
+      onClose={this.closeZoomInImage}>
+      <img src={zoomInURL} style={{}}/>
+    </Dialog>
 
 
   return (
@@ -111,7 +135,10 @@ if(split) {
           </Typography>
         </div>
 
-        <img src={text.screenShot} style={{height:'150px',borderRadius:'100px',width:'30%'}}/>
+        <div style={{height:'150px',borderRadius:'100px',width:'30%'}}>
+        <img src={text.screenShot} style={{height:'150px',borderRadius:'100px'}}/>
+        <Button onClick={this.showImage(text.screenShot)} style={{marginTop : '-15px', float : 'right'}} ><ZoomInIcon/></Button>
+        </div>
         {!selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
         onClick={this.onItemSelectedForPurchase(text.partNumber)}
           className={classes.button}>

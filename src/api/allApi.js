@@ -38,17 +38,28 @@ export function createPurchase(purchaseID, itemsInPurchaseOrder) {
       Object.keys(split).forEach((indentID) => {
           const indentsRef = dbRef.child('indents/' + indentID + '/items');
 
-          indentsRef.transaction(function(indentItems){
-            if(indentItems) {
-              indentItems.map((item) => {
-                if(item.partNumber === partId) {
-                  item.purchaseID = purchaseID;
-                  item.selectedForPurchase = true;
-                }
-              })
-              return indentItems;
-            }
+          // indentsRef.transaction(function(indentItems){
+          //   if(indentItems) {
+          //     indentItems.map((item) => {
+          //       if(item.partNumber === partId) {
+          //         item.purchaseID = purchaseID;
+          //         item.selectedForPurchase = true;
+          //       }
+          //     })
+          //     return indentItems;
+          //   }
+          // })
+          indentsRef.once('value', function(data){
+            let items = data.val();
+                items.map((item) => {
+                  if(item.partNumber === partId) {
+                    item.purchaseID = purchaseID;
+                    item.selectedForPurchase = true;
+                  }
+                })
+                indentsRef.update(items);
           })
+
       })
   })
 
