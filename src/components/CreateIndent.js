@@ -128,6 +128,8 @@ onSubmit = () => {
   }
   let count = 0;
 
+  console.log(items);
+  
   items.forEach((item) => {
     if(item.screenShot) {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");

@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
 import Webcam from 'react-webcam';
 import Videocam from '@material-ui/icons/Videocam';
+import { uploadPurchaseImage, savePurchaseItems } from '../api/allApi.js';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 
 
@@ -62,17 +63,15 @@ class ViewPurchaseTable extends React.Component {
     super(props);
     this.state = {
       open: false,
-      webcamClicked: false
+      webcamClicked: false,
+      showLiveCameraFeed: true,
+      itemButtonClicked: false
     }
   }
 
   handleClose = () => {
     this.setState({ open: false });
   };
-
-  onActionButton = () => {
-    this.setState({ open : true })
-  }
 
   onCameraClick = (e) => {
     e.preventDefault();
@@ -123,19 +122,54 @@ class ViewPurchaseTable extends React.Component {
        }
      }
 
+     onActionButton = (partNumber) => {
+       this.setState({
+         open : true,
+         partNumber
+       })
+     }
 
+     onSubmittingPurchase = (img) => {
+       const { purchaseID, items } = this.props;
+       const {partNumber} = this.state;
+        let role = window.localStorage.role;
+        let imgFile = img.replace(/^data:image\/\w+;base64,/, "");
+
+       uploadPurchaseImage(imgFile, purchaseID, role, partNumber).then((snapshot) => {
+         console.log(snapshot.downloadURL);
+         alert('successfully uploaded');
+       }).catch((e) => console.log(e))
+       this.setState({
+         open: false
+       })
+     }
+
+     onPurchaseSubmitClick = () => {
+       const { items, purchaseID } = this.props;
+
+       const payload = {
+         items,
+         purchaseID,
+         createdAt : new Date().toString(),
+         currentOwner : 'STORE'
+       }
+         savePurchaseItems(payload).then(() => {
+           alert('successfully saved');
+         }).catch((e) => console.log(e))
+  }
 
   render() {
-  const { classes, items } = this.props;
+  const { classes, items, purchaseID } = this.props;
   if(!items)
   return null;
   console.log(items)
-  const { open, webcamClicked } = this.state;
-
+  const { open, webcamClicked, screenShot } = this.state;
+  let count = 0;
   return (
     <Fragment>
     <Paper className={classes.root}>
-      <Table className={classes.table} style={{marginTop:'80px', marginLeft: '150px', width:'70%' }}>
+
+      <Table className={classes.table} style={{marginTop:'80px', marginLeft: '170px', width:'70%' }}>
         <TableHead>
           <TableRow>
           <CustomTableCell>S.NO</CustomTableCell>
@@ -149,8 +183,11 @@ class ViewPurchaseTable extends React.Component {
         <TableBody>
           {Object.keys(items).map((item, index) => {
             let purchaseItem = items[item];
-            console.log(item);
-            console.log(purchaseItem);
+            console.log(purchaseItem)
+            // count = count+1;
+            // if(count == items.length)
+            if(typeof purchaseItem == "object")
+
             return (
               <TableRow className={classes.row} key={index}>
                 <CustomTableCell>{index+1}</CustomTableCell>
@@ -159,7 +196,7 @@ class ViewPurchaseTable extends React.Component {
                 <CustomTableCell numeric>{purchaseItem.partNumber}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.quantityRequired}</CustomTableCell>
                 <CustomTableCell numeric>
-                <Button onClick={this.onActionButton}>
+                <Button onClick={this.onActionButton.bind(this, purchaseItem.partNumber)}>
                 <Done />
                 </Button>
                 <Button>
@@ -171,6 +208,11 @@ class ViewPurchaseTable extends React.Component {
           })}
         </TableBody>
       </Table>
+      <div style={{marginLeft:'500px', marginTop:'20px'}}>
+      <Button variant='raised' color='secondary' onClick={this.onPurchaseSubmitClick}>
+      SUBMIT
+      </Button>
+      </div>
     </Paper>
     <div style={{margin:'5%', width:'30%'}}>
     <Dialog
@@ -186,6 +228,7 @@ class ViewPurchaseTable extends React.Component {
               </IconButton>
             </Toolbar>
           </AppBar>
+          <div style={{marginLeft:'450px'}}>
           <div onClick={this.capture.bind(this)} style={{position:'relative', marginTop:'200px'}}>
             { !webcamClicked ?
               <Button variant="fab" color="primary"
@@ -193,13 +236,14 @@ class ViewPurchaseTable extends React.Component {
                 <Videocam/>
               </Button> : this.renderCamera() }
           </div>
-          <div>
+          <div style={{marginTop:'20px'}}>
           <TextField label="text field" />
           </div>
-          <div>
-          <Button variant='raised' color='primary'>
-          SUBMIT
+          <div style={{marginTop:'30px'}}>
+          <Button variant='raised' color='primary' onClick={this.onSubmittingPurchase.bind(this, screenShot)}>
+          DONE
           </Button>
+          </div>
           </div>
         </Dialog>
         </div>

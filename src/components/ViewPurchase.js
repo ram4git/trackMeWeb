@@ -29,6 +29,7 @@ export default class ViewPurchase extends Component {
     if(!purchaseItem)
     return null;
 
+    console.log(purchaseItem)
     return (
       <Fragment>
       <Paper style={{margin:'5%',marginLeft:'350px', width:'40%'}}>
@@ -53,7 +54,7 @@ export default class ViewPurchase extends Component {
         </TableBody>
       </Table>
     </Paper>
-    <ViewPurchaseTable items={purchaseItem}/>
+    <ViewPurchaseTable items={purchaseItem} purchaseID={purchaseID} />
   </Fragment>
     )
   }

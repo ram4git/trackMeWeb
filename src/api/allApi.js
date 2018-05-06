@@ -186,6 +186,24 @@ indentsRef.set(indentDetails.currentOwner);
   return dbRef.update(updates);
 }
 
+export function savePurchaseItems(purchaseDetails) {
+  const historyRef = firebase.database().ref(`purchases/${purchaseDetails.purchaseID}/history/`);
+  const arrKey = historyRef.push().key;
+  const updates = {};
+  let historyPayload = {
+    updatedTime : purchaseDetails.createdAt || '',
+    items : purchaseDetails.items,
+    updatedBy : window.localStorage.role
+  };
+
+const purchasesRef = firebase.database().ref().child(`purchases/${purchaseDetails.purchaseID}/currentOwner`);
+
+purchasesRef.set(purchaseDetails.currentOwner);
+
+  updates[`purchases/${purchaseDetails.purchaseID}/history/${arrKey}`] = historyPayload;
+  const dbRef = firebase.database().ref();
+  return dbRef.update(updates);
+}
 
 export function reserveParts(indentDetails){
   let updates = {}; let items = indentDetails.items;
@@ -217,6 +235,13 @@ export function getItemsForModelNumber(modelNumber) {
 export function uploadImage(file, indentId, role, partNumber) {
   const storageRef = firebase.storage().ref();
   const path = 'indents/'+indentId+'/'+role+'/'+partNumber+'.jpeg';
+  const imgRef = storageRef.child(path);
+  return  imgRef.putString(file, 'base64')
+}
+
+export function uploadPurchaseImage(file, purchaseID, role, partNumber) {
+  const storageRef = firebase.storage().ref();
+  const path = 'purchases/'+purchaseID+'/'+partNumber+'/'+role+'/'+partNumber+'.jpeg';
   const imgRef = storageRef.child(path);
   return  imgRef.putString(file, 'base64')
 }
