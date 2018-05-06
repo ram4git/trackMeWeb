@@ -13,7 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
 import Webcam from 'react-webcam';
 import Videocam from '@material-ui/icons/Videocam';
-import { uploadPurchaseImage, savePurchaseItems } from '../api/allApi.js';
+import { uploadPurchaseImage, savePurchaseItems, updateItemsQuantity } from '../api/allApi.js';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 
 
@@ -122,11 +122,15 @@ class ViewPurchaseTable extends React.Component {
        }
      }
 
-     onActionButton = (partNumber) => {
+     onActionButton = (partNumber, quantity, mainHead) => {
        this.setState({
          open : true,
          partNumber
        })
+
+       updateItemsQuantity(mainHead, partNumber, quantity).then(() => {
+         alert('successfully updated')
+       }).catch((e) => console.log(e));
      }
 
      onSubmittingPurchase = (img) => {
@@ -157,6 +161,8 @@ class ViewPurchaseTable extends React.Component {
            alert('successfully saved');
          }).catch((e) => console.log(e))
   }
+
+
 
   render() {
   const { classes, items, purchaseID } = this.props;
@@ -196,7 +202,8 @@ class ViewPurchaseTable extends React.Component {
                 <CustomTableCell numeric>{purchaseItem.partNumber}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.quantityRequired}</CustomTableCell>
                 <CustomTableCell numeric>
-                <Button onClick={this.onActionButton.bind(this, purchaseItem.partNumber)}>
+                <Button
+                onClick={this.onActionButton.bind(this, purchaseItem.partNumber, purchaseItem.quantityRequired, purchaseItem.mainHead)}>
                 <Done />
                 </Button>
                 <Button>

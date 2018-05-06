@@ -205,6 +205,8 @@ purchasesRef.set(purchaseDetails.currentOwner);
   return dbRef.update(updates);
 }
 
+
+
 export function reserveParts(indentDetails){
   let updates = {}; let items = indentDetails.items;
   const dbRef = firebase.database().ref().child('parts/' + indentDetails.modelNumber + '/' );
@@ -262,4 +264,13 @@ export function downloadImage(path) {
                        status = sts;
                        return status;
                      });
+   }
+
+   export function updateItemsQuantity(mainHead, partNumber, quantity) {
+
+     const dbRef = firebase.database().ref().child('items/'+'M1312' + '/'+mainHead+'/'+partNumber+'/quantity');
+
+     dbRef.transaction((count) => {
+                      return Number(count) + Number(quantity);
+                        });
    }
