@@ -191,7 +191,8 @@ onPurchaseOrderClick = () => {
         onIndentItemSelectedForPurchase : this.onIndentItemSelectedForPurchase
 
       }
-      indentItemsArr.push(<div key={indent}><SimpleExpansionPanel {...expansionPanelProps} /></div>)
+      indentItemsArr.push(<div key={indent} style={{
+         marginLeft : '20px' , marginBottom : '50px' }} ><SimpleExpansionPanel {...expansionPanelProps} /></div>)
 })
   return (
     <Fragment>

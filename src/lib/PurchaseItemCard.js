@@ -92,7 +92,8 @@ if(split) {
 
 
   return (
-    <div style={{flex : '90%'}}>
+    <div style={ text.selectedForPurchase ? {opacity : '0.6', filter : 'grayscale(1)', flex : '90%'}
+                    : {flex : '90%'} }>
       <Card>
         <CardContent className={classes.content}>
 

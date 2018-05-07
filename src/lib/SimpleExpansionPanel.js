@@ -23,6 +23,7 @@ import AddIcon from '@material-ui/icons/Add';
 const styles = theme => ({
   root: {
     width: '100%',
+    backgroundColor : '#d1efd1'
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -118,8 +119,8 @@ class SimpleExpansionPanel extends Component  {
     }
     count +=1;
     expansionItemsArray.push(
-      <div key={index}>
-      <PurchaseItemCard {...mediaCardProps} />
+      <div key={index} style={{marginTop: '5px', marginBottom : '5px'}}>
+      <PurchaseItemCard  {...mediaCardProps} />
       </div>
     )
   })
@@ -128,7 +129,7 @@ class SimpleExpansionPanel extends Component  {
 
   return (
     <div className={classes.root}>
-      <ExpansionPanel>
+      <ExpansionPanel className={classes.root}>
         <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
           <Typography className={classes.heading} style={{width:'25%',fontSize : '16px'}}>{text.header}</Typography>
           <Typography className={classes.heading} style={iStyle}>Total = <span style={{color:'blue',fontSize:'25px'}}>{text.numOfItems}</span></Typography>
