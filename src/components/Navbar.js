@@ -37,6 +37,7 @@ export default function Navbar () {
       <Link to='/jobcards'>Jobcards</Link>
        <Link to='/lorries'>Lorries</Link>
        <Link to='/indents'>Indents</Link>
+       <Link to='/purchases'>Purchases</Link>
         <Link to='/requests'>Requests</Link>
         <Link to='/settings'>Settings</Link>
         <Link to='/search'>Search</Link>

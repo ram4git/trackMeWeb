@@ -13,6 +13,7 @@ import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
 import Webcam from 'react-webcam';
 import Videocam from '@material-ui/icons/Videocam';
+import Snackbar from 'material-ui/Snackbar';
 import { uploadPurchaseImage, savePurchaseItems, updateItemsQuantity } from '../api/allApi.js';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
 
@@ -184,11 +185,9 @@ class ViewPurchaseTable extends React.Component {
        status = 'CLOSED';
        }else if(this.props.items.currentOwner === 'PURCHASE'){
         items['currentOwner'] = 'SECURITY' ;
-        }
+       }
 
        items['address'] = this.props.items.address || '';
-
-
 
        const payload = {
          items,
@@ -197,9 +196,9 @@ class ViewPurchaseTable extends React.Component {
          currentOwner : 'STORE',
          status
        }
-         savePurchaseItems(payload).then(() => {
-           alert('successfully saved');
-           this.setState({
+       savePurchaseItems(payload).then(() => {
+         alert('successfully saved');
+         this.setState({
               renderSnackBar : true
            })
          }).catch((e) => console.log(e))
@@ -213,8 +212,20 @@ class ViewPurchaseTable extends React.Component {
   if(!items)
   return null;
   console.log(items)
-  const { open, webcamClicked, screenShot } = this.state;
+  const { open, webcamClicked, screenShot, renderSnackBar } = this.state;
   let count = 0;
+  if(renderSnackBar) {
+    return (<Snackbar
+       anchorOrigin={{ vertical : 'top', horizontal:'right' }}
+       open={renderSnackBar}
+       onClose={this.handleCloseSnackBar}
+       SnackbarContentProps={{
+         'aria-describedby': 'message-id',
+       }}
+       message={<span id="message-id">Indent updated successfully</span>}
+     />)
+  }
+
   return (
     <Fragment>
     <Paper className={classes.root}>

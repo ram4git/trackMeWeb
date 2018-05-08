@@ -37,7 +37,8 @@ export default class CreatePurchase extends Component {
     super(props);
     this.state = {
       indents: {},
-      open: false
+      open: false,
+      submitPurchaseClicked: false
     }
 }
 
@@ -99,31 +100,7 @@ componentDidMount() {
 onPurchaseOrderClick = () => {
   const { itemsInPurchaseOrder, companyName, address } = this.state;
 
-  if(!companyName || !address) {
-  return <Dialog
-          open={this.state.open}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
-          <DialogContent>
-            <DialogContentText id="alert-dialog-description">
-              Let Google help apps determine location. This means sending anonymous location data to
-              Google, even when no apps are running.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
-            </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
-          </DialogActions>
-        </Dialog>
-}
-  else {
+
   itemsInPurchaseOrder['companyName'] = companyName;
   itemsInPurchaseOrder['address'] = address;
   let now = new Date();
@@ -133,11 +110,14 @@ onPurchaseOrderClick = () => {
   let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
                  mathRandom.toString();
   createPurchase(orderId, itemsInPurchaseOrder).then(() => {
-    alert('Successfully saved purchase items');
+
     setTimeout(function() {
-       this.setState({open: false});
+       this.setState({
+         open: false,
+         submitPurchaseClicked: true,
+         orderId
+       });
        const localStorage = window.localStorage;
-       window.location.href='/purchases';
       try {
           localStorage.removeItem('keys');
           localStorage.removeItem('blabla');
@@ -146,8 +126,9 @@ onPurchaseOrderClick = () => {
         }
      }.bind(this), 3000);
   }).catch((e) => console.log(e))
+  console.log(this.state);
 }
-}
+
 
   onClickOfPurchaseOrder = () => {
     this.setState({ open: true });
@@ -164,14 +145,45 @@ onPurchaseOrderClick = () => {
     console.log(this.state);
   }
 
+  onViewingPurchaseOrder = () => {
+    this.setState({
+      submitPurchaseClicked: false
+    })
+    window.locatio.href='/purchases';
+  }
+
+
   render() {
     const { classes } = this.props;
 
-    const { indents, purchaseItems, itemsInPurchaseOrder, companyName, address } = this.state;
+    const { indents,
+            purchaseItems,
+            itemsInPurchaseOrder,
+            companyName,
+            address,
+            submitPurchaseClicked,
+            orderId } = this.state;
 
-    console.log(companyName);
-    console.log(address);
 
+    if(submitPurchaseClicked && orderId) {
+      return (
+        <Dialog
+        open={this.state.submitPurchaseClicked}
+          onClose={this.handleClose}>
+          <DialogTitle>Successfully Created Purchase Order.</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+               You can view the purchase order here <a href='/purchase/orderId'>{orderId}</a>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.onViewingPurchaseOrder} color="primary" autoFocus>
+              Ok
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )
+    }
     const btnStyle = {
       position: 'fixed',
       bottom:'1px',
