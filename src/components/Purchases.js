@@ -25,7 +25,7 @@ export default class Purchases extends Component {
   }
 
   render() {
-    const { purchaseDetails, loadedData } = this.state;
+    const { purchaseDetails={}, loadedData } = this.state;
     console.log(purchaseDetails);
 
     const pStyle = {
@@ -38,17 +38,19 @@ export default class Purchases extends Component {
      }
 
     let purchaseItemsList = [];
-    Object.keys(purchaseDetails).forEach((item, index) => {
-    let purchaseItem = purchaseDetails[item];
-        let cardProps = {
-            text: {
-                id: item,
-                detail: purchaseItem['createdAt'] || new Date().toString()
-              },
-              onButtonClickPath : 'purchase'
-            }
-            purchaseItemsList.push(<div className='card'><SimpleCard {...cardProps} /></div>);
-        });
+    if(purchaseDetails) {
+      Object.keys(purchaseDetails).forEach((item, index) => {
+      let purchaseItem = purchaseDetails[item];
+          let cardProps = {
+              text: {
+                  id: item,
+                  detail: purchaseItem['createdAt'] || new Date().toString()
+                },
+                onButtonClickPath : 'purchase'
+              }
+              purchaseItemsList.push(<div className='card'><SimpleCard {...cardProps} /></div>);
+          });
+    }
 
 
 

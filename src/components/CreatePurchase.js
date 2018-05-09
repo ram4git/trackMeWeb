@@ -44,10 +44,18 @@ export default class CreatePurchase extends Component {
 
 
 componentDidMount() {
+  let filteredIndents = {};
   getAllIndents().then((data) => {
-    this.setState({
-      indents: data.val()
+    let allIndents = data.val();
+    Object.keys(allIndents).map(indent => {
+      if(allIndents[indent].status === "OPEN"){
+        filteredIndents[indent] = allIndents[indent];
+      }
     })
+    this.setState({
+      indents: filteredIndents
+    })
+
   }).catch((e) => console.log(e))
 }
 
