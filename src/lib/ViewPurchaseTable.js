@@ -13,9 +13,9 @@ import IconButton from 'material-ui/IconButton';
 import Slide from 'material-ui/transitions/Slide';
 import Webcam from 'react-webcam';
 import Videocam from '@material-ui/icons/Videocam';
-import Snackbar from 'material-ui/Snackbar';
-import { uploadPurchaseImage, savePurchaseItems, updateItemsQuantity } from '../api/allApi.js';
+import { uploadPurchaseImage, savePurchaseItems, updateItemsQuantity, getAllItemsForIndentAndUpdate } from '../api/allApi.js';
 import Dialog, { DialogActions, DialogContent, DialogContentText, DialogTitle } from 'material-ui/Dialog';
+import Snackbar from 'material-ui/Snackbar';
 
 
 const dialogStyles = {
@@ -151,12 +151,15 @@ class ViewPurchaseTable extends React.Component {
         let ref = this;
        uploadPurchaseImage(imgFile, purchaseID, role, partNumber).then((snapshot) => {
          console.log(snapshot.downloadURL);
-         let item =  ref.props.items[partNumber];
+         let item =  ref.props.items.parts[partNumber];
          item.screenShot = snapshot.downloadURL;
          const { items = {} } = ref.state ;
          alert('successfully uploaded');
 
-         items[partNumber] = item;
+         if(!items['parts'])
+            items['parts']= {};
+
+         items['parts'][partNumber] = item;
          ref.setState({
            items
          })
@@ -202,6 +205,9 @@ class ViewPurchaseTable extends React.Component {
               renderSnackBar : true
            })
          }).catch((e) => console.log(e))
+
+         getAllItemsForIndentAndUpdate(purchaseID, items.parts);
+
        }
 
 
@@ -213,7 +219,6 @@ class ViewPurchaseTable extends React.Component {
   return null;
   console.log(items)
   const { open, webcamClicked, screenShot, renderSnackBar } = this.state;
-  let count = 0;
   if(renderSnackBar) {
     return (<Snackbar
        anchorOrigin={{ vertical : 'top', horizontal:'right' }}
@@ -226,6 +231,7 @@ class ViewPurchaseTable extends React.Component {
      />)
   }
 
+  let count = 0; let itemParts = items.parts || {};
   return (
     <Fragment>
     <Paper className={classes.root}>
@@ -242,12 +248,11 @@ class ViewPurchaseTable extends React.Component {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.keys(items).map((item, index) => {
-            let purchaseItem = items[item];
+          {Object.keys(itemParts).map((item, index) => {
+            let purchaseItem = itemParts[item];
             console.log(purchaseItem)
             // count = count+1;
             // if(count == items.length)
-            if(typeof purchaseItem == "object")
 
             return (
               <TableRow className={classes.row} key={index}>

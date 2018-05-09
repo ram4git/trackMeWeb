@@ -16,21 +16,23 @@ export default class PurchaseOrder extends Component {
   }
 
   render() {
-    const {items} = this.props;
+    const {items = {}} = this.props;
 
     let allPurchaseItems = [];
-    if(items) {
-    Object.keys(items).forEach((partNumber) => {
-      let item = items[partNumber];
+    if(items.parts) {
+      let parts = items.parts;
+    Object.keys(items.parts).forEach((partNumber) => {
+      let item = parts[partNumber];
       let mediaCardProps = {
         text : {
           mainHead : item.mainHead,
           partName : item.partName,
           partNumber : item.partNumber,
-          quantityRequired: item.quantityRequired,
+          quantityRequired: item.quantityPurchase,
           screenShot : item.screenShot,
           itemInPurchase : item.itemInPurchase,
           selectedForPurchase : true,
+          right : true,
           split : item.split
         }
       }

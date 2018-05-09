@@ -30,107 +30,118 @@ export function createJobCard(data) {
 
 }
 
-export function createPurchase(purchaseID, itemsInPurchaseOrder) {
-  const dbRef = firebase.database().ref();;
-  const updates = {}; let iteratorCount = 0;
-  let indentHistory = {};
+// export function createPurchase(purchaseID, itemsInPurchaseOrder) {
+//   const dbRef = firebase.database().ref();;
+//   const updates = {}; let iteratorCount = 0;
+//   let indentHistory = {};
+//
+//   let complexObj = {};
+//   let clone = Object.assign({}, itemsInPurchaseOrder);
+//   delete clone['companyName'];
+//   delete clone['address'];
+//
+//
+//   Object.keys(clone).forEach((partId) => {
+//       let split = clone[partId].split;iteratorCount++;
+//       let splitCount = 0;
+//       Object.keys(split).forEach((indentID) => {
+//           const indentsRef = dbRef.child('indents/' + indentID + '/items');splitCount++;
+//           const historyRef = firebase.database().ref(`indents/${indentID}/history/`);
+//           const arrKey = historyRef.push().key;
+//           let bk = {};
+//            if(window.localStorage.keys)
+//             bk = JSON.parse(window.localStorage.keys);
+//           bk[indentID] = arrKey
+//           window.localStorage.keys = JSON.stringify(bk);
+//           indentsRef.once('value', function(data){
+//             let items = data.val();let r = {};
+//             if(window.localStorage.blabla)
+//              r =  JSON.parse(window.localStorage.blabla)
+//             r[indentID] = items;
+//             window.localStorage.blabla= JSON.stringify(r);
+//                 items.map((item) => {
+//                   update(iteratorCount,splitCount, item, partId, purchaseID,indentID, complexObj, Object.keys(clone).length,
+//                      Object.keys(split).length)
+//                 })
+//           })
+//       })
+//   })
+//   const purchasesRef = dbRef.child(`purchases/${purchaseID}`)
+//     itemsInPurchaseOrder['createdAt'] = new Date().toString();
+//     itemsInPurchaseOrder['currentOwner'] = 'SECURITY';
+//      return purchasesRef.update(itemsInPurchaseOrder);
+// }
+//
+//
+// function update(iteratorCount,splitCount, item, partId, purchaseID, indentID,complexObj, cloneLength, splitLength
+//         ) {
+//
+//   console.log(iteratorCount,splitCount, item, partId, purchaseID, indentID);
+//   if(item.partNumber === partId) {
+//
+//     console.log(JSON.parse(window.localStorage.blabla));
+//     let ob = JSON.parse(window.localStorage.blabla);
+//     Object.keys(ob).forEach((i) => {
+//       let bo = ob[i];
+//       bo.map((o)=>{
+//         if(o.partNumber === partId) {
+//           o.purchaseID = purchaseID;
+//           o.selectedForPurchase = true;
+//         }
+//       });
+//       ob[i] = bo;
+//     })
+//
+//
+//     window.localStorage.blabla = JSON.stringify(ob);
+//     let hist = complexObj[indentID];
+//     if(!hist){
+//       hist={};
+//       hist['updatedBy'] = 'PURCHASE';
+//       hist['updatedTime'] = new Date().toString();
+//       hist['items'] = [];
+//       hist['items'].push(item);
+//       complexObj[indentID] = hist;
+//     }else{
+//       hist['items'].push(item);
+//     }
+//     complexObj[indentID] = hist;
+//     if(iteratorCount === cloneLength && splitCount === splitLength){
+//       console.log(complexObj);
+//       let items = JSON.parse(window.localStorage.blabla);
+//       console.log(items);
+//       console.log('hi hi hi');
+//       Object.keys(items).map(id => {
+//         const dbRef = firebase.database().ref();;
+//           const indentsRef = dbRef.child('indents/' + id + '/items');
+//           let a = items[id]; let c = {}
+//           a.map((v, index) => {
+//               c[index] = v;
+//            });
+//            indentsRef.set(c);
+//       })
+//       //indentsRef.update(items);
+//       Object.keys(complexObj).map((indentID) => {
+//         const dbRef = firebase.database().ref();;
+//         let historyPayload = complexObj[indentID];
+//         const updates= {};let kys = JSON.parse(window.localStorage.keys);
+//         let arrKey = kys[indentID];
+//         updates[`indents/${indentID}/history/${arrKey}`] = historyPayload;
+//         dbRef.update(updates);
+//       })
+//     }
+//   }
+// }
 
-  let complexObj = {};
-  let clone = Object.assign({}, itemsInPurchaseOrder);
-  delete clone['companyName'];
-  delete clone['address'];
 
+export function createPurchase(purchaseID,  itemsInPurchaseOrder) {
+    const dbRef = firebase.database().ref();
 
-  Object.keys(clone).forEach((partId) => {
-      let split = clone[partId].split;iteratorCount++;
-      let splitCount = 0;
-      Object.keys(split).forEach((indentID) => {
-          const indentsRef = dbRef.child('indents/' + indentID + '/items');splitCount++;
-          const historyRef = firebase.database().ref(`indents/${indentID}/history/`);
-          const arrKey = historyRef.push().key;
-          let bk = {};
-           if(window.localStorage.keys)
-            bk = JSON.parse(window.localStorage.keys);
-          bk[indentID] = arrKey
-          window.localStorage.keys = JSON.stringify(bk);
-          indentsRef.once('value', function(data){
-            let items = data.val();let r = {};
-            if(window.localStorage.blabla)
-             r =  JSON.parse(window.localStorage.blabla)
-            r[indentID] = items;
-            window.localStorage.blabla= JSON.stringify(r);
-                items.map((item) => {
-                  update(iteratorCount,splitCount, item, partId, purchaseID,indentID, complexObj, Object.keys(clone).length,
-                     Object.keys(split).length)
-                })
-          })
-      })
-  })
-  const purchasesRef = dbRef.child(`purchases/${purchaseID}`)
+    const purchasesRef = dbRef.child(`purchases/${purchaseID}`)
     itemsInPurchaseOrder['createdAt'] = new Date().toString();
     itemsInPurchaseOrder['currentOwner'] = 'SECURITY';
      return purchasesRef.update(itemsInPurchaseOrder);
-}
 
-
-function update(iteratorCount,splitCount, item, partId, purchaseID, indentID,complexObj, cloneLength, splitLength
-        ) {
-
-  console.log(iteratorCount,splitCount, item, partId, purchaseID, indentID);
-  if(item.partNumber === partId) {
-
-    console.log(JSON.parse(window.localStorage.blabla));
-    let ob = JSON.parse(window.localStorage.blabla);
-    Object.keys(ob).forEach((i) => {
-      let bo = ob[i];
-      bo.map((o)=>{
-        if(o.partNumber === partId) {
-          o.purchaseID = purchaseID;
-          o.selectedForPurchase = true;
-        }
-      });
-      ob[i] = bo;
-    })
-
-
-    window.localStorage.blabla = JSON.stringify(ob);
-    let hist = complexObj[indentID];
-    if(!hist){
-      hist={};
-      hist['updatedBy'] = 'PURCHASE';
-      hist['updatedTime'] = new Date().toString();
-      hist['items'] = [];
-      hist['items'].push(item);
-      complexObj[indentID] = hist;
-    }else{
-      hist['items'].push(item);
-    }
-    complexObj[indentID] = hist;
-    if(iteratorCount === cloneLength && splitCount === splitLength){
-      console.log(complexObj);
-      let items = JSON.parse(window.localStorage.blabla);
-      console.log(items);
-      console.log('hi hi hi');
-      Object.keys(items).map(id => {
-        const dbRef = firebase.database().ref();;
-          const indentsRef = dbRef.child('indents/' + id + '/items');
-          let a = items[id]; let c = {}
-          a.map((v, index) => {
-              c[index] = v;
-           });
-           indentsRef.set(c);
-      })
-      //indentsRef.update(items);
-      Object.keys(complexObj).map((indentID) => {
-        const dbRef = firebase.database().ref();;
-        let historyPayload = complexObj[indentID];
-        const updates= {};let kys = JSON.parse(window.localStorage.keys);
-        let arrKey = kys[indentID];
-        updates[`indents/${indentID}/history/${arrKey}`] = historyPayload;
-        dbRef.update(updates);
-      })
-    }
-  }
 }
 
 export function getAllPurchases() {
@@ -202,7 +213,7 @@ export function getAllIndents() {
 
 
 export function getPartCount(modelNumber, mainHead, partNumber) {
-  const dbRef = firebase.database().ref().child('parts/'+ modelNumber + '/' + mainHead + '/' + partNumber);
+  const dbRef = firebase.database().ref().child('items/'+ modelNumber + '/' + mainHead + '/' + partNumber);
   return dbRef.once('value');
 }
 
@@ -232,7 +243,8 @@ export function updatePartCount(indentDetails) {
 }
 
 
-export function updateIndent(indentDetails) {
+
+export function updateIndent(indentDetails, originalItems) {
   const historyRef = firebase.database().ref(`indents/${indentDetails.indentID}/history/`);
   const arrKey = historyRef.push().key;
   const updates = {};
@@ -245,6 +257,11 @@ export function updateIndent(indentDetails) {
 const indentsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/currentOwner`);
 
 indentsRef.set(indentDetails.currentOwner);
+
+  if(originalItems) {
+    const indentItemsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/items`);
+    indentItemsRef.set(originalItems);
+  }
 
   updates[`indents/${indentDetails.indentID}/history/${arrKey}`] = historyPayload;
   const dbRef = firebase.database().ref();
@@ -276,7 +293,7 @@ purchasesStatusRef.set(purchaseDetails.status);
 
 export function reserveParts(indentDetails){
   let updates = {}; let items = indentDetails.items;
-  const dbRef = firebase.database().ref().child('parts/' + indentDetails.modelNumber + '/' );
+  const dbRef = firebase.database().ref().child('items/' + indentDetails.modelNumber + '/' );
   items.map((item) => {
       updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
       updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] =  item.quantityApproved
@@ -340,4 +357,76 @@ export function downloadImage(path) {
      dbRef.transaction((count) => {
                       return Number(count) + Number(quantity);
                         });
+   }
+
+
+   export function getAllItemsForIndentAndUpdate(purchaseID, items) {
+     let indentVsItems = {}; let i = 0
+     Object.keys(items).map(partNumber => {
+       let indents = items[partNumber].split; i++
+       Object.keys(indents).map(indent => {
+          const dbRef = firebase.database().ref(`indents/${indent}`);
+          dbRef.once('value', function(data){
+            indentVsItems[indent] = data.val().items;
+            window.localStorage.indentVsItems = JSON.stringify(indentVsItems);
+          })
+       })
+       if(i === Object.keys(items).length)
+          setTimeout(linkIndentAndPurchase(purchaseID,items) , 5000 );
+     })
+   }
+
+   export function linkIndentAndPurchase(purchaseID,items) {
+     const dbRef = firebase.database().ref();
+     let historyKeys = {}; let indentVsItems = JSON.parse(window.localStorage.indentVsItems);
+
+     let partNumberVsImage = {};
+     Object.keys(items).map(partNumber => {
+       let indents = items[partNumber].split;
+       partNumberVsImage[partNumber] = items[partNumber].screenShot;
+       Object.keys(indents).map(indent => {
+         let k = historyKeys[indent];
+         if(!k) {
+           const historyRef = firebase.database().ref(`indents/${indent}/history/`);
+           const arrKey = historyRef.push().key;
+           historyKeys[indent] = arrKey;
+         }
+       })
+     })
+
+      const updates = {};
+      Object.keys(historyKeys).map(indentID => {
+        let ky = historyKeys[indentID];
+        let itemsOfIndent = indentVsItems[indentID];
+        let originalItemsOfIndent = itemsOfIndent.slice();
+        itemsOfIndent.map(item => {
+          if(partNumberVsImage[item.partNumber]){
+            item.screenShot = partNumberVsImage[item.partNumber];
+          }
+          item.selectedForPurchase = true;
+          item.purchaseID =purchaseID;
+        });
+
+        originalItemsOfIndent.map(item => {
+          item.selectedForPurchase = true;
+          item.purchaseID =purchaseID;
+        });
+
+
+        let historyPayload = {
+              updatedTime : new Date().toString(),
+              items : itemsOfIndent,
+              updatedBy : window.localStorage.role
+        };
+        if(window.localStorage.role === 'PURCHASE') {
+          updates[`indents/${indentID}/currentOwner`] = 'STORE';
+        }else if(window.localStorage.role === 'SECURITY'){
+          updates[`indents/${indentID}/currentOwner`] = 'STORE';
+        }
+
+        updates[`indents/${indentID}/history/${ky}`] = historyPayload;
+        updates[`indents/${indentID}/items`] = originalItemsOfIndent;
+
+      })
+      dbRef.update(updates);
    }

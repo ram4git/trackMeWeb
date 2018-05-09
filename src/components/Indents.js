@@ -19,7 +19,17 @@ export default class Jobcards extends Component {
   }
   componentDidMount () {
     getAllIndents().then((data) => {
-         this.setState({indents : data.val(),
+      let allIndents =data.val(); let filteredIndents = {}
+      console.log(this.props);
+      if(this.props.role) {
+        Object.keys(allIndents).map(indent => {
+          if(allIndents[indent].currentOwner === this.props.role)
+            filteredIndents[indent] = allIndents[indent];
+        })
+      }else {
+        filteredIndents = allIndents;
+      }
+         this.setState({indents : filteredIndents ,
           loadedData : true});
       }).catch((e) => console.log(e))
   }
@@ -42,7 +52,7 @@ export default class Jobcards extends Component {
    text : {
      title : indentDetails.vehicleNumber,
      id : indentDetails.indentID,
-     detail : now
+     detail : indentDetails.createdAt
    },
    onButtonClickPath : 'indent'
  }

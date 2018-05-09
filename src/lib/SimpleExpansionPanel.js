@@ -110,7 +110,7 @@ class SimpleExpansionPanel extends Component  {
         mainHead : item.mainHead,
         partName : item.partName,
         partNumber : item.partNumber,
-        quantityRequired: item.quantityRequired,
+        quantityRequired: item.quantityPurchase,
         screenShot : item.screenShot,
         selectedForPurchase : item.selectedForPurchase
       },

@@ -41,7 +41,7 @@ export default class ViewPurchase extends Component {
            </TableRow>
            <TableRow>
             <TableCell>Created At</TableCell>
-            <TableCell></TableCell>
+            <TableCell>{purchaseItem.createdAt}</TableCell>
            </TableRow>
            <TableRow>
             <TableCell>Company Name</TableCell>

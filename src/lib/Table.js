@@ -38,7 +38,7 @@ function CustomizedTable(props) {
 
   return (
     <Paper className={classes.root}>
-      <Table className={classes.table} style={{marginTop:'40px', marginLeft: '150px', width:'70%' }}>
+      <Table className={classes.table} style={{marginTop:'80px', marginLeft: '150px', width:'70%' }}>
         <TableHead>
           <TableRow>
             <CustomTableCell>MAIN HEAD</CustomTableCell>
@@ -55,7 +55,7 @@ function CustomizedTable(props) {
                 <CustomTableCell>{purchaseItem.mainHead}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.partName}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.partNumber}</CustomTableCell>
-                <CustomTableCell numeric>{purchaseItem.quantityRequired}</CustomTableCell>
+                <CustomTableCell numeric>{purchaseItem.quantityPurchase}</CustomTableCell>
               </TableRow>
             );
           })}

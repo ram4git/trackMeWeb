@@ -49,7 +49,7 @@ class SingleLineGridList extends React.Component {
     imagesArray.push(
     <GridListTile style={{height : '240px'}}>
       <img src={url.screenShot} className={classes.image} />
-      <GridListTileBar style={{backgroundColor : 'white'}}
+      <GridListTileBar style={{backgroundColor : 'white', marginLeft : '-10px'}}
         title={url.updatedBy + ' @ ' + url.updatedAt}
         classes={{
           root: classes.titleBar,

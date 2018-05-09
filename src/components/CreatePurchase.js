@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import SimpleExpansionPanel from '../lib/SimpleExpansionPanel.js';
-import { getAllIndents, createPurchase } from '../api/allApi.js';
+import { getAllIndents, createPurchase , getAllItemsForIndentAndUpdate } from '../api/allApi.js';
 import PurchaseOrder from './PurchaseOrder';
 import Button from 'material-ui/Button';
 import List, { ListItem, ListItemText } from 'material-ui/List';
@@ -72,22 +72,27 @@ componentDidMount() {
 
  aggregateItems(purchaseItems) {
    let { itemsInPurchaseOrder = {} } = this.state ;
+
+   if(!itemsInPurchaseOrder.parts) {
+      itemsInPurchaseOrder.parts = {}
+   }
+
    Object.keys(purchaseItems).forEach((indentID) => {
      let itemsOfIndent = purchaseItems[indentID];
 
      Object.keys(itemsOfIndent).forEach((partNumber) => {
-       const it = itemsInPurchaseOrder[partNumber];
+       const it = itemsInPurchaseOrder['parts'][partNumber];
        if(it == null) {
          const ob = itemsOfIndent[partNumber];
-         const qty = ob['quantityRequired'];
+         const qty = ob['quantityPurchase'];
          ob['split'] = {};
          ob['split'][indentID] = qty;
          ob['itemInPurchase'] = true;
-         itemsInPurchaseOrder[partNumber] = ob ;
+         itemsInPurchaseOrder['parts'][partNumber] = ob ;
        }else {
-         let qty = itemsOfIndent[partNumber]['quantityRequired'];
+         let qty = itemsOfIndent[partNumber]['quantityPurchase'];
          it['split'][indentID] = qty;
-         it['quantityRequired'] = (Number(it['quantityRequired']) +  Number(qty)).toString();
+         it['quantityRequired'] = (Number(it['quantityPurchase']) +  Number(qty)).toString();
        }
      })
    });
@@ -109,24 +114,15 @@ onPurchaseOrderClick = () => {
   let mathRandom = Math.floor((Math.random())*1000);
   let orderId= (now.getDate()).toString()  + monthsText[now.getMonth()] + (now.getFullYear()%100).toString() + '-'+
                  mathRandom.toString();
+
+
   createPurchase(orderId, itemsInPurchaseOrder).then(() => {
-
-    setTimeout(function() {
-       this.setState({
-         open: false,
-         submitPurchaseClicked: true,
-         orderId
-       });
-       const localStorage = window.localStorage;
-      try {
-          localStorage.removeItem('keys');
-          localStorage.removeItem('blabla');
-        }catch(e) {
-
-        }
-     }.bind(this), 3000);
+    alert('Successfully saved purchase items');
+    getAllItemsForIndentAndUpdate(orderId,itemsInPurchaseOrder.parts)
   }).catch((e) => console.log(e))
-  console.log(this.state);
+
+
+
 }
 
 
@@ -154,17 +150,19 @@ onPurchaseOrderClick = () => {
 
 
   render() {
+
+
     const { classes } = this.props;
 
     const { indents,
             purchaseItems,
-            itemsInPurchaseOrder,
+            itemsInPurchaseOrder = {},
             companyName,
             address,
             submitPurchaseClicked,
             orderId } = this.state;
 
-
+let path = '/purchase/' + orderId
     if(submitPurchaseClicked && orderId) {
       return (
         <Dialog
@@ -173,7 +171,7 @@ onPurchaseOrderClick = () => {
           <DialogTitle>Successfully Created Purchase Order.</DialogTitle>
           <DialogContent>
             <DialogContentText>
-               You can view the purchase order here <a href='/purchase/orderId'>{orderId}</a>
+               You can view the purchase order here <a href={path}>{orderId}</a>
             </DialogContentText>
           </DialogContent>
           <DialogActions>
@@ -234,7 +232,7 @@ onPurchaseOrderClick = () => {
               </IconButton>
             </Toolbar>
           </AppBar>
-          <Table items={itemsInPurchaseOrder}/>
+          <Table style={{marginTop : '80px'}}items={itemsInPurchaseOrder.parts}/>
           <div style={{marginTop:'20px', marginLeft:'450px'}}>
           <TextField label="Company Name" onChange={this.handleChange('companyName')} />
           </div>

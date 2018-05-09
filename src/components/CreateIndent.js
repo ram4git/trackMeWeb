@@ -26,6 +26,7 @@ import { uploadImage, downloadImage } from '../api/allApi.js';
 import * as firebase from 'firebase';
 import FireBaseTools from '../api/firebase-tools'
 import Delete from '@material-ui/icons/Delete';
+import Rand from 'random-key';
 
 
 class CreateIndent extends Component {
@@ -112,8 +113,10 @@ handleClickOpen = () => {
 
 onSubmit = () => {
 
+  let mathRandom = Rand.generateBase30(1);
+
    const {items }  =  this.state;
-   const  indentID = this.state.jobCardID;// change later
+   const  indentID = this.state.jobCardID + '-'+ mathRandom  ; // change later
 
 
   const payload = {
@@ -124,12 +127,13 @@ onSubmit = () => {
     createdAt : new Date().toString(),
     vehicleNumber : this.state.vehicleNumber,
     currentOwner : 'STORE',
+    internalState : 'GARAGE_STORE_REQUESTED',
     status : 'OPEN'
   }
   let count = 0;
 
   console.log(items);
-  
+
   items.forEach((item) => {
     if(item.screenShot) {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
@@ -143,7 +147,7 @@ onSubmit = () => {
           //update the history
 
 
-          updateIndent(payload) //fire and forget - dont resolve promise
+          updateIndent(payload, null) //fire and forget - dont resolve promise
 
           this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
 

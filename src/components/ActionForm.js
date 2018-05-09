@@ -19,7 +19,7 @@ import {saveIndent} from '../api/allApi.js';
 import Button from 'material-ui/Button';
 import { updateIndent, updatePartCount } from '../api/allApi.js'
 import Rand from 'random-key';
-import { reserveParts } from '../api/allApi.js';
+import { reserveParts, getPartCount } from '../api/allApi.js';
 
 
 
@@ -44,20 +44,21 @@ export default class ActionForm extends Component {
         modelNumber : indentDetails.modelNumber,
         loading : true
     });
+
+
     //how to achieve synchronization - study later
     const itemsInActionForm = indentDetails.items.slice();
-    // itemsInActionForm.map((item) => {
-    //   getPartCount(item.modelNumber, item.mainHead, item.partNumber).
-    //       then((data) => {
-    //           let partData = data.val();
-    //           item.quantityStores= partData.count;
-    //
-    //       })
-    //       .catch(()=> alert('error occured fetching part count'))
-    //
-    // })
+    //TODO change model number
+    itemsInActionForm.map((item) => {
+      getPartCount('M1312', item.mainHead, item.partNumber).
+          then((data) => {
+              let partData = data.val();
+              item.quantityStores= partData.quantity;
+              this.setState({itemsInActionForm})
+          })
+          .catch(()=> alert('error occured fetching part count'))
+    })
 
-    this.setState({itemsInActionForm})
 
   }
 
@@ -100,6 +101,7 @@ export default class ActionForm extends Component {
         indentDetails.actionUpdateMsg= 'All items returned to garage';
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.status = 'OPEN';
+        indentDetails.internalState =
         indentDetails.actionUpdateTime= new Date().toString();
 
         //call to update the count
@@ -190,15 +192,22 @@ export default class ActionForm extends Component {
       if(valid) {
 
         //indentDetails is the input - copy all the modifications done as part of this actionform to the input
+        let originalItems = indentDetails.items.slice() ;
+        originalItems.map((indentItem) => {
+          indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
+          indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+        })
+
 
         indentDetails.items.map((indentItem) => {
           indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
         })
         indentDetails.status='FORWARDED_TO_PURCHASE';
         indentDetails.currentOwner = 'PURCHASE';
         indentDetails.actionUpdateMsg= 'Forwarded to purchase';
-        indentDetails.actionUpdateTime= new Date();
+        indentDetails.actionUpdateTime= new Date().toString();
 
 
         //call to update the count
@@ -209,7 +218,7 @@ export default class ActionForm extends Component {
        //call to update the indent details
        //use this flag not to deduct the count again
        indentDetails.countUpdated = true;
-       updateIndent(indentDetails).then(alert('success')).catch(alert('error'))
+       updateIndent(indentDetails, originalItems).then(()=> alert('success')).catch(() => alert('error'))
         msg = 'Indent updated successfully'
       }
 

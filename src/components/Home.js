@@ -49,7 +49,7 @@ export default class Home extends Component {
       <Fragment>
         {localStorage.role=='GARAGE' && <Jobcards /> }
         {localStorage.role=='STORE' && <Indents /> }
-        {localStorage.role=='PURCHASE' && <Purchases /> }
+        {localStorage.role=='PURCHASE' && <Indents role={"PURCHASE"}/> }
         {localStorage.role=='SECURITY' && <Purchases /> }
 
       </Fragment>
