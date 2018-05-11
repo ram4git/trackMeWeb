@@ -138,7 +138,9 @@ if(split) {
 
         <div style={{height:'150px',borderRadius:'100px',width:'30%'}}>
         <img src={text.screenShot} style={{height:'150px',borderRadius:'100px'}}/>
-        <Button onClick={this.showImage(text.screenShot)} style={{marginTop : '-15px', float : 'right'}} ><ZoomInIcon/></Button>
+        <Button onClick={this.showImage(text.screenShot)} style={{marginTop : '-15px', float : 'right'}} >
+        <ZoomInIcon/>
+        </Button>
         </div>
         {!selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
         onClick={this.onItemSelectedForPurchase(text.partNumber)}

@@ -237,13 +237,16 @@ export default class ViewIndent extends Component {
                         <GridlistImage urls= {partImageURLs} />
                       </div>)
     })
+
+    let path='/jobcard/'+indentDetails.jobCardID;
+
       return (
         <Fragment>
         <Paper style={{margin:'5%', width:'30%'}}>
         <Table>
           <TableBody>
              <TableRow>
-              <TableCell>Jobcard Id</TableCell>
+              <TableCell><a href={path}>Jobcard Id</a></TableCell>
               <TableCell>{indentDetails.jobCardID}</TableCell>
               </TableRow>
               <TableRow>

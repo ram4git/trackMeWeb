@@ -236,7 +236,7 @@ class ViewPurchaseTable extends React.Component {
     <Fragment>
     <Paper className={classes.root}>
 
-      <Table className={classes.table} style={{marginTop:'80px', marginLeft: '170px', width:'70%' }}>
+      <Table className={classes.table} style={{marginTop:'80px', width:'100%' }}>
         <TableHead>
           <TableRow>
           <CustomTableCell>S.NO</CustomTableCell>
@@ -245,6 +245,7 @@ class ViewPurchaseTable extends React.Component {
             <CustomTableCell numeric>PART NUMBER</CustomTableCell>
             <CustomTableCell numeric>QUANTITY</CustomTableCell>
             <CustomTableCell>ACTION</CustomTableCell>
+            <CustomTableCell>IMAGE</CustomTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -269,6 +270,11 @@ class ViewPurchaseTable extends React.Component {
                 <Button>
                 <CloseIcon/>
                 </Button>
+                </CustomTableCell>
+                <CustomTableCell numeric>
+                <div style={{height : '240px', width:'50%'}}>
+                <img src={purchaseItem.screenShot}/>
+                </div>
                 </CustomTableCell>
               </TableRow>
             );

@@ -153,7 +153,7 @@ onPurchaseOrderClick = () => {
     this.setState({
       submitPurchaseClicked: false
     })
-    window.locatio.href='/purchases';
+    window.location.href='/purchases';
   }
 
 
@@ -172,6 +172,7 @@ onPurchaseOrderClick = () => {
 
 let path = '/purchase/' + orderId
     if(submitPurchaseClicked && orderId) {
+      let path = '/purchase/'+orderId;
       return (
         <Dialog
         open={this.state.submitPurchaseClicked}

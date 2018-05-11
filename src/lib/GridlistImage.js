@@ -4,6 +4,9 @@ import { withStyles } from 'material-ui/styles';
 import GridList, { GridListTile, GridListTileBar } from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
+import ZoomInIcon from '@material-ui/icons/ZoomIn';
+import Button from 'material-ui/Button';
+import Dialog from 'material-ui/Dialog';
 
 const styles = theme => ({
   root: {
@@ -38,15 +41,41 @@ const styles = theme => ({
 class SingleLineGridList extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      zoomInImage : false
+    }
+  }
+
+  showImage = image => event => {
+    this.setState({
+      zoomInImage : true,
+      zoomInURL : image
+    })
+  }
+
+  closeZoomInImage = () => {
+    this.setState({
+      zoomInImage : false
+    })
   }
 
 
   render() {
   const { classes, urls } = this.props;
+  const { zoomInURL, zoomInImage } = this.state;
+  console.log(urls)
+
+  if(zoomInImage)
+   return  <Dialog
+      open={this.state.zoomInImage}
+      onClose={this.closeZoomInImage}>
+      <img src={zoomInURL} style={{}}/>
+    </Dialog>
 
   let imagesArray = [];
   urls.map((url)=> {
     imagesArray.push(
+
     <GridListTile style={{height : '240px'}}>
       <img src={url.screenShot} className={classes.image} />
       <GridListTileBar style={{backgroundColor : 'white', marginLeft : '-10px'}}
@@ -56,7 +85,15 @@ class SingleLineGridList extends React.Component {
           title: classes.title,
         }}
       />
+      <div>
+      <Button onClick={this.showImage(url.screenShot)} style={{marginTop : '-15px', float : 'right'}} >
+      <ZoomInIcon/>
+      </Button>
+      </div>
+
     </GridListTile>
+
+
   )
   })
 

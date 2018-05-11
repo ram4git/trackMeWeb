@@ -7,6 +7,7 @@ import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import Search from '@material-ui/icons/Search';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
 
 export default class Items extends Component {
@@ -32,6 +33,12 @@ componentDidMount() {
        let parts = data.val(); let listOfMainHeads = [];
        Object.keys(parts).map((mainHead) => {
           listOfMainHeads.push(mainHead);
+          let partItem = parts[mainHead];
+          console.log(partItem);
+          Object.keys(partItem).map((item) => {
+            let itemVal = partItem[item];
+            console.log(itemVal);
+          })
        })
        this.setState({
          listOfMainHeads,
@@ -59,12 +66,12 @@ componentDidMount() {
 
   render() {
     console.log(this.state);
-    const { listOfMainHeads, mainHead, parts } = this.state;
+    const { listOfMainHeads, mainHead, parts, partNumber } = this.state;
 
     let mainHeadLists = [];
     if(listOfMainHeads) {
-      listOfMainHeads.forEach((mainHead) => {
-        let menuItem = <MenuItem value={mainHead}>{mainHead}</MenuItem>;
+      listOfMainHeads.forEach((mainHead, index) => {
+        let menuItem = <MenuItem value={mainHead} key={index}>{mainHead}</MenuItem>;
           mainHeadLists.push(menuItem);
       })
     }
@@ -72,12 +79,21 @@ componentDidMount() {
     let partNumberOptions = [];
     if(mainHead) {
       let partsOfMainHead = parts[mainHead] || [];
-      Object.keys(partsOfMainHead).map((partKey) => {
+      Object.keys(partsOfMainHead).map((partKey, index) => {
         let partDetail = partsOfMainHead[partKey];
-        let menuItem = <MenuItem value={partKey}>{partDetail.name}</MenuItem>;
+        console.log(partDetail)
+        let menuItem = <MenuItem value={partKey} key={index}>{partDetail.name}</MenuItem>;
           partNumberOptions.push(menuItem);
       })
     }
+
+    let partItemObj = {}; let partReservationsArr=[];
+    if(partNumber) {
+      let partItemQty = parts[mainHead][partNumber].quantity;
+      partItemObj['quantity'] = partItemQty;
+      let partReservations = parts[mainHead][partNumber].reservations;
+      partReservationsArr.push(partReservations)
+      }
 
     return (
       <Fragment>
@@ -121,6 +137,37 @@ componentDidMount() {
         </Select>
       </FormControl>
       </form>
+      <div style={{marginTop:'30px'}}>
+        <Table>
+          <TableBody>
+             <TableRow>
+              <TableCell>Qunatity</TableCell>
+              <TableCell>{partItemObj.quantity}</TableCell>
+             </TableRow>
+          </TableBody>
+        </Table>
+        <Table>
+        <TableHead>
+         <TableRow>
+          <TableCell>INDENT ID</TableCell>
+          <TableCell>QUANTITY</TableCell>
+         </TableRow>
+        </TableHead>
+        <TableBody>
+        {partReservationsArr.map((item, index) => {
+          console.log(item)
+          for(var i in item) {
+          return (
+            <TableRow>
+                   <TableCell>{i}</TableCell>
+                   <TableCell>{item[i]}</TableCell>
+            </TableRow>
+          );
+        }
+        })}
+        </TableBody>
+        </Table>
+      </div>
       </Fragment>
     )
   }
