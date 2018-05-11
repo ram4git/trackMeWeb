@@ -195,7 +195,27 @@ export function saveIndent(data) {
                      indents.push(data);
                      return indents;
                  });
+
   return dbRef.update(updates);
+}
+
+export function updateHistory(data) {
+  const dbRef = firebase.database().ref();
+  const updates={};
+  const historyRef = firebase.database().ref(`indents/${data.indentID}/history/`);
+  const arrKey = historyRef.push().key;
+
+  let items =  data.items.slice();
+  items.map(item =>{
+    item.screenShot = item.referenceImage;
+  })
+  let historyPayload = {
+      updatedTime : new Date().toString() ,
+      items : items,
+      updatedBy : window.localStorage.role
+  };
+ updates[`indents/${data.indentID}/history/${arrKey}`] = historyPayload;
+ return dbRef.update(updates);
 }
 
 
@@ -249,7 +269,7 @@ export function updateIndent(indentDetails, originalItems) {
   const arrKey = historyRef.push().key;
   const updates = {};
   let historyPayload = {
-    updatedTime : indentDetails.createdAt || '',
+    updatedTime : new Date().toString() ,
     items : indentDetails.items,
     updatedBy : window.localStorage.role
   };
@@ -257,6 +277,10 @@ export function updateIndent(indentDetails, originalItems) {
 const indentsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/currentOwner`);
 
 indentsRef.set(indentDetails.currentOwner);
+
+const internalStateRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/internalState`);
+internalStateRef.set(indentDetails.internalState)
+
 
   if(originalItems) {
     const indentItemsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/items`);
@@ -318,9 +342,9 @@ export function getItemsForModelNumber(modelNumber) {
   return dbRef.once('value');
 }
 
-export function uploadImage(file, indentId, role, partNumber) {
+export function uploadImage(file, indentId, action, partNumber) {
   const storageRef = firebase.storage().ref();
-  const path = 'indents/'+indentId+'/'+role+'/'+partNumber+'.jpeg';
+  const path = 'indents/'+indentId+'/'+action+'/'+partNumber+'.jpeg';
   const imgRef = storageRef.child(path);
   return  imgRef.putString(file, 'base64')
 }

@@ -130,8 +130,8 @@ class GarageActionCard extends React.Component {
         });
 
         let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
-        let role = window.localStorage.role + '_RECEIVED' ;
-        uploadImage(img, this.state.indentID, role, this.state.partNumber).then((snapshot) => {
+        let action = 'GARAGE_RECEIVED' ;
+        uploadImage(img, this.state.indentID, action, this.state.partNumber).then((snapshot) => {
           let URL = snapshot.downloadURL;
           this.setState({screenShot : URL});
         }).catch((e) => console.log(e));

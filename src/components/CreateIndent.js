@@ -22,13 +22,15 @@ import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent,getItemsForModelNumber, updateIndent} from '../api/allApi.js';
 import { Redirect, Link } from 'react-router-dom'
-import { uploadImage, downloadImage } from '../api/allApi.js';
+import { uploadImage, downloadImage, updateHistory } from '../api/allApi.js';
 import * as firebase from 'firebase';
 import FireBaseTools from '../api/firebase-tools'
 import Delete from '@material-ui/icons/Delete';
 import Rand from 'random-key';
 
 
+const DEFAULT_SOURCE_SCREEN_SHOT = 'https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/default_source.jpg?alt=media&token=6566f5ef-5645-4f76-833c-ddc843586856'
+const NO_IMAGE_AVAILABLE = 'https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/not-available.jpg?alt=media&token=c772681a-d0a4-49e8-87dc-a3680e1ac534'
 class CreateIndent extends Component {
 constructor(props) {
   super(props);
@@ -139,30 +141,35 @@ onSubmit = () => {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
     //  let buf = new Buffer(img, 'base64');
 
-    uploadImage(img, this.state.jobCardID, window.localStorage.role, item.partNumber).then((snapshot) => {
+    uploadImage(img, this.state.jobCardID, 'GARAGE_STORE_REQUESTED', item.partNumber).then((snapshot) => {
       item.screenShot = snapshot.downloadURL;
       count = count + 1;
       if(count === items.length) {
-        saveIndent(payload).then(() => {
-          //update the history
+          saveIndent(payload).then(() => {
+            updateHistory(payload).then( () => {
+              updateIndent(payload, null) //fire and forget - dont resolve promise
+          }).catch(() =>alert('could not update history Indent'))
 
-
-          updateIndent(payload, null) //fire and forget - dont resolve promise
-
-          this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
-
-        }
-        ).catch(() =>alert('could not save Indent'))
+          this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') );
+        }).catch((e) => {console.log(e); alert('could not save Indent')})
       }
 
       }).catch((e) => console.log(e))
+
+    }else {
+      item.screenShot = NO_IMAGE_AVAILABLE;
+      count = count + 1;
+      if(count === items.length) {
+        saveIndent(payload).then(() => {
+          updateHistory(payload).then( () => {
+            updateIndent(payload, null) //fire and forget - dont resolve promise
+          }).catch(() =>alert('could not update history Indent'))
+        this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
+        }).catch(() =>alert('could not save Indent'))
+      }
     }
   })
-
-
-
-
-}
+};
 
   handleClose = () => {
     this.setState({open: false});
@@ -192,6 +199,7 @@ onSubmit = () => {
     newItem.quantityRequired = quantityRequired;
     newItem.quantityStores = '120';
     newItem.screenShot = screenShot;
+    newItem.referenceImage = DEFAULT_SOURCE_SCREEN_SHOT;
 
     items.push(newItem);
 

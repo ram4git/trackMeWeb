@@ -22,6 +22,7 @@ import Rand from 'random-key';
 import { reserveParts, getPartCount } from '../api/allApi.js';
 
 
+const DEFAULT_SCREEN_SHOT = 'https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/not-available.jpg?alt=media&token=c772681a-d0a4-49e8-87dc-a3680e1ac534'
 
 
 export default class ActionForm extends Component {
@@ -94,14 +95,14 @@ export default class ActionForm extends Component {
         indentDetails.items.map((indentItem) => {
           indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
-          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
+          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'] || DEFAULT_SCREEN_SHOT;
 
         })
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.actionUpdateMsg= 'All items returned to garage';
         indentDetails.currentOwner = 'GARAGE';
         indentDetails.status = 'OPEN';
-        indentDetails.internalState =
+        indentDetails.internalState = 'STORE_GARAGE_GRANTED'
         indentDetails.actionUpdateTime= new Date().toString();
 
         //call to update the count
@@ -205,6 +206,7 @@ export default class ActionForm extends Component {
           indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
         })
         indentDetails.status='FORWARDED_TO_PURCHASE';
+        indentDetails.internalState='STORE_PURCHASE_REQUESTED';
         indentDetails.currentOwner = 'PURCHASE';
         indentDetails.actionUpdateMsg= 'Forwarded to purchase';
         indentDetails.actionUpdateTime= new Date().toString();
@@ -260,7 +262,10 @@ export default class ActionForm extends Component {
             partNumber : itemInActionForm.partNumber,
             screenShot : itemInActionForm.screenShot,
             quantityRequired: itemInActionForm.quantityRequired,
-            quantityStores : itemInActionForm.quantityStores || '24'
+            quantityStores : itemInActionForm.quantityStores || '24',
+            renderCamera : actionTaken==='COMPLETE_RETURN_TO_GARAGE' ? true : false,
+            enableInput : actionTaken === 'NO_ACTION' ? false : true,
+            actionTaken
           }
         }
         cardsArray.push(<div className='card' style={{marginTop : '5%'}}><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
@@ -282,6 +287,7 @@ export default class ActionForm extends Component {
                   </IconButton>
                   <Typography variant="title" color="inherit" style={{flex:1}}>
                     Resolving Indent ...
+                    <span style={{paddingLeft: '440px'}}>Please select an action on the right to edit</span>
                   </Typography>
                   <Typography variant="title" color="inherit" style={{color:'white'}}>
                     Action

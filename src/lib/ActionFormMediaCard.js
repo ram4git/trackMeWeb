@@ -35,9 +35,10 @@ const classes = {
      margin : '20px'
    },
    text: {
-   marginBottom: 16,
    marginLeft : 20,
-   fontSize: 24,
+   fontSize: 18,
+   paddingTop : 20,
+   color : 'red'
   },
   textDiv : {
     flex:0.5
@@ -53,9 +54,6 @@ const classes = {
     margin : '10px'
   }
 };
-
-
-
 
 
 class ActionFormMediaCard extends React.Component {
@@ -124,7 +122,7 @@ class ActionFormMediaCard extends React.Component {
     );
   }
 
-  capture() {
+  capture(actionTaken) {
       if(this.state.showLiveCameraFeed) {
         const screenShot = this.webcam.getScreenshot();
         this.setState({
@@ -132,8 +130,14 @@ class ActionFormMediaCard extends React.Component {
         });
 
         let img =  screenShot.replace(/^data:image\/\w+;base64,/, "");
-        let role = window.localStorage.role
-        uploadImage(img, this.state.indentID, role, this.state.partNumber).then((snapshot) => {
+        let action = 'NO_ACTION';
+
+        if(actionTaken === 'COMPLETE_RETURN_TO_GARAGE')
+          action = 'STORE_GARAGE_GRANTED';
+        else if(actionTaken === 'FORWARD_TO_PURCHASE')
+          action = 'STORE_PURCHASE_REQUESTED';
+        
+        uploadImage(img, this.state.indentID, action, this.state.partNumber).then((snapshot) => {
           let URL = snapshot.downloadURL;
           this.setState({screenShot : URL});
         }).catch((e) => console.log(e));
@@ -167,23 +171,44 @@ class ActionFormMediaCard extends React.Component {
 
  render() {
    const { screenShot,mainHead, partNumber } = this.state;
-   const {  classes } = this.props;
+   const {  classes, items } = this.props;
+
+
+   const renderCam = items.renderCamera;
+   const enableInput = items.enableInput;
+   const actionTaken = items.actionTaken;
 
    if(screenShot) {
 
+   }
+
+  const btnStyle = {
+    position: 'absolute',
+    top:'80px',
+    left:'100px',
+    height: '50px'
   }
 
-const btnStyle = {
-  position: 'absolute',
-  top:'80px',
-  left:'100px',
-  height: '50px'
-}
   const { isLocked, webcamClicked, showLiveCameraFeed , quantityStores ,
      quantityApproved , quantityRequired } = this.state;
   return (
     <div>
       <Card className={classes.card}>
+      <div className={classes.card}>
+
+        <CardMedia
+         className={classes.cover}
+         image={require('../background.jpg')}
+        />
+        <div onClick={this.capture.bind(this, actionTaken)} style={{position:'relative'}}>
+          { !webcamClicked ?
+            <Button variant="fab" color="primary"  style={btnStyle} disabled={!renderCam}
+                  onClick={this.onCameraClick}>
+              <Videocam/>
+            </Button> : this.renderCamera() }
+        </div>
+
+        </div>
       <div className={classes.textDiv}>
         <CardContent>
         <Table>
@@ -211,51 +236,36 @@ const btnStyle = {
           <TextField id="quantityApproved"
              label="Quantity Approved"
              value={this.state.quantityApproved}
-             onChange={this.handleChange('quantityApproved')}
+             onChange={this.handleChange('quantityApproved')} disabled={!enableInput}
              margin="normal"
           />
           <TextField id="quantityPurchase"
              label="Quantity Purchase"
              value={this.state.quantityPurchase}
              onChange={this.handleChange('quantityPurchase')}
-             margin="normal"
+             margin="normal" disabled={!enableInput}
           />
           </div>
           <div style = { !isLocked ? {display:'none'} : {}}>
-          <Typography variant="subheading" className={classes.text} color="textSecondary">
+          <Typography  className={classes.text} color="textSecondary">
             Approved Qty = {this.state.quantityApproved}
           </Typography>
-          <Typography variant="subheading" className={classes.text} color="textSecondary">
+          <Typography className={classes.text} color="textSecondary">
             Purchase Qty = {this.state.quantityPurchase}
           </Typography>
           </div>
 
-          <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {} }
-            onClick={this.wantsToUnLock}>
+          <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'}}
+            onClick={this.wantsToUnLock} disabled={!enableInput} >
             <Locked/>
           </Button>
-          <Button variant="fab" color="primary" aria-label="DONE" style = { isLocked ? {display:'none'} : {} }
-                onClick={this.wantsToLock}>
+          <Button variant="fab" color="primary" aria-label="DONE" style = { isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'}}
+                onClick={this.wantsToLock} disabled={!enableInput}>
             <LockOpen/>
           </Button>
         </CardContent>
 
       </div>
-      <div className={classes.card}>
-
-        <CardMedia
-         className={classes.cover}
-         image={require('../background.jpg')}
-        />
-        <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
-          { !webcamClicked ?
-            <Button variant="fab" color="primary"  style={btnStyle}
-                  onClick={this.onCameraClick}>
-              <Videocam/>
-            </Button> : this.renderCamera() }
-        </div>
-        </div>
-
       </Card>
     </div>
   );
