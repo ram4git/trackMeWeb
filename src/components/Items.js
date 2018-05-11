@@ -156,10 +156,12 @@ componentDidMount() {
         <TableBody>
         {partReservationsArr.map((item, index) => {
           console.log(item)
+
           for(var i in item) {
+            let path = '/indent/'+i;
           return (
             <TableRow>
-                   <TableCell>{i}</TableCell>
+                   <TableCell><a href={path}>{i}</a></TableCell>
                    <TableCell>{item[i]}</TableCell>
             </TableRow>
           );
