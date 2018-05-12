@@ -147,7 +147,7 @@ onSubmit = () => {
       if(count === items.length) {
           saveIndent(payload).then(() => {
             updateHistory(payload).then( () => {
-              updateIndent(payload, null) //fire and forget - dont resolve promise
+              updateIndent(payload, null, 'Created Indent') //fire and forget - dont resolve promise
           }).catch(() =>alert('could not update history Indent'))
 
           this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') );
@@ -162,7 +162,7 @@ onSubmit = () => {
       if(count === items.length) {
         saveIndent(payload).then(() => {
           updateHistory(payload).then( () => {
-            updateIndent(payload, null) //fire and forget - dont resolve promise
+            updateIndent(payload, null,  'Created Indent') //fire and forget - dont resolve promise
           }).catch(() =>alert('could not update history Indent'))
         this.setState({navigateBackToJobPage : true}, alert('Indent saved successfully') )
         }).catch(() =>alert('could not save Indent'))

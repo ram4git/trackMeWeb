@@ -127,10 +127,11 @@ componentDidMount () {
          indentDetails.currentOwner = 'STORE';
          indentDetails.status = 'OPEN';
          indentDetails.actionUpdateTime= new Date().toString();
+         indentDetails.internalState = 'GARAGE_STORE_CONFIRMED';
 
 
         //call to update the indent details
-        updateIndent(indentDetails).then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
+        updateIndent(indentDetails, null, 'All items received from Store').then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
          msg = 'Indent updated successfully'
 
      }else if('WRONG_ITEMS_RECEIVED' === actionTaken){

@@ -65,9 +65,12 @@ export default class ViewIndent extends Component {
         let historyObjItems = indentHistory[key]['items'];
         historyObjItems.forEach((item) => {
           let imageURLArray = partNumberVsImageURL[item.partNumber] || [];
+          let msg = indentHistory[key]['updateMsg'] ? indentHistory[key]['updateMsg'] : '';
+          let time = indentHistory[key]['updatedTime'];
+          time = time.substring(0, time.length-14);
           imageURLArray.push({
             updatedBy : indentHistory[key]['updatedBy'],
-            updatedAt : indentHistory[key]['updatedTime'],
+            updatedAt : time + ' ' + msg,
             screenShot : item.screenShot
           });
           partNumberVsImageURL[item.partNumber] = imageURLArray;

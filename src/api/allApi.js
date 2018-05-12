@@ -205,14 +205,14 @@ export function updateHistory(data) {
   const historyRef = firebase.database().ref(`indents/${data.indentID}/history/`);
   const arrKey = historyRef.push().key;
 
-  let items =  data.items.slice();
+  let items =  JSON.parse(JSON.stringify(data.items));
   items.map(item =>{
     item.screenShot = item.referenceImage;
   })
   let historyPayload = {
-      updatedTime : new Date().toString() ,
+      updatedTime : '' ,
       items : items,
-      updatedBy : window.localStorage.role
+      updatedBy : 'Part Reference Image'
   };
  updates[`indents/${data.indentID}/history/${arrKey}`] = historyPayload;
  return dbRef.update(updates);
@@ -264,14 +264,15 @@ export function updatePartCount(indentDetails) {
 
 
 
-export function updateIndent(indentDetails, originalItems) {
+export function updateIndent(indentDetails, originalItems, updateMsg) {
   const historyRef = firebase.database().ref(`indents/${indentDetails.indentID}/history/`);
   const arrKey = historyRef.push().key;
   const updates = {};
   let historyPayload = {
     updatedTime : new Date().toString() ,
     items : indentDetails.items,
-    updatedBy : window.localStorage.role
+    updatedBy : window.localStorage.role,
+    updateMsg
   };
 
 const indentsRef = firebase.database().ref().child(`indents/${indentDetails.indentID}/currentOwner`);
@@ -437,10 +438,13 @@ export function downloadImage(path) {
         });
 
 
+ let updateMsg = window.localStorage.role === 'PURCHASE' ? 'Generated Purchase Order' :
+                    'Accepted items at Security Gate'
         let historyPayload = {
               updatedTime : new Date().toString(),
               items : itemsOfIndent,
-              updatedBy : window.localStorage.role
+              updatedBy : window.localStorage.role,
+              updateMsg
         };
         if(window.localStorage.role === 'PURCHASE') {
           updates[`indents/${indentID}/currentOwner`] = 'STORE';

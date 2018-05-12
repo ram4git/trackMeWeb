@@ -111,7 +111,7 @@ export default class ActionForm extends Component {
         .catch(()=> alert('error occured fetching part count'))
 
        //call to update the indent details
-       updateIndent(indentDetails).then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
+       updateIndent(indentDetails, null, 'Returned all items to Garage').then(() => alert('Action Successful on Indent')).catch((e) => console.log(e))
         msg = 'Indent updated successfully'
       }
 
@@ -220,7 +220,7 @@ export default class ActionForm extends Component {
        //call to update the indent details
        //use this flag not to deduct the count again
        indentDetails.countUpdated = true;
-       updateIndent(indentDetails, originalItems).then(()=> alert('success')).catch(() => alert('error'))
+       updateIndent(indentDetails, originalItems, 'Forwared to purchase').then(()=> alert('success')).catch(() => alert('error'))
         msg = 'Indent updated successfully'
       }
 
