@@ -26,7 +26,6 @@ componentDidMount() {
 
   handleChange = () => {
     const { modelNumber } = this.state;
-    console.log(modelNumber);
 
     getItemsForModelNumber(modelNumber).then((data) => {
 
@@ -34,10 +33,8 @@ componentDidMount() {
        Object.keys(parts).map((mainHead) => {
           listOfMainHeads.push(mainHead);
           let partItem = parts[mainHead];
-          console.log(partItem);
           Object.keys(partItem).map((item) => {
             let itemVal = partItem[item];
-            console.log(itemVal);
           })
        })
        this.setState({
@@ -60,7 +57,7 @@ componentDidMount() {
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
         this.setState({ partName })
       }
-
+      console.log(this.state);
   };
 
 
@@ -81,7 +78,6 @@ componentDidMount() {
       let partsOfMainHead = parts[mainHead] || [];
       Object.keys(partsOfMainHead).map((partKey, index) => {
         let partDetail = partsOfMainHead[partKey];
-        console.log(partDetail)
         let menuItem = <MenuItem value={partKey} key={index}>{partDetail.name}</MenuItem>;
           partNumberOptions.push(menuItem);
       })
@@ -155,7 +151,6 @@ componentDidMount() {
         </TableHead>
         <TableBody>
         {partReservationsArr.map((item, index) => {
-          console.log(item)
 
           for(var i in item) {
             let path = '/indent/'+i;

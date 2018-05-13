@@ -128,9 +128,9 @@ onPurchaseOrderClick = () => {
     alert('Successfully saved purchase items');
     getAllItemsForIndentAndUpdate(orderId,itemsInPurchaseOrder.parts)
   }).catch((e) => console.log(e))
-
-
-
+  this.setState({
+    submitPurchaseClicked: true
+  })
 }
 
 

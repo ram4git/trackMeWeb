@@ -27,6 +27,8 @@ import * as firebase from 'firebase';
 import FireBaseTools from '../api/firebase-tools'
 import Delete from '@material-ui/icons/Delete';
 import Rand from 'random-key';
+import Videocam from '@material-ui/icons/Videocam';
+
 
 
 const DEFAULT_SOURCE_SCREEN_SHOT = 'https://firebasestorage.googleapis.com/v0/b/trackme-55331.appspot.com/o/default_source.jpg?alt=media&token=6566f5ef-5645-4f76-833c-ddc843586856'
@@ -40,6 +42,7 @@ constructor(props) {
     partNumber:'',
     showLiveCameraFeed: true,
     navigateBackToJobPage : false,
+    webcamClicked : false,
     items: []
   }
   this.handleChange.bind(this);
@@ -75,6 +78,12 @@ renderCamera() {
       { this.renderImage() }
     </div>
   );
+}
+
+onCameraClick = (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  this.setState({webcamClicked: true})
 }
 
 capture() {
@@ -186,7 +195,7 @@ onSubmit = () => {
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
         this.setState({ partName })
       }
-
+      console.log(this.state)
   };
 
   saveIndents = () => {
@@ -234,8 +243,9 @@ download = () => {
 }
 
 render() {
+  console.log(this.state)
   let savedIndentsArray = [];
-  const {navigateBackToJobPage , jobCardID, listOfMainHeads, mainHead, parts } = this.state;
+  const {navigateBackToJobPage , jobCardID, listOfMainHeads, mainHead, parts, partNumber, webcamClicked } = this.state;
 
   if(navigateBackToJobPage) {
     const url = "/jobcard/"+ jobCardID;
@@ -259,6 +269,12 @@ render() {
         partNumberOptions.push(menuItem);
     })
   }
+
+  let partItemObj = {};
+  if(partNumber) {
+    let partItemQty = parts[mainHead][partNumber].quantity;
+    partItemObj['quantity'] = partItemQty;
+    }
 
 
   let itemsArray = this.state.items;
@@ -353,6 +369,16 @@ render() {
             </Select>
           </FormControl>
           </form>
+          <div style={{width:'23%', marginTop:'50px'}} >
+          <Table>
+            <TableBody>
+               <TableRow>
+                <TableCell>Qunatity</TableCell>
+                <TableCell>{partItemObj.quantity}</TableCell>
+               </TableRow>
+            </TableBody>
+          </Table>
+          </div>
           <TextField className="partImage"
              id="quantity"
              label="Quantity Required"
@@ -369,9 +395,13 @@ render() {
             </GridListTile>
 
             <GridListTile key='webcamImage' >
-              <div onClick={this.capture.bind(this)} >
-                {this.renderCamera() }
-              </div>
+            <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
+              { !webcamClicked ?
+                <Button variant="fab" color="primary"
+                      onClick={this.onCameraClick}>
+                  <Videocam/>
+                </Button> : this.renderCamera() }
+            </div>
             </GridListTile>
 
           </GridList>
