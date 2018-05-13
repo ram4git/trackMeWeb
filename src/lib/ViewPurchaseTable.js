@@ -245,7 +245,8 @@ class ViewPurchaseTable extends React.Component {
             <CustomTableCell numeric>PART NUMBER</CustomTableCell>
             <CustomTableCell numeric>QUANTITY</CustomTableCell>
             <CustomTableCell>ACTION</CustomTableCell>
-            <CustomTableCell>IMAGE</CustomTableCell>
+            <CustomTableCell>REFERENCE IMAGE</CustomTableCell>
+            <CustomTableCell>UPLOADED IMAGE</CustomTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -262,18 +263,23 @@ class ViewPurchaseTable extends React.Component {
                 <CustomTableCell numeric>{purchaseItem.partName}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.partNumber}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.quantityRequired}</CustomTableCell>
-                <CustomTableCell numeric>
-                <Button
+                <CustomTableCell>
+                <div style={{height : '120px', width:'50%'}}>
+                <img style={{height : '120px'}} src={purchaseItem.referenceImage}/>
+                </div>
+                </CustomTableCell>
+                <CustomTableCell>
+                <Button variant="raised" color="primary"
                 onClick={this.onActionButton.bind(this, purchaseItem.partNumber, purchaseItem.quantityRequired, purchaseItem.mainHead)}>
                 <Done />
-                </Button>
-                <Button>
+                </Button >
+                <Button variant="raised" color="secondary">
                 <CloseIcon/>
                 </Button>
                 </CustomTableCell>
-                <CustomTableCell numeric>
-                <div style={{height : '240px', width:'50%'}}>
-                <img src={purchaseItem.screenShot}/>
+                <CustomTableCell>
+                <div style={{height : '120px', width:'50%'}}>
+                <img style={{height : '120px'}} src={purchaseItem.screenShot}/>
                 </div>
                 </CustomTableCell>
               </TableRow>

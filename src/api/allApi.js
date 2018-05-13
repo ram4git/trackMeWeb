@@ -320,7 +320,8 @@ export function reserveParts(indentDetails){
   let updates = {}; let items = indentDetails.items;
   const dbRef = firebase.database().ref().child('items/' + indentDetails.modelNumber + '/' );
   items.map((item) => {
-      updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+      updates[`${item.mainHead}/${item.partNumber}/quantity`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+      if(item.quantityApproved != null && item.quantityApproved != '0')
       updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] =  item.quantityApproved
   })
   return dbRef.update(updates);

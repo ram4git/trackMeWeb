@@ -31,7 +31,7 @@ const styles = {
 const flexContainer = {
   display : 'flex',
   flexDirection : 'row',
-  height: '60px'
+  height: '80px'
 }
 
 function SimpleCard(props) {

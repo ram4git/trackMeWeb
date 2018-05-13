@@ -203,7 +203,7 @@ export default class ActionForm extends Component {
         indentDetails.items.map((indentItem) => {
           indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
-          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot'];
+          indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot']|| DEFAULT_SCREEN_SHOT;
         })
         indentDetails.status='FORWARDED_TO_PURCHASE';
         indentDetails.internalState='STORE_PURCHASE_REQUESTED';

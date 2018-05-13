@@ -197,7 +197,6 @@ onSubmit = () => {
     newItem.partNumber = partNumber;
     newItem.partName = partName;
     newItem.quantityRequired = quantityRequired;
-    newItem.quantityStores = '120';
     newItem.screenShot = screenShot;
     newItem.referenceImage = DEFAULT_SOURCE_SCREEN_SHOT;
 

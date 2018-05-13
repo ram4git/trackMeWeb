@@ -48,7 +48,7 @@ componentDidMount() {
   getAllIndents().then((data) => {
     let allIndents = data.val();
     Object.keys(allIndents).map(indent => {
-      if(allIndents[indent].status === "OPEN"){
+      if(allIndents[indent].status === "OPEN" && allIndents[indent].currentOwner === 'PURCHASE'){
         filteredIndents[indent] = allIndents[indent];
       }
     })
