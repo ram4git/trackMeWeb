@@ -214,7 +214,7 @@ class ViewPurchaseTable extends React.Component {
 
   render() {
   const { classes, items, purchaseID } = this.props;
-
+console.log(this.props)
   if(!items)
   return null;
   console.log(items)
@@ -244,18 +244,19 @@ class ViewPurchaseTable extends React.Component {
             <CustomTableCell numeric>PART NAME</CustomTableCell>
             <CustomTableCell numeric>PART NUMBER</CustomTableCell>
             <CustomTableCell numeric>QUANTITY</CustomTableCell>
-            <CustomTableCell>ACTION</CustomTableCell>
             <CustomTableCell>REFERENCE IMAGE</CustomTableCell>
+            <CustomTableCell>ACTION</CustomTableCell>
             <CustomTableCell>UPLOADED IMAGE</CustomTableCell>
+            <CustomTableCell>INDENTS</CustomTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {Object.keys(itemParts).map((item, index) => {
             let purchaseItem = itemParts[item];
-            console.log(purchaseItem)
-            // count = count+1;
-            // if(count == items.length)
-
+            console.log(purchaseItem);
+            let purchaseItemIndentsObj = purchaseItem.split; let purchaseItemIndentsArr=[]
+            console.log(purchaseItemIndentsObj);
+            purchaseItemIndentsArr.push(purchaseItemIndentsObj);
             return (
               <TableRow className={classes.row} key={index}>
                 <CustomTableCell>{index+1}</CustomTableCell>
@@ -281,6 +282,14 @@ class ViewPurchaseTable extends React.Component {
                 <div style={{height : '120px', width:'50%'}}>
                 <img style={{height : '120px'}} src={purchaseItem.screenShot}/>
                 </div>
+                </CustomTableCell>
+                <CustomTableCell>
+                {purchaseItemIndentsArr.map((indentObj) => {
+                  for(let indent in indentObj) {
+                    let path='/indent/'+indent;
+                    return <li><a href={path}>{indent}</a></li>
+                  }
+                })}
                 </CustomTableCell>
               </TableRow>
             );

@@ -133,7 +133,7 @@ componentDidMount() {
         </Select>
       </FormControl>
       </form>
-      <div style={{marginTop:'30px'}}>
+      <div style={{marginTop:'30px', width:'35%'}}>
         <Table>
           <TableBody>
              <TableRow>
@@ -152,7 +152,7 @@ componentDidMount() {
         <TableBody>
         {partReservationsArr.map((item, index) => {
 
-          for(var i in item) {
+          for(let i in item) {
             let path = '/indent/'+i;
           return (
             <TableRow>

@@ -25,6 +25,8 @@ export function createJobCard(data) {
                  });
   const dbRef = firebase.database().ref().child('jobCards/');
   const updates = {};
+  data.createdAt = firebase.database.ServerValue.TIMESTAMP;
+  console.log(data)
   updates[`${data.id}`] = data;
   return dbRef.update(updates);
 

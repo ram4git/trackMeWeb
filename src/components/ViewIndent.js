@@ -250,8 +250,8 @@ export default class ViewIndent extends Component {
         <Table>
           <TableBody>
              <TableRow>
-              <TableCell><a href={path}>Jobcard Id</a></TableCell>
-              <TableCell>{indentDetails.jobCardID}</TableCell>
+              <TableCell>Jobcard Id</TableCell>
+              <TableCell><a href={path}>{indentDetails.jobCardID}</a></TableCell>
               </TableRow>
               <TableRow>
               <TableCell>Lorry Number</TableCell>

@@ -151,7 +151,8 @@ onPurchaseOrderClick = () => {
     getAllItemsForIndentAndUpdate(orderId,itemsInPurchaseOrder.parts)
   }).catch((e) => console.log(e))
   this.setState({
-    submitPurchaseClicked: true
+    submitPurchaseClicked: true,
+    orderId
   })
 }
 
@@ -175,7 +176,7 @@ onPurchaseOrderClick = () => {
     this.setState({
       submitPurchaseClicked: false
     })
-    window.location.href='/purchases';
+    window.location.href='/createPurchase';
   }
 
 
