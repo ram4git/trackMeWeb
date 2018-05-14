@@ -50,8 +50,13 @@ onItemSelectedForPurchase = partNumber => event => {
     this.props.onPurchaseSelect(this.props.text.indentID, partNumber)
 }
 
-onRemovalOfPurchaseItems = partNumber => event => {
-  console.log(partNumber)
+onItemRemovedFromPurchase = partNumber => event => {
+  if(this.props.text.split) {
+    const split = this.props.text.split;
+    Object.keys(split).forEach(indentID => {
+      this.props.onPurchaseRemove(indentID, partNumber)
+    })
+  }
 }
 
   showImage = image => event => {
@@ -148,7 +153,7 @@ if(split) {
          <AddIcon />
        </Button> }
        {itemInPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
-       onClick={this.onItemSelectedForPurchase(text.partNumber)}
+       onClick={this.onItemRemovedFromPurchase(text.partNumber)}
          className={classes.button}>
         <RemoveIcon />
       </Button> }

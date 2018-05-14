@@ -77,6 +77,26 @@ componentDidMount() {
    })
  }
 
+ onIndentItemRemovedForPurchase = (indentItem) => {
+  const { indents, itemsInPurchaseOrder } =  this.state;
+  const indentID = indentItem['indentID'];
+  const partNumber = indentItem['partNumber'];
+
+  const indentDetails = indents[indentID];
+
+  indentDetails.items.forEach((item) => {
+    if(item.partNumber === partNumber) {
+       item.selectedForPurchase = false;
+       delete itemsInPurchaseOrder['parts'][partNumber];
+    }
+  });
+  this.setState({
+    indents
+  })
+}
+
+
+
 
  aggregateItems(purchaseItems) {
    let { itemsInPurchaseOrder = {} } = this.state ;
@@ -98,9 +118,11 @@ componentDidMount() {
          ob['itemInPurchase'] = true;
          itemsInPurchaseOrder['parts'][partNumber] = ob ;
        }else {
-         let qty = itemsOfIndent[partNumber]['quantityPurchase'];
-         it['split'][indentID] = qty;
-         it['quantityRequired'] = (Number(it['quantityPurchase']) +  Number(qty)).toString();
+         let quanty = itemsOfIndent[partNumber]['quantityPurchase'];
+         it['split'][indentID] = quanty;
+         it['quantityRequired'] = (Number(it['quantityPurchase']) +  Number(quanty)).toString();
+         it['quantityPurchase'] = (Number(it['quantityPurchase']) +  Number(quanty)).toString();
+
        }
      })
    });
@@ -220,7 +242,7 @@ let path = '/purchase/' + orderId
     {indentItemsArr}
     </div>
     <div style={{float: 'right', width: '50%'}}>
-    <PurchaseOrder items={itemsInPurchaseOrder} />
+    <PurchaseOrder items={itemsInPurchaseOrder} onIndentItemRemovedForPurchase={this.onIndentItemRemovedForPurchase} />
     </div>
     </div>
     <div style={btnStyle}>

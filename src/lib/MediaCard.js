@@ -25,9 +25,10 @@ const classes = {
    marginBottom: 16,
    marginLeft : 20,
    fontSize: 18,
+   fontWeight : '500'
   },
   textDiv : {
-    flex:0.7
+    flex:0.8
   },
   flexContainer : {
     display : 'flex',
@@ -44,27 +45,46 @@ function SimpleMediaCard(props) {
       <Card className={classes.card} style={ text.screenShot ?  {height: '200px'} : {height:'60px'} }>
       <div className={classes.textDiv}>
         <CardContent  className={classes.flexContainer}>
+          <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
+            Main Head :
+          </Typography>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
           {text.mainHead}
           </Typography>
-          <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
-          {text.partNumber}
+          <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
+            Part Name :
           </Typography>
           <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
             {text.partName}
           </Typography>
+          <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
+            Part Number :
+          </Typography>
+          <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
+          {text.partNumber}
+          </Typography>
+          <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
+            Quantity Required :
+          </Typography>
           <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
             {text.quantityRequired}
           </Typography>
+
         </CardContent>
       </div>
-      <div style={{flex:0.3}}>
-        <img src={text.screenShot} style={{height:'200px'}}/>
+      <div style={{flex:0.2}}>
+        <Button variant="raised" color="primary" style={{float:'right',marginTop : '10px', marginRight:'100px'}} onClick={() =>
+            window.location.href='/purchase/'+ text.purchaseID}>
+          View Purchase <span style={{fontSize:'8px', marginLeft: '5px'}}>{ text.purchaseID }</span>
+        </Button>
       </div>
       </Card>
     </div>
   );
+
+
 }
+
 
 SimpleMediaCard.propTypes = {
   classes: PropTypes.object.isRequired,

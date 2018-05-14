@@ -230,7 +230,8 @@ export default class ViewIndent extends Component {
           mainHead : indent.mainHead,
           partNumber : indent.partNumber,
           partName : indent.partName,
-          quantityRequired : indent.quantityRequired
+          quantityRequired : indent.quantityRequired,
+          purchaseID : indent.purchaseID
           }
       }
       let partImageURLs = partNumberVsImageURL[indent.partNumber] || []

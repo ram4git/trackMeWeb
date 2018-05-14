@@ -15,6 +15,13 @@ export default class PurchaseOrder extends Component {
     })
   }
 
+  onPurchaseRemove = (indentID, partNumber) => {
+    let purchaseObj = {};
+    purchaseObj['indentID']=indentID;
+    purchaseObj['partNumber']=partNumber;
+    this.props.onIndentItemRemovedForPurchase(purchaseObj);
+  }
+
   render() {
     const {items = {}} = this.props;
 
@@ -29,12 +36,13 @@ export default class PurchaseOrder extends Component {
           partName : item.partName,
           partNumber : item.partNumber,
           quantityRequired: item.quantityPurchase,
-          screenShot : item.screenShot,
+          screenShot : item.referenceImage,
           itemInPurchase : item.itemInPurchase,
           selectedForPurchase : true,
           right : true,
           split : item.split
-        }
+        },
+        onPurchaseRemove : this.onPurchaseRemove
       }
       allPurchaseItems.push(<div key={item.partNumber}><PurchaseItemCard {...mediaCardProps} /></div>);
     })

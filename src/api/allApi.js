@@ -404,6 +404,7 @@ export function downloadImage(path) {
 
    export function linkIndentAndPurchase(purchaseID,items) {
      const dbRef = firebase.database().ref();
+     console.log('$$$$$$$', items);
      let historyKeys = {}; let indentVsItems = JSON.parse(window.localStorage.indentVsItems);
 
      let partNumberVsImage = {};
@@ -426,20 +427,28 @@ export function downloadImage(path) {
         let itemsOfIndent = indentVsItems[indentID];
         let originalItemsOfIndent = itemsOfIndent.slice();
         itemsOfIndent.map(item => {
+          if(items[item.partNumber]) {
           if(partNumberVsImage[item.partNumber]){
             item.screenShot = partNumberVsImage[item.partNumber];
           }
           item.selectedForPurchase = true;
           item.purchaseID =purchaseID;
+        }
         });
 
+        let purchasedCount = 0;
         originalItemsOfIndent.map(item => {
-          item.selectedForPurchase = true;
-          item.purchaseID =purchaseID;
+          if(item.selectedForPurchase)
+            purchasedCount++;
+          if(item.partNumber in items) {
+            item.selectedForPurchase = true;
+            item.purchaseID =purchaseID;
+          }
         });
 
 
- let updateMsg = window.localStorage.role === 'PURCHASE' ? 'Generated Purchase Order' :
+
+        let updateMsg = window.localStorage.role === 'PURCHASE' ? 'Generated Purchase Order' :
                     'Accepted items at Security Gate'
         let historyPayload = {
               updatedTime : new Date().toString(),
@@ -447,8 +456,10 @@ export function downloadImage(path) {
               updatedBy : window.localStorage.role,
               updateMsg
         };
-        if(window.localStorage.role === 'PURCHASE') {
+        if(window.localStorage.role === 'PURCHASE' && purchasedCount === originalItemsOfIndent.length) {
           updates[`indents/${indentID}/currentOwner`] = 'STORE';
+          updates[`indents/${indentID}/internalState`] = 'PURCHASE_STORE_GRANTED';
+
         }else if(window.localStorage.role === 'SECURITY'){
           updates[`indents/${indentID}/currentOwner`] = 'STORE';
         }
@@ -458,4 +469,9 @@ export function downloadImage(path) {
 
       })
       dbRef.update(updates);
+
+      const localStorage = window.localStorage;
+      delete localStorage['indentVsItems'];
+      delete localStorage['indents'];
+
    }
