@@ -97,7 +97,7 @@ if(split) {
 
 
   return (
-    <div style={ text.selectedForPurchase && !text.right ? {opacity : '0.6', filter : 'grayscale(1)', flex : '90%'}
+    <div style={ text.purchaseNotRequired || text.selectedForPurchase && !text.right ? {opacity : '0.6', filter : 'grayscale(1)', flex : '90%'}
                     : {flex : '90%'}  }>
       <Card>
         <CardContent className={classes.content}>
@@ -147,7 +147,7 @@ if(split) {
         <ZoomInIcon/>
         </Button>
         </div>
-        {!text.purchaseNotRequired && !selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
+        {!selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
         onClick={this.onItemSelectedForPurchase(text.partNumber)}
           className={classes.button}>
          <AddIcon />

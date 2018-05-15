@@ -438,7 +438,7 @@ export function downloadImage(path) {
 
         let purchasedCount = 0;
         originalItemsOfIndent.map(item => {
-          if(item.selectedForPurchase)
+          if(item.selectedForPurchase || item.purchaseNotRequired)
             purchasedCount++;
           if(item.partNumber in items) {
             item.selectedForPurchase = true;

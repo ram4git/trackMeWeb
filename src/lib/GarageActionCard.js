@@ -220,11 +220,11 @@ class GarageActionCard extends React.Component {
           </TableBody>
         </Table>
           <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
-            onClick={this.wantsToUnLock}> disabled={!enableInput}
+            onClick={this.wantsToUnLock} disabled={!enableInput}> 
             <Locked/>
           </Button>
-          <Button variant="fab" color="primary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
-                onClick={this.wantsToLock}> disabled={!enableInput}
+          <Button variant="fab" color="primary" aria-label="DONE" style = { isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
+                onClick={this.wantsToLock} disabled={!enableInput}>
             <LockOpen/>
           </Button>
         </CardContent>

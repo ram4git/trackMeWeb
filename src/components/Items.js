@@ -82,14 +82,10 @@ componentDidMount() {
           partNumberOptions.push(menuItem);
       })
     }
-
-    let partItemObj = {}; let partReservationsArr=[];
+    let partReservations = {}
     if(partNumber) {
-      let partItemQty = parts[mainHead][partNumber].quantity;
-      partItemObj['quantity'] = partItemQty;
-      let partReservations = parts[mainHead][partNumber].reservations;
-      partReservationsArr.push(partReservations)
-      }
+        partReservations = parts[mainHead][partNumber].reservations;
+    }
 
     return (
       <Fragment>
@@ -137,8 +133,9 @@ componentDidMount() {
         <Table>
           <TableBody>
              <TableRow>
-              <TableCell>Qunatity</TableCell>
-              <TableCell>{partItemObj.quantity}</TableCell>
+              <TableCell>Quantity</TableCell>
+              <TableCell>{parts && parts[mainHead] && parts[mainHead][partNumber] ?
+                 parts[mainHead][partNumber]['quantity'] : '0'}</TableCell>
              </TableRow>
           </TableBody>
         </Table>
@@ -150,17 +147,14 @@ componentDidMount() {
          </TableRow>
         </TableHead>
         <TableBody>
-        {partReservationsArr.map((item, index) => {
-
-          for(let i in item) {
-            let path = '/indent/'+i;
+        { partReservations && Object.keys(partReservations).length >0 &&
+          Object.keys(partReservations).map((indentID) => {
           return (
             <TableRow>
-                   <TableCell><a href={path}>{i}</a></TableCell>
-                   <TableCell>{item[i]}</TableCell>
+                   <TableCell><a href={'/indents/' +  indentID}>{indentID}</a></TableCell>
+                   <TableCell>{partReservations[indentID]}</TableCell>
             </TableRow>
           );
-        }
         })}
         </TableBody>
         </Table>

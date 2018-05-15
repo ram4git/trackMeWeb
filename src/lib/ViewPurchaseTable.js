@@ -263,7 +263,7 @@ console.log(this.props)
                 <CustomTableCell>{purchaseItem.mainHead}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.partName}</CustomTableCell>
                 <CustomTableCell numeric>{purchaseItem.partNumber}</CustomTableCell>
-                <CustomTableCell numeric>{purchaseItem.quantityRequired}</CustomTableCell>
+                <CustomTableCell numeric>{purchaseItem.quantityPurchase}</CustomTableCell>
                 <CustomTableCell>
                 <div style={{height : '120px', width:'50%'}}>
                 <img style={{height : '120px'}} src={purchaseItem.referenceImage}/>
@@ -271,7 +271,7 @@ console.log(this.props)
                 </CustomTableCell>
                 <CustomTableCell>
                 <Button variant="raised" color="primary"
-                onClick={this.onActionButton.bind(this, purchaseItem.partNumber, purchaseItem.quantityRequired, purchaseItem.mainHead)}>
+                onClick={this.onActionButton.bind(this, purchaseItem.partNumber, purchaseItem.quantityPurchase, purchaseItem.mainHead)}>
                 <Done />
                 </Button >
                 <Button variant="raised" color="secondary">

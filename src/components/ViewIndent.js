@@ -269,7 +269,7 @@ export default class ViewIndent extends Component {
         </Table>
         </Paper>
         {cardsArray}
-        {window.localStorage.role === indentDetails.currentOwner &&
+        {window.localStorage.role === indentDetails.currentOwner && !indentDetails.status.startsWith('CLOSE') &&
         <div style={{marginLeft : '45%',marginTop:'5%'}}>
         <Button color="secondary" style={{}} variant="raised" onClick={this.handleUpdateClicked}>UPDATE</Button>
         </div>
