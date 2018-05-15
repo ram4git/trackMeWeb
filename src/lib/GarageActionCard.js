@@ -166,7 +166,8 @@ class GarageActionCard extends React.Component {
  render() {
    const { screenShot,mainHead, partNumber, partName } = this.state;
    const {  classes, items } = this.props;
-
+   console.log(partName);
+   console.log(this.state);
    const enableInput = items.enableInput;
    const actionTaken = items.actionTaken;
    const renderCam = items.renderCamera;
@@ -220,7 +221,7 @@ class GarageActionCard extends React.Component {
           </TableBody>
         </Table>
           <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
-            onClick={this.wantsToUnLock} disabled={!enableInput}> 
+            onClick={this.wantsToUnLock} disabled={!enableInput}>
             <Locked/>
           </Button>
           <Button variant="fab" color="primary" aria-label="DONE" style = { isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }

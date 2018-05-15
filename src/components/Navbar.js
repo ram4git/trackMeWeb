@@ -1,5 +1,7 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import Button from 'material-ui/Button';
+
 
 const logout = () => {
   const localStorage = window.localStorage;
@@ -33,6 +35,8 @@ export default function Navbar () {
   return (
     <div className='container navbar'>
       <Link to='/'>Home</Link>
+      <Button>{window.localStorage.email}</Button>
+      <Button>{window.localStorage.role}</Button>
       <nav className='nav-links'>
       <Link to='/jobcards'>Jobcards</Link>
        <Link to='/lorries'>Lorries</Link>

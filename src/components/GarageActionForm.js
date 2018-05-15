@@ -165,6 +165,7 @@ render() {
         items : {
           mainHead : item.mainHead,
           partNumber : item.partNumber,
+          partName : item.partName,
           GarageActionCard : item.GarageActionCard,
           screenShot : item.screenShot,
           quantityRequired: item.quantityRequired,

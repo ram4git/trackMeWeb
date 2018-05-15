@@ -22,7 +22,7 @@ export default class Jobcards extends Component {
       let allIndents =data.val(); let filteredIndents = {}
       console.log(this.props);
       if(this.props.role) {
-        Object.keys(allIndents).map(indent => {
+        Object.keys(allIndents).map((indent) => {
           if(allIndents[indent].currentOwner === this.props.role && allIndents[indent].status !='CLOSED' )
             filteredIndents[indent] = allIndents[indent];
         })
