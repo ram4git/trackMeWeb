@@ -146,7 +146,7 @@ onSubmit = () => {
   console.log(items);
 
   items.forEach((item) => {
-    if(item.screenShot) {
+    if(!item.screenShot.startsWith("https")) {
       let img =  item.screenShot.replace(/^data:image\/\w+;base64,/, "");
     //  let buf = new Buffer(img, 'base64');
 
@@ -166,7 +166,6 @@ onSubmit = () => {
       }).catch((e) => console.log(e))
 
     }else {
-      item.screenShot = NO_IMAGE_AVAILABLE;
       count = count + 1;
       if(count === items.length) {
         saveIndent(payload).then(() => {
@@ -206,7 +205,7 @@ onSubmit = () => {
     newItem.partNumber = partNumber;
     newItem.partName = partName;
     newItem.quantityRequired = quantityRequired;
-    newItem.screenShot = screenShot;
+    newItem.screenShot = screenShot || NO_IMAGE_AVAILABLE;
     newItem.referenceImage = DEFAULT_SOURCE_SCREEN_SHOT;
 
     items.push(newItem);
@@ -373,7 +372,7 @@ render() {
           <Table>
             <TableBody>
                <TableRow>
-                <TableCell>Qunatity</TableCell>
+                <TableCell>Quantity In Stores</TableCell>
                 <TableCell>{partItemObj.quantity}</TableCell>
                </TableRow>
             </TableBody>

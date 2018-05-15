@@ -112,7 +112,8 @@ class SimpleExpansionPanel extends Component  {
         partNumber : item.partNumber,
         quantityRequired: item.quantityPurchase,
         screenShot : item.referenceImage,
-        selectedForPurchase : item.selectedForPurchase
+        selectedForPurchase : item.selectedForPurchase,
+        purchaseNotRequired : item.purchaseNotRequired
       },
       onPurchaseSelect : this.onPurchaseSelect,
       onPurchaseRemoval : this.onPurchaseRemoval

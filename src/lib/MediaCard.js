@@ -73,10 +73,11 @@ function SimpleMediaCard(props) {
         </CardContent>
       </div>
       <div style={{flex:0.2}}>
-        <Button variant="raised" color="primary" style={{float:'right',marginTop : '10px', marginRight:'100px'}} onClick={() =>
+        <img src={text.screenShot} style={{height:'200px'}}/>
+        { text.purchaseID && <Button variant="raised" color="primary" style={{float:'right',marginTop : '10px', marginRight:'100px'}} onClick={() =>
             window.location.href='/purchase/'+ text.purchaseID}>
           View Purchase <span style={{fontSize:'8px', marginLeft: '5px'}}>{ text.purchaseID }</span>
-        </Button>
+        </Button> }
       </div>
       </Card>
     </div>

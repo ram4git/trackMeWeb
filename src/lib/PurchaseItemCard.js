@@ -147,7 +147,7 @@ if(split) {
         <ZoomInIcon/>
         </Button>
         </div>
-        {!selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
+        {!text.purchaseNotRequired && !selectedForPurchase &&  <Button variant="fab"  color="primary" aria-label="add" value={text.partNumber}
         onClick={this.onItemSelectedForPurchase(text.partNumber)}
           className={classes.button}>
          <AddIcon />

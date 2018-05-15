@@ -54,7 +54,13 @@ export default class ActionForm extends Component {
       getPartCount('M1312', item.mainHead, item.partNumber).
           then((data) => {
               let partData = data.val();
-              item.quantityStores= partData.quantity;
+              //add reservations
+              let reservations = partData.reservations;
+              if(reservations && reservations[indentID]){
+                item.quantityStores= (Number(partData.quantity) + Number(reservations[indentID])).toString();
+              }else{
+                item.quantityStores= partData.quantity;
+              }
               this.setState({itemsInActionForm})
           })
           .catch(()=> alert('error occured fetching part count'))
@@ -195,14 +201,19 @@ export default class ActionForm extends Component {
         //indentDetails is the input - copy all the modifications done as part of this actionform to the input
         let originalItems = indentDetails.items.slice() ;
         originalItems.map((indentItem) => {
-          indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
+          indentItem['quantityReserved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+          if(indentItem['quantityPurchase'] == '0')
+            indentItem['purchaseNotRequired'] = true;
         })
 
 
         indentDetails.items.map((indentItem) => {
-          indentItem['quantityApproved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
+          indentItem['quantityReserved'] = updatedItemsFromCard[indentItem.partNumber]['quantityApproved'];
           indentItem['quantityPurchase'] = updatedItemsFromCard[indentItem.partNumber]['quantityPurchase'];
+          if(indentItem['quantityPurchase'] == '0' || indentItem['quantityPurchase'] == '')
+            indentItem['purchaseNotRequired'] = true;
+
           indentItem['screenShot'] = updatedItemsFromCard[indentItem.partNumber]['screenShot']|| DEFAULT_SCREEN_SHOT;
         })
         indentDetails.status='FORWARDED_TO_PURCHASE';
@@ -262,7 +273,7 @@ export default class ActionForm extends Component {
             partNumber : itemInActionForm.partNumber,
             screenShot : itemInActionForm.screenShot,
             quantityRequired: itemInActionForm.quantityRequired,
-            quantityStores : itemInActionForm.quantityStores || '24',
+            quantityStores : itemInActionForm.quantityStores,
             renderCamera : actionTaken==='COMPLETE_RETURN_TO_GARAGE' ? true : false,
             enableInput : actionTaken === 'NO_ACTION' ? false : true,
             actionTaken

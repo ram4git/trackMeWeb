@@ -255,9 +255,8 @@ export function updatePartCount(indentDetails) {
   }else {
     const partsRef =  dbRef.child('items/' + indentDetails.modelNumber + '/' );
     items.map((item) => {
-        updates[`${item.mainHead}/${item.partNumber}/count`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
+        updates[`${item.mainHead}/${item.partNumber}/quantity`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
     })
-
     return partsRef.update(updates);
 
   }
@@ -322,9 +321,9 @@ export function reserveParts(indentDetails){
   let updates = {}; let items = indentDetails.items;
   const dbRef = firebase.database().ref().child('items/' + indentDetails.modelNumber + '/' );
   items.map((item) => {
-      updates[`${item.mainHead}/${item.partNumber}/quantity`] = (Number(item.quantityStores) - Number(item.quantityApproved)).toString()
-      if(item.quantityApproved != null && item.quantityApproved != '0')
-      updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] =  item.quantityApproved
+      updates[`${item.mainHead}/${item.partNumber}/quantity`] = (Number(item.quantityStores) - Number(item.quantityReserved)).toString()
+      if(item.quantityReserved != null && item.quantityReserved != '0')
+      updates[`${item.mainHead}/${item.partNumber}/reservations/${indentDetails.indentID}`] =  item.quantityReserved
   })
   return dbRef.update(updates);
 }
@@ -400,13 +399,12 @@ export function downloadImage(path) {
           })
        })
        if(i === Object.keys(items).length)
-          setTimeout(linkIndentAndPurchase(purchaseID,items) , 5000 );
+          setTimeout(linkIndentAndPurchase(purchaseID,items) , 10000 );
      })
    }
 
    export function linkIndentAndPurchase(purchaseID,items) {
      const dbRef = firebase.database().ref();
-     console.log('$$$$$$$', items);
      let historyKeys = {}; let indentVsItems = JSON.parse(window.localStorage.indentVsItems);
 
      let partNumberVsImage = {};
