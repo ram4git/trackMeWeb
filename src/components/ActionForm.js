@@ -329,7 +329,6 @@ export default class ActionForm extends Component {
               </AppBar>
             {cardsArray}
           </DialogContent>
-
     </Dialog>
 
 

@@ -167,7 +167,10 @@ render() {
           partNumber : item.partNumber,
           GarageActionCard : item.GarageActionCard,
           screenShot : item.screenShot,
-          quantityRequired: item.quantityRequired
+          quantityRequired: item.quantityRequired,
+          renderCamera : actionTaken==='ALL_ITEMS_RECEIVED' ? true : false,
+          enableInput : actionTaken === 'NO_ACTION' ? false : true,
+          actionTaken
         }
       }
       cardsArray.push(<div className='card' style={{marginTop : '5%'}}>

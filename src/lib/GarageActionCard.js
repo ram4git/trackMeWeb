@@ -165,7 +165,11 @@ class GarageActionCard extends React.Component {
 
  render() {
    const { screenShot,mainHead, partNumber, partName } = this.state;
-   const {  classes } = this.props;
+   const {  classes, items } = this.props;
+
+   const enableInput = items.enableInput;
+   const actionTaken = items.actionTaken;
+   const renderCam = items.renderCamera;
 
 
   const btnStyle = {
@@ -179,6 +183,20 @@ class GarageActionCard extends React.Component {
   return (
     <div>
       <Card className={classes.card}>
+      <div className={classes.card}>
+
+        <CardMedia
+         className={classes.cover}
+         image={require('../background.jpg')}
+        />
+        <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
+          { !webcamClicked ?
+            <Button variant="fab" color="primary"  style={btnStyle} disabled={!renderCam}
+                  onClick={this.onCameraClick}>
+              <Videocam/>
+            </Button> : this.renderCamera() }
+        </div>
+        </div>
       <div className={classes.textDiv}>
         <CardContent>
         <Table>
@@ -201,31 +219,18 @@ class GarageActionCard extends React.Component {
               </TableRow>
           </TableBody>
         </Table>
-          <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {} }
-            onClick={this.wantsToUnLock}>
+          <Button variant="fab" color="secondary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
+            onClick={this.wantsToUnLock}> disabled={!enableInput}
             <Locked/>
           </Button>
-          <Button variant="fab" color="primary" aria-label="DONE" style = { isLocked ? {display:'none'} : {} }
-                onClick={this.wantsToLock}>
+          <Button variant="fab" color="primary" aria-label="DONE" style = { !isLocked ? {display:'none'} : {float:'right',marginBottom:'16px'} }
+                onClick={this.wantsToLock}> disabled={!enableInput}
             <LockOpen/>
           </Button>
         </CardContent>
 
       </div>
-      <div className={classes.card}>
 
-        <CardMedia
-         className={classes.cover}
-         image={require('../background.jpg')}
-        />
-        <div onClick={this.capture.bind(this)} style={{position:'relative'}}>
-          { !webcamClicked ?
-            <Button variant="fab" color="primary"  style={btnStyle}
-                  onClick={this.onCameraClick}>
-              <Videocam/>
-            </Button> : this.renderCamera() }
-        </div>
-        </div>
 
       </Card>
     </div>
