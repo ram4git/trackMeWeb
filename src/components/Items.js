@@ -7,15 +7,18 @@ import { FormControl } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import Search from '@material-ui/icons/Search';
+import Edit from '@material-ui/icons/Edit';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-
+import Button from 'material-ui/Button';
+import { updateItemsQuantity } from '../api/allApi.js';
 
 export default class Items extends Component {
   constructor(props) {
     super(props);
     this.state = {
       mainHead: '',
-      partNumber: ''
+      partNumber: '',
+      quantity: 0
     }
   }
 
@@ -60,10 +63,27 @@ componentDidMount() {
       console.log(this.state);
   };
 
+  onEditClick = () => {
+    this.setState({
+      editClicked : true
+    })
+  }
+
+
+  quantityUpdate(quantity) {
+    const { mainHead, partNumber } = this.state;
+    updateItemsQuantity(mainHead, partNumber, quantity);
+    this.setState({
+      editClicked: false,
+      quantity: 0
+    })
+  }
 
   render() {
     console.log(this.state);
-    const { listOfMainHeads, mainHead, parts, partNumber } = this.state;
+    const { listOfMainHeads, mainHead, parts, partNumber, editClicked, quantity } = this.state;
+
+
 
     let mainHeadLists = [];
     if(listOfMainHeads) {
@@ -130,15 +150,29 @@ componentDidMount() {
       </FormControl>
       </form>
       <div style={{marginTop:'30px', width:'35%'}}>
-        <Table>
-          <TableBody>
-             <TableRow>
-              <TableCell>Quantity</TableCell>
-              <TableCell>{parts && parts[mainHead] && parts[mainHead][partNumber] ?
-                 parts[mainHead][partNumber]['quantity'] : '0'}</TableCell>
-             </TableRow>
-          </TableBody>
-        </Table>
+      <div>
+      {editClicked ? <TextField id="quantity"
+         label="Quantity"
+         value={this.state.quantity || ''}
+         onChange={this.handlePropChange('quantity')}
+         margin="normal"
+        /> : <Table>
+        <TableBody>
+           <TableRow>
+            <TableCell>Quantity</TableCell>
+            <TableCell>{parts && parts[mainHead] && parts[mainHead][partNumber] ?
+               parts[mainHead][partNumber]['quantity'] : '0'}</TableCell>
+           </TableRow>
+        </TableBody>
+        </Table> }
+        { quantity == 0 ?
+          <Button variant='raised' color='secondary' onClick={this.onEditClick}>
+          Edit
+          </Button> :
+          <Button variant='raised' color='primary' onClick={this.quantityUpdate.bind(this, quantity)}>
+          Submit
+          </Button>}
+        </div>
         <Table>
         <TableHead>
          <TableRow>

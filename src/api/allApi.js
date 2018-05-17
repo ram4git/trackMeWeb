@@ -339,7 +339,6 @@ export function getRole(uid) {
   return dbRef.once('value');
 }
 
-
 export function getItemsForModelNumber(modelNumber) {
   const dbRef = firebase.database().ref().child('items/' + modelNumber);
   return dbRef.once('value');
