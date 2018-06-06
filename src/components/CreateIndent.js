@@ -28,7 +28,7 @@ import FireBaseTools from '../api/firebase-tools'
 import Delete from '@material-ui/icons/Delete';
 import Rand from 'random-key';
 import Videocam from '@material-ui/icons/Videocam';
-import { Search, Grid, Header } from 'semantic-ui-react'
+import { Search, Grid, Header,Label } from 'semantic-ui-react'
 
 
 
@@ -198,7 +198,7 @@ onSubmit = () => {
           let ob = {
             title:partDetail.number,
             description:partDetail.name,
-            price: partDetail.imageName
+            girishImage : partDetail.imageName
           }
             partNumberOptions.push(ob);
         })
@@ -208,7 +208,8 @@ onSubmit = () => {
       if(prop === 'partNumber') {
         const parts = this.state.parts;
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
-        this.setState({ partName })
+        this.setState({
+          partName })
       }
   };
 
@@ -249,11 +250,12 @@ onSubmit = () => {
 handleResultSelect = (e, { result }) => {
   this.setState({
     value: result.title,
-    partName: result.description
+    partName: result.description,
+    partNumber : result.title
   })
 
   if(result) {
-    downloadImageUrlForItem(result.price).then((URL) => {
+    downloadImageUrlForItem(result.girishImage).then((URL) => {
       this.setState({URL})
     }).catch((e) => console.log(e))
   }
@@ -413,7 +415,10 @@ console.log(this.state)
 
           <Grid style={{marginTop:'20px', marginLeft:'5px'}}>
             <Grid.Column width={8}>
+            <Label pointing='below'>Please select the part </Label>
               <Search
+                fluid={true}
+                size="big"
                 loading={isLoading}
                 onResultSelect={this.handleResultSelect}
                 onSearchChange={this.handleSearchChange}
