@@ -18,6 +18,7 @@ a {
 .container navbar {
   margin-top: 2px;
 }
+
 .container {
   position: relative;
   max-width: 1000px;
@@ -74,6 +75,10 @@ a {
 
 .nav-links a {
   padding: 0 10px;
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
 }
 
 .two-column {
@@ -250,10 +255,11 @@ a {
   display: none;
 }
 
+
+
 .card {
   margin-top: 80px;
 }
-
 .addItemForm {
   margin-top: 70px;
   margin-left: 20px;

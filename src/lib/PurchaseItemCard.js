@@ -73,6 +73,7 @@ onItemRemovedFromPurchase = partNumber => event => {
   }
 
 render() {
+
   const { classes, text } = this.props;
 
   const selectedForPurchase= text.selectedForPurchase || false;
@@ -82,11 +83,11 @@ render() {
   const split = text.split; let indentSplitString = '';
   const {zoomInImage, zoomInURL} = this.state;
 
-if(split) {
-  Object.keys(split).forEach(indentID => {
+  if(split) {
+    Object.keys(split).forEach(indentID => {
       indentSplitString = indentSplitString + indentID + ' = ' + split[indentID] + '   ';
-  })
-}
+    })
+  }
 
   if(zoomInImage)
    return  <Dialog

@@ -6,11 +6,13 @@ import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
 import { Link } from 'react-router-dom';
 
+
 const styles = {
   card: {
     minWidth: 100,
     display: 'flex',
-    flexDirection: 'row'
+    flexDirection: 'row',
+
   },
   content : {
     flex:0.9
@@ -34,15 +36,30 @@ const flexContainer = {
   height: '80px'
 }
 
-function SimpleCard(props) {
-  const { classes, text, onButtonClickPath } = props;
+class SimpleCard extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { shadow: 1 }
+  }
+
+  onMouseOver = () => this.setState({ shadow: 3 });
+
+  onMouseOut = () => this.setState({ shadow: 1 });
+
+  render() {
+  const { classes, text, onButtonClickPath } = this.props;
   const MyLink = props => <Link to={`/${onButtonClickPath}/${text.id}`}
   {...props} />
 
 
+
   return (
     <div>
-      <Card className={classes.card}>
+      <Card
+      className={classes.card}
+      onMouseHover={this.onMouseHover}
+      onMouseOut={this.onMouseOut}
+      zdepth={this.state.shadow}>
         <CardContent className={classes.content} style={flexContainer}>
           <Typography className={classes.title} color="textSecondary" >
             {text.id}
@@ -65,6 +82,7 @@ function SimpleCard(props) {
       </Card>
     </div>
   );
+}
 }
 
 SimpleCard.propTypes = {

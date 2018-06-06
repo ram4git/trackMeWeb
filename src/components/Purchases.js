@@ -48,7 +48,7 @@ export default class Purchases extends Component {
                 },
                 onButtonClickPath : 'purchase'
               }
-              purchaseItemsList.push(<div className='card'><SimpleCard {...cardProps} /></div>);
+              purchaseItemsList.push(<div className='card' key={index}><SimpleCard {...cardProps} /></div>);
           });
     }
 

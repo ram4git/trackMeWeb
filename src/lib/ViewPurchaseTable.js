@@ -287,7 +287,7 @@ console.log(this.props)
                 {purchaseItemIndentsArr.map((indentObj) => {
                   for(let indent in indentObj) {
                     let path='/indent/'+indent;
-                    return <li><a href={path}>{indent}</a></li>
+                    return <li key={indent}><a href={path}>{indent}</a></li>
                   }
                 })}
                 </CustomTableCell>

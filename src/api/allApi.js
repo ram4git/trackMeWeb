@@ -138,11 +138,13 @@ export function createJobCard(data) {
 
 export function createPurchase(purchaseID,  itemsInPurchaseOrder) {
     const dbRef = firebase.database().ref();
-
-    const purchasesRef = dbRef.child(`purchases/${purchaseID}`)
+    const updates = {};
+    const purchasesRef = dbRef.child('purchases/')
     itemsInPurchaseOrder['createdAt'] = new Date().toString();
     itemsInPurchaseOrder['currentOwner'] = 'SECURITY';
-     return purchasesRef.update(itemsInPurchaseOrder);
+    updates[`${purchaseID}`] = itemsInPurchaseOrder;
+    console.log(updates);
+     return purchasesRef.update(updates);
 
 }
 
@@ -340,7 +342,7 @@ export function getRole(uid) {
 }
 
 export function getItemsForModelNumber(modelNumber) {
-  const dbRef = firebase.database().ref().child('items/' + modelNumber);
+  const dbRef = firebase.database().ref().child('components/' + modelNumber);
   return dbRef.once('value');
 }
 
@@ -473,4 +475,10 @@ export function downloadImage(path) {
       delete localStorage['indentVsItems'];
       delete localStorage['indents'];
 
+   }
+
+   export function downloadImageUrlForItem(file) {
+     const storageRef = firebase.storage().ref();
+     let path = 'components/'+file+'.jpg';
+     return storageRef.child(path).getDownloadURL()
    }

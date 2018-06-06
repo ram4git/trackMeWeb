@@ -60,7 +60,7 @@ export default class ViewJobCard extends Component {
  let returnObj = [];
  let jobCardIndents = jobCard.indents;
  if(jobCardIndents) {
-   jobCardIndents.map((indent) => {
+   jobCardIndents.map((indent, index) => {
    let cardProps = {
      text : {
        title : indent.indentID,
@@ -69,7 +69,7 @@ export default class ViewJobCard extends Component {
      },
      onButtonClickPath : 'indent'
    }
-     returnObj.push(<div style = {{width :'70%', marginLeft:'5%'}} key={indent.indentID} className='card'>
+     returnObj.push(<div style = {{width :'70%', marginLeft:'5%'}} key={index} className='card'>
                      <SimpleCard {...cardProps} />
                     </div>)
    })

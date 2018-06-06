@@ -33,6 +33,7 @@ const styles = theme => ({
 
 function CustomizedTable(props) {
   const { classes, items } = props;
+  console.log(props)
   if(!items)
   return null;
 

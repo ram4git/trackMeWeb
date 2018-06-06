@@ -22,12 +22,13 @@ import TextField from 'material-ui/TextField';
 import CloseIcon from '@material-ui/icons/Close';
 import {saveIndent,getItemsForModelNumber, updateIndent} from '../api/allApi.js';
 import { Redirect, Link } from 'react-router-dom'
-import { uploadImage, downloadImage, updateHistory } from '../api/allApi.js';
+import { uploadImage, downloadImageUrlForItem, updateHistory } from '../api/allApi.js';
 import * as firebase from 'firebase';
 import FireBaseTools from '../api/firebase-tools'
 import Delete from '@material-ui/icons/Delete';
 import Rand from 'random-key';
 import Videocam from '@material-ui/icons/Videocam';
+import { Search, Grid, Header } from 'semantic-ui-react'
 
 
 
@@ -57,7 +58,7 @@ componentDidMount() {
     jobCardID : this.props.jobCardID,
     modelNumber : this.props.modelNumber || 'M1312'
   })
-  getItemsForModelNumber('M1312').then((data) => {
+  getItemsForModelNumber('V4549108').then((data) => {
      let parts = data.val(); let listOfMainHeads = [];
      Object.keys(parts).map((mainHead) => {
         listOfMainHeads.push(mainHead);
@@ -188,25 +189,38 @@ onSubmit = () => {
         [prop] : event.target.value
       });
 
+      if(prop === 'mainHead') {
+        let partNumberOptions = [];
+        const {parts} = this.state;
+        let partsOfMainHead = parts[event.target.value];
+        Object.keys(partsOfMainHead).map((partKey, index) => {
+          let partDetail = partsOfMainHead[partKey];
+          let ob = {
+            title:partDetail.number,
+            description:partDetail.name,
+            price: partDetail.imageName
+          }
+            partNumberOptions.push(ob);
+        })
+        this.setState({partNumberOptions})
+      }
 
       if(prop === 'partNumber') {
         const parts = this.state.parts;
         const partName = parts[this.state.mainHead][event.target.value]['name'] || 'N/A';
         this.setState({ partName })
       }
-      console.log(this.state)
   };
 
   saveIndents = () => {
-    const { mainHead, partNumber, screenShot ,quantityRequired, partName , items } = this.state;
+    const { mainHead, partNumber, screenShot ,quantityRequired, partName , items, URL, value } = this.state;
     let newItem = {};
-
     newItem.mainHead = mainHead;
-    newItem.partNumber = partNumber;
+    newItem.partNumber = value;
     newItem.partName = partName;
     newItem.quantityRequired = quantityRequired;
     newItem.screenShot = screenShot || NO_IMAGE_AVAILABLE;
-    newItem.referenceImage = DEFAULT_SOURCE_SCREEN_SHOT;
+    newItem.referenceImage = URL;
 
     items.push(newItem);
 
@@ -231,21 +245,73 @@ onSubmit = () => {
 
 
 
-download = () => {
-  const storageRef = firebase.storage().ref();
-  let indentId = this.state.jobCardID;
-  let role = window.localStorage.role;
-  let path = 'indents/'+indentId+'/'+role+'/'+'999'+'.jpeg';
-  return storageRef.child(path).getDownloadURL().then(function(url) {
-    let URL = url;
-  }).catch((e) => console.log(e))
+
+handleResultSelect = (e, { result }) => {
+  this.setState({
+    value: result.title,
+    partName: result.description
+  })
+
+  if(result) {
+    downloadImageUrlForItem(result.price).then((URL) => {
+      this.setState({URL})
+    }).catch((e) => console.log(e))
+  }
 }
 
-render() {
-  console.log(this.state)
-  let savedIndentsArray = [];
-  const {navigateBackToJobPage , jobCardID, listOfMainHeads, mainHead, parts, partNumber, webcamClicked } = this.state;
+resetComponent = () => {
+  this.setState({
+    isLoading: false
+  })
+}
 
+handleSearchChange = (e, { value }) => {
+
+  this.setState({
+    isLoading: true,
+    value
+  })
+
+  setTimeout(() => {
+      if (value.length < 1)
+      return this.resetComponent()
+
+      this.setState({
+        isLoading: false
+      })
+    }, 300)
+
+    let filtered = [];
+    let options = this.state.partNumberOptions;
+    let givenVal = value.toUpperCase();
+    if(givenVal == '')
+      filtered = options
+    else {
+      options.forEach((opt) => {
+        if(opt.title.toUpperCase().includes(givenVal) || opt.description.toUpperCase().includes(givenVal))
+          filtered.push(opt)
+      })
+      this.setState({
+        filteredOptions: filtered
+      })
+    }
+  }
+
+render() {
+  let savedIndentsArray = [];
+  const {navigateBackToJobPage,
+        jobCardID,
+        listOfMainHeads,
+        mainHead,
+        parts,
+        partNumber,
+        webcamClicked,
+        filteredOptions,
+        isLoading,
+        value,
+        URL} = this.state;
+
+console.log(this.state)
   if(navigateBackToJobPage) {
     const url = "/jobcard/"+ jobCardID;
     return <Redirect push to={url}/>
@@ -253,19 +319,9 @@ render() {
 
   let mainHeadLists = [];
   if(listOfMainHeads) {
-    listOfMainHeads.forEach((mainHead) => {
-      let menuItem = <MenuItem value={mainHead}>{mainHead}</MenuItem>;
+    listOfMainHeads.forEach((mainHead, index) => {
+      let menuItem = <MenuItem value={mainHead} key={index}>{mainHead}</MenuItem>;
         mainHeadLists.push(menuItem);
-    })
-  }
-
-  let partNumberOptions = [];
-  if(mainHead) {
-    let partsOfMainHead = parts[mainHead] || [];
-    Object.keys(partsOfMainHead).map((partKey) => {
-      let partDetail = partsOfMainHead[partKey];
-      let menuItem = <MenuItem value={partKey}>{partDetail.name}</MenuItem>;
-        partNumberOptions.push(menuItem);
     })
   }
 
@@ -275,9 +331,8 @@ render() {
     partItemObj['quantity'] = partItemQty;
     }
 
-
   let itemsArray = this.state.items;
-  itemsArray.map((indent) => {
+  itemsArray.map((indent, index) => {
     let mediaCardProps = {
       text : {
         mainHead : indent.mainHead,
@@ -287,8 +342,9 @@ render() {
         screenShot : indent.screenShot
       }
     }
-    savedIndentsArray.push(<div className='card' style={{width:'70%'}}><MediaCard {...mediaCardProps} />
-    </div>)
+    savedIndentsArray.push(<div className='card' style={{width:'70%'}} key={index}>
+                            <MediaCard {...mediaCardProps} />
+                          </div>)
   })
 
   const pStyle = {
@@ -354,20 +410,18 @@ render() {
             </Select>
           </FormControl>
           </form>
-          <form className='partImage' autoComplete="off">
-          <FormControl className='addItemSelect'>
-            <InputLabel htmlFor="partNumber">Item/Part</InputLabel>
-            <Select
-            value={this.state.partNumber}
-            onChange={this.handlePropChange('partNumber')}
-            inputProps={{
-            name: 'partNumber',
-            id: 'partNumber',
-            }}>
-            {partNumberOptions}
-            </Select>
-          </FormControl>
-          </form>
+
+          <Grid style={{marginTop:'20px', marginLeft:'5px'}}>
+            <Grid.Column width={8}>
+              <Search
+                loading={isLoading}
+                onResultSelect={this.handleResultSelect}
+                onSearchChange={this.handleSearchChange}
+                value={value}
+                results={filteredOptions}
+                />
+            </Grid.Column>
+          </Grid>
           <div style={{width:'23%', marginTop:'50px'}} >
           <Table>
             <TableBody>
@@ -390,7 +444,7 @@ render() {
           <GridList cellHeight='auto' cols={2} >
 
             <GridListTile key='referenceImage' >
-              <img src={require('../background.jpg')} alt='Reference image'  />
+              <img src={URL} alt='Reference image'  />
             </GridListTile>
 
             <GridListTile key='webcamImage' >
@@ -415,6 +469,7 @@ render() {
     { savedIndentsArray.length > 0  &&
     <div style={{marginLeft : '45%',marginTop:'5%'}}>
     <Button color="secondary" variant="raised" onClick={this.onSubmit}>Submit</Button>
+
     </div> }
 
   </Fragment>

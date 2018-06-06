@@ -38,7 +38,7 @@ export default class PurchaseOrder extends Component {
           quantityRequired: item.quantityPurchase,
           screenShot : item.referenceImage,
           itemInPurchase : item.itemInPurchase,
-          selectedForPurchase : true,
+          selectedForPurchase : false,
           right : true,
           split : item.split
         },
