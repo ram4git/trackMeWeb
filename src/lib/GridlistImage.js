@@ -75,10 +75,10 @@ class SingleLineGridList extends React.Component {
     </Dialog>
 
   let imagesArray = [];
-  urls.map((url)=> {
+  urls.map((url, index)=> {
     imagesArray.push(
 
-    <GridListTile style={{height : '360px'}}>
+    <GridListTile style={{height : '360px', marginRight: '50px'}} key={index}>
       <img src={url.screenShot} className={classes.image} />
       <GridListTileBar style={{backgroundColor : 'white',marginBottom : '100px',paddingLeft : '30px'}}
         title={url.updatedBy + (url.updatedAt != null && url.updatedAt !='' ? ' @ ' + url.updatedAt :
@@ -89,7 +89,7 @@ class SingleLineGridList extends React.Component {
         }}
       />
       <div>
-      <Button onClick={this.showImage(url.screenShot)} style={{marginTop : '-15px', float : 'right'}} >
+      <Button onClick={this.showImage(url.screenShot)} style={{marginTop : '-50px', float : 'right'}} >
       <ZoomInIcon/>
       </Button>
       </div>

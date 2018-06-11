@@ -72,14 +72,16 @@ class ActionFormMediaCard extends React.Component {
 
   componentDidMount () {
     const { indentID , items } = this.props;
-    const { mainHead, partNumber, quantityStores, quantityRequired  } = this.props.items;
+    console.log(items)
+    const { mainHead, partNumber, quantityStores, quantityRequired, referenceImage } = this.props.items;
     this.setState({
       indentID,
       partNumber,
       mainHead ,
       partNumber,
       quantityStores,
-      quantityRequired
+      quantityRequired,
+      referenceImage
     })
 
   }
@@ -136,7 +138,7 @@ class ActionFormMediaCard extends React.Component {
           action = 'STORE_GARAGE_GRANTED';
         else if(actionTaken === 'FORWARD_TO_PURCHASE')
           action = 'STORE_PURCHASE_REQUESTED';
-        
+
         uploadImage(img, this.state.indentID, action, this.state.partNumber).then((snapshot) => {
           let URL = snapshot.downloadURL;
           this.setState({screenShot : URL});
@@ -190,7 +192,7 @@ class ActionFormMediaCard extends React.Component {
   }
 
   const { isLocked, webcamClicked, showLiveCameraFeed , quantityStores ,
-     quantityApproved , quantityRequired } = this.state;
+     quantityApproved , quantityRequired, referenceImage} = this.state;
   return (
     <div>
       <Card className={classes.card}>
@@ -198,7 +200,7 @@ class ActionFormMediaCard extends React.Component {
 
         <CardMedia
          className={classes.cover}
-         image={require('../background.jpg')}
+         image={referenceImage}
         />
         <div onClick={this.capture.bind(this, actionTaken)} style={{position:'relative'}}>
           { !webcamClicked ?

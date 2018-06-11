@@ -100,7 +100,7 @@ class SimpleExpansionPanel extends Component  {
   if(!text)
   return null;
 
-
+console.log(text)
   let expansionItemsArray = [] ;     const indentID = text.header;
   let count = 0;
   text.items.map((item, index) => {

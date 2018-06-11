@@ -148,7 +148,9 @@ onPurchaseOrderClick = () => {
           transport,
           delivery,
           pf,
-          otherTerms
+          otherTerms,
+          companyName,
+          address
         } = this.state;
   itemsInPurchaseOrder['description'] = description;
   itemsInPurchaseOrder['uom'] = uom;
@@ -164,6 +166,9 @@ onPurchaseOrderClick = () => {
   itemsInPurchaseOrder['delivery'] = delivery;
   itemsInPurchaseOrder['pf'] = pf;
   itemsInPurchaseOrder['otherTerms'] = otherTerms;
+  itemsInPurchaseOrder['companyName'] = companyName;
+  itemsInPurchaseOrder['address'] = address;
+
   console.log(itemsInPurchaseOrder)
   let now = new Date();
   let monthsText=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];

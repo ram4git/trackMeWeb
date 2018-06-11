@@ -237,7 +237,7 @@ export function getAllIndents() {
 
 
 export function getPartCount(modelNumber, mainHead, partNumber) {
-  const dbRef = firebase.database().ref().child('items/'+ modelNumber + '/' + mainHead + '/' + partNumber);
+  const dbRef = firebase.database().ref().child('components/'+ modelNumber + '/' + mainHead + '/' + partNumber);
   return dbRef.once('value');
 }
 

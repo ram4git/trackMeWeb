@@ -49,9 +49,10 @@ export default class ActionForm extends Component {
 
     //how to achieve synchronization - study later
     const itemsInActionForm = indentDetails.items.slice();
+    console.log(itemsInActionForm)
     //TODO change model number
     itemsInActionForm.map((item) => {
-      getPartCount('M1312', item.mainHead, item.partNumber).
+      getPartCount('V4549108', item.mainHead, item.partNumber).
           then((data) => {
               let partData = data.val();
               //add reservations
@@ -266,7 +267,7 @@ export default class ActionForm extends Component {
     const { itemsInActionForm = [], indentID, actionTaken } = this.state;
     let cardsArray =  [];
     if(itemsInActionForm) {
-      itemsInActionForm.map((itemInActionForm) => {
+      itemsInActionForm.map((itemInActionForm, index) => {
         let mediaCardProps = {
           items : {
             mainHead : itemInActionForm.mainHead,
@@ -274,12 +275,13 @@ export default class ActionForm extends Component {
             screenShot : itemInActionForm.screenShot,
             quantityRequired: itemInActionForm.quantityRequired,
             quantityStores : itemInActionForm.quantityStores,
+            referenceImage: itemInActionForm.referenceImage,
             renderCamera : actionTaken==='COMPLETE_RETURN_TO_GARAGE' ? true : false,
             enableInput : actionTaken === 'NO_ACTION' ? false : true,
             actionTaken
           }
         }
-        cardsArray.push(<div className='card' style={{marginTop : '5%'}}><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
+        cardsArray.push(<div className='card' key={index} style={{marginTop : '5%'}}><ActionFormMediaCard indentID={indentID} {...mediaCardProps} onItemLocked={this.onItemLocked} /></div>)
       })
     }
 

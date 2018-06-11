@@ -22,10 +22,9 @@ const classes = {
    flex: '1 0 auto',
   },
    text: {
-   marginBottom: 16,
-   marginLeft : 20,
-   fontSize: 18,
-   fontWeight : '500'
+   margin:'15px',
+   fontSize: 16,
+   fontWeight : '650'
   },
   textDiv : {
     flex:0.8
@@ -42,29 +41,29 @@ function SimpleMediaCard(props) {
   const { classes, text } = props;
   return (
     <div>
-      <Card className={classes.card} style={ text.screenShot ?  {height: '200px'} : {height:'60px'} }>
+      <Card className={classes.card} style={ text.screenShot ?  {height: '400px'} : {height:'100px'} }>
       <div className={classes.textDiv}>
         <CardContent  className={classes.flexContainer}>
           <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
-            Main Head :
+            Main Head:
           </Typography>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
           {text.mainHead}
           </Typography>
           <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
-            Part Name :
+            Part Name:
           </Typography>
           <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
             {text.partName}
           </Typography>
           <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
-            Part Number :
+            Part Number:
           </Typography>
           <Typography variant="headline" className={classes.text} style={{marginRight: '100px'}}>
           {text.partNumber}
           </Typography>
           <Typography variant="headline" className={classes.text} style={{color : 'rgba(0, 0, 0, 0.54)'}}>
-            Quantity Required :
+            Quantity Required:
           </Typography>
           <Typography variant="subheading" className={classes.text} style={{marginRight: '100px'}}>
             {text.quantityRequired}

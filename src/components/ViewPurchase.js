@@ -27,20 +27,37 @@ export default class ViewPurchase extends Component {
   }
 
   onPrintingPurchase = () => {
-    const { purchaseItem, purchaseID } = this.state;
-    console.log(purchaseItem);
-    console.log(this.state)
+    const {purchaseID,purchaseItem} = this.state;
+    this.setState({
+      printPurchaseId: purchaseID,
+      printPurchaseObj: purchaseItem
+    })
+  }
+
+  printPurchaseCard() {
+    const { purchaseItem, purchaseID, printPurchaseId, printPurchaseObj } = this.state;
+    
+    if(!printPurchaseId && !printPurchaseObj)
+    return null;
+
     return (
       <Print name='purchase' exclusive>
-      <Card>
-        <CardContent>
-         <Typography>
-         Nithya menon
-         </Typography>
-        </CardContent>
-      </Card>
+      <div className='purchaseCard'>
+      <Paper>
+      <h1 style={{textDecoration: 'underline', marginLeft: '320px'}}>PURCHASE ORDER</h1>
+      <h1 style={{marginLeft:'200px'}}>Sri Lalitha Enterprises Industries Pvt Ltd</h1>
+      <h3 style={{marginLeft:'300px'}}>Valuthimmapuram Road, Peddapuram,</h3>
+      <strong><p style={{marginLeft:'270px'}}>Ph No :0884-2326661/2 Email :lalitharice@gmail.com</p></strong>
+      <h3 style={{marginLeft:'320px'}}>GSTIN: 37AAKCS3233N1ZX</h3>
+      </Paper>
+      </div>
       </Print>
     )
+  }
+
+  print() {
+    if(this.state.printPurchaseId)
+     this.setState({printPurchaseId : null},  setTimeout(() => window.print(), 2000) );
   }
 
   render() {
@@ -87,12 +104,14 @@ export default class ViewPurchase extends Component {
       </Table>
     </Paper>
     <ViewPurchaseTable items={purchaseItem} purchaseID={purchaseID} />
+    {this.printPurchaseCard()}
+    { this.print() }
     <div style={{marginLeft:'480px'}}>
     <Button variant='raised' color='secondary' onClick={this.onPrintingPurchase}>
     Print Purchase Order
     </Button>
     </div>
-    
+
   </Fragment>
     )
   }
